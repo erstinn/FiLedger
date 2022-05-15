@@ -1,0 +1,225 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing: border-box;
+    font-family: 'Roboto', sans-serif;
+}
+
+.container{
+    display:flex;
+    background-color: black;
+    color: white;
+}
+.menu{
+    /* background-color: red; */
+    height: 50px;
+    padding:10px;
+    border-bottom: 1px solid white;
+}
+.nav{
+    /* background-color: blue; */
+    width:15vw;
+    height: 100vh;
+    border-right: 1px solid white;
+}
+.head{
+    /* background-color: green; */
+    min-height: 50px;
+    width: 85vw;
+    padding:10px;
+    border-bottom: 1px solid white;
+
+}
+.burger{
+    height: 23px;
+    width: 23px;
+    fill:white;
+    display: inline;
+
+}
+.title1,.username{
+    display:inline;
+    font-size: 16px;
+}
+.title{
+    text-align: center;
+}
+input[type="search"][name="search"]{
+    margin-left:15%;
+    display: inline;
+    background-color: transparent;
+    border: 1px solid white;
+    height: 20px;
+    width: 250px;
+    color: white;
+    padding: 3px;
+    
+}
+input[type="search"][name="search"]::placeholder{
+    color: white;
+}
+.username{
+    margin-left: 20%;
+}
+.nav-content{
+    list-style: none;
+    margin-top: 10px;
+}
+.nav-list{
+    margin-left: 10%;
+}
+.nav-list-child{
+    margin-left: 20%;
+}
+.item{
+    margin-bottom: 5%;
+}
+.item:hover{
+    background-color: white;
+    color: black;
+}
+.logout{
+    position:absolute;
+    bottom: 3em;
+    margin-left: 2em;
+}
+.logout-link{
+    color:white;
+    text-decoration: none;
+}
+.main-content h1{
+    text-align: center;
+    margin-top: 5px;
+}
+.content-container{
+    height: 75vh;
+    width:80vw;
+    margin:2em auto;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+.content-container::-webkit-scrollbar{
+    width: 10px;
+    background-color: rgba(140, 140, 140, 0.377);
+}
+.content-container::-webkit-scrollbar-thumb{
+    background-color: rgb(101, 101, 101);
+    border-radius: 10px;
+}
+
+.card{
+    width: 250px;
+    height: 190px;
+    background-color: white;
+    margin: 25px;
+    border-radius: 2px 2px 20px 20px;
+    position: relative;
+    display: flex;
+}
+.bg{
+    position: absolute;
+    width: 100%;
+    height: 50px;
+    background-color: #F2BE5E;
+    border-bottom: 2px solid black;
+}
+.circle{
+    width: 30px;
+    height: 30px;
+    border-radius: 100%;
+    position:absolute;
+    left:45%;
+    top:-5%;
+    border: solid black 1px;
+    background-size: cover;
+}
+.status-box{
+    position:absolute;
+    width: 80%;
+    height: 40px;
+    background-color: #F44336;
+    bottom:0;
+    border-radius: 3px 3px 0px 20px;
+    padding:10px;
+    align-items: center;
+    display:flex
+}
+#number{
+    color: black;
+    display: block;
+    align-self: center;
+    text-align: center;
+    width:100%;
+    font-size: 3em;
+}
+.dropdown{
+    background-color: rgb(225, 225, 225);
+    height: 40px;
+    width:20%;
+    border-radius: 2px 2px 20px 2px;
+    padding:10px;
+    position: absolute;
+    bottom:0;
+    right:0;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+.down{
+    fill: #F44336;
+    height: 20px;
+    width: 20px;
+}
+
+.popup{
+    width: 350px;
+    height: 200px;
+    z-index:100;
+    position: absolute;
+    background-color: rgb(239, 239, 239);
+    box-shadow: 10px 10px 10px 5px rgba(0, 0, 0, 0.254);
+    border-radius: 2px 2px 20px 20px;
+    margin: auto;
+    top:0;
+    bottom:0;
+    right:0;
+    left: 0;
+    display:none;
+}
+.popup .status-list{
+    font-size: 25px;
+    letter-spacing: 2px;
+    list-style: none;
+    text-align: center;
+    margin-top: 5px;
+}
+.popup svg:hover{
+    cursor: pointer;
+    background-color: #d3d3d3;
+}
+.status-list li{
+    margin-bottom: 3px;
+    padding:5px;
+}
+.status-list li:hover{
+    background-color: #d3d3d3;
+}
+
+.addButton{
+    width: fit-content;
+    position: absolute;
+    right:8em;
+    bottom:4em; 
+}
+.addButton svg{
+    width:70px;
+    height: 70px;
+    fill:white;
+    cursor: pointer;
+}
+.addButton svg:hover{
+    transform: scale(1.05);
+}

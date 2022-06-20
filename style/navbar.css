@@ -1,0 +1,103 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing: border-box;
+    font-family: "Inter",sans-serif;
+}
+.side-nav{
+    width:15vw;
+    height: 100vh;
+    position: fixed;
+    border-right:1px solid rgb(17,24,39);
+    transition:.3s;
+    background-color: white;
+    
+}
+.inactive-sidenav{
+    transform: translateX(-15vw);
+}
+
+.nav-header{
+    padding-top: 2em;
+    position: relative;
+}
+.burger{
+    width:2vw;
+    height: 2vw;
+    vertical-align: middle;
+    margin-left: 1em;
+
+}
+.menu{
+    position: absolute;
+    display: inline-block;
+    width: fit-content;
+    left:35%;
+    margin: auto;
+    font-size: 2vw;
+}
+.logo{
+    display:flex;
+    align-items: center;
+    padding-top:2em ;
+    flex-direction: column;
+}
+.menu-logo{
+    width:4vw;
+}
+.links{
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
+    padding-top: 2em;
+}
+.links a{
+    text-decoration: none;
+    color:#111827;
+    width: 100%;
+}
+.nav-item{
+    padding:1em;
+    cursor: pointer;
+    width: 100%;
+    transition: .1s ease-in;
+}
+.nav-item:hover{
+    background-color: rgb(186, 186, 186);
+}
+
+.header,.header-left{
+    background-color: #E5E7EB;
+    display: flex;
+    padding:.5em;
+    align-items: center;
+    color:rgb(17,24,39);
+}
+.burger-button{
+    width: 2vw;
+    height: 2vw;
+    vertical-align: middle;
+}
+.prod-name{
+    font-size: 2vw;
+    vertical-align: middle;
+    margin-left: 1rem;
+}
+.header-left{
+    width:75vw
+}
+.header-right{
+    display: flex;
+    gap:2em;
+}
+.header-right svg{
+    width: 2vw;
+    height: 2vw;
+    vertical-align: middle;
+    fill:rgb(17,24,39);
+}
+.title{
+    padding: 1em 0 2em 3em;
+    color: #111827;
+}

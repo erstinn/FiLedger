@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./style/login-style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,700;0,900;1,400&display=swap" rel="stylesheet">
+<script src="./js/login.js" defer></script>
+</head>
+<body>
+    <!-- main container -->
+    <div class="container">
+        <!-- left half -->
+        <div class="poster">
+            <h1>Lorem. <br>Ipsum.</h1>
+        </div>
+        <!-- end of left half -->
+        <!-- right half -->
+        <div class="sign-up">
+            <h1>Login to Account</h1>
+            <div class="form">
+                <form action="">
+                  <div class="fields">
+                      <input type="email" name="email" placeholder="Email" autocomplete="off" required>
+                      <input type="password" name="password" placeholder="Password">
+                      <!-- custom dropdown menu -->
+                      <div class="dropdown">
+                          <span id="drpdwn-value">Department</span>
+                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-down-fill down" id="down" viewBox="0 0 16 16">
+                            <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
+                          </svg>
+                          <div class="drpdwn-choices">
+                            <ul class="choices">
+                                <li class="choice-val">Department1</li>
+                                <li  class="choice-val">Department2</li>
+                                <li  class="choice-val">Department3</li>
+                                <li  class="choice-val">Department4</li>
+                                <li  class="choice-val">Department5</li>
+                            </ul>
+                        </div>
+                      </div>
+                      <!-- end of custom dropdown -->
+                      <p>Don't have an account yet? <a href="./registration.html">Sign Up</a></p>
+                      <button type="submit">Login</button>
+                  </div>
+                </form>
+            </div>
+        </div>
+        <!-- end of right half -->
+    </div>
+    <!-- end of main container -->
+</body>
+</html>

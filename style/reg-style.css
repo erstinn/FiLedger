@@ -1,0 +1,144 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing: border-box;
+}
+
+.container{
+    display:flex;
+}
+
+.poster{
+    background-image: url(../images/442.jpg);
+    height: 100vh;
+    width: 50vw;
+    background-size:cover;
+    background-repeat: no-repeat;
+    font-family: 'Roboto', sans-serif;
+    display: flex;
+    align-items: center;
+    font-size: 35px;
+    color: white;
+    background-color: #4C8C8E;
+}
+.poster h1{
+    margin-left:1em;
+}
+
+.sign-up{
+    width: 50vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    color: rgb(37, 37, 37);
+    position: relative;
+    
+}
+.sign-up h1{
+    font-family: 'Roboto', sans-serif;
+    margin:1em 0 0 1.5em;
+    font-size: 60px;
+    /* background-color: red; */
+    width: fit-content;
+}
+
+.form{
+    height: 75vh;
+    width: 40vw;
+    margin: 0.5em auto 0;
+    
+}
+
+
+.fields input[type="text"],input[type="password"],input[type="email"]{
+    display: block;
+    width: 90%;
+    height: 2em;
+    margin: 2em auto;
+    background-color: transparent;
+    border: none;
+    border-bottom: 1px solid rgb(37, 37, 37);
+    font-size: 15px;
+    padding: 10px;
+    font-family: 'Roboto', sans-serif;
+    outline: none;
+    
+}
+.fields button[type='submit']{
+    display: block;
+    width: 90%;
+    margin: 2em auto;
+    background-color:#6ECDCA;
+    border: none;
+    font-size: 15px;
+    padding: 10px;
+    font-family: 'Roboto', sans-serif;
+    color:white;
+    font-weight: 500;
+    border-radius: 5px;
+}
+.fields button[type="submit"]:hover{
+    background-color: #448b89;
+}
+
+.dropdown{
+    display: block;
+    width: 90%;
+    height: 2em;
+    margin: 2em auto;
+    background-color: transparent;
+    border: none;
+    border-bottom: 1px solid rgb(37, 37, 37);
+    font-size: 15px;
+    padding: 10px;
+    font-family: 'Roboto', sans-serif;
+    outline: none;
+    position: relative;
+}
+.drpdwn-choices{
+    width:100%;
+    height: 0;
+    background-color: white;
+    border: none;
+    border: 1px solid rgb(37, 37, 37);
+    font-size: 15px;
+    font-family: 'Roboto', sans-serif;
+    outline: none;
+    position: absolute;
+    margin-left: -10px;
+    overflow-y: scroll;
+    transition: 0.3s;
+}
+.drpdwn-choices::-webkit-scrollbar{
+    width: 5px;
+}
+.drpdwn-choices::-webkit-scrollbar-thumb{
+    background-color: rgb(177, 177, 177);
+    border-radius: 10px;
+}
+.choices{
+    list-style: none;
+}
+.choices li{
+    padding: 10px;
+    border-bottom: 1px solid rgb(177, 177, 177);
+}
+.choices li:hover{
+    background-color: rgba(65, 65, 65, 0.193);
+}
+.down{
+    position:absolute;
+    right: 0;
+}
+
+.fields p{
+    font-family: 'Roboto', sans-serif;
+    margin:2em auto;
+    display: block;
+    width: 90%;
+}
+.fields a{
+    text-decoration: none;
+    color: #6ECDCA;
+    font-family: 'Roboto', sans-serif;
+}

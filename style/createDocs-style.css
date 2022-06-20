@@ -1,0 +1,116 @@
+*{
+    padding:0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: "Inter", sans-serif;
+    color: #111827;
+}
+.header{
+    display: flex;
+    padding:.3em;
+    align-items: center;
+    gap: 1em;
+    border: 1px solid #111827;
+    
+}
+.header-logo{
+    margin-left: 2em;
+    flex-grow: 1;
+}
+.header-logo img{
+    width: 5vw;
+    height: 5vw;
+}
+.header .document-name{
+    padding-right:30vw;
+    flex-grow: 3;
+}
+.header-buttons-container{
+    flex-grow: 1;
+    display: flex;
+    gap:3vh;
+}
+.buttons-header{
+    background-color: #00C2CB;
+    padding:1vw;
+    border: none;
+    border-radius: 6px;
+    color:white;
+}
+.subheader{
+    background-color: #D9D9D9;
+    border-bottom:1px solid #111827 ;
+    display: flex;
+    flex-direction: column;
+    gap:2vh;
+    padding:.5vw;
+}
+.tools-container{
+    display: flex;
+    gap:.5vw;
+
+}
+.tool{
+    width: 1.3vw;
+    height: 1.3vw;
+}
+
+.container-body{
+    display: flex;
+    margin:3vw auto 0;
+    gap:2em;
+    align-items: center;
+    padding-bottom:5em;
+}
+.document-container{
+    width: calc(8.5vw*5);
+    height:calc(11vw*5);
+    border:1px solid #111827;
+    flex-grow: 2;
+    margin-left: 3vw;
+}
+.right-sidenav{
+    display: flex;
+    flex-direction: column ;
+    width:40vh;
+    padding:0 2vw 2vw 2vw;
+    flex-grow: 1;
+    height:55vw;
+    align-items: center;
+    gap:1.5em;
+}
+.people-nav{
+    background-color: gray;
+    padding:1vw;
+    height: 15vw;
+    width: 100%;
+}
+.history-nav{
+    background-color: gray;
+    padding:1vw;
+    width: 100%;
+}
+.upload-nav{
+    background-color: gray;
+    padding:1vw;
+    width: 100%;
+}
+.history-nav ul{
+    list-style: none;
+}
+.history-nav li::before { 
+    content: "";
+    border-color: transparent #111;
+    border-style: solid;
+    border-width: 0.35em 0 0.35em 0.45em;
+    display: block;
+    height: 0;
+    width: 0;
+    left: -0.5em;
+    top: 0.9em;
+    position: relative;
+  }
+
+.off{
+    visibility: hidden;
+}

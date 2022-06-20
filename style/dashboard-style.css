@@ -1,0 +1,88 @@
+.main-cont{
+    padding-bottom: 3em;
+    display: flex;
+    gap:5vw;
+    margin-top: 3vw;
+}
+.content-box{
+    width: 65vw;
+    height:90vh;
+    margin-left:5vw;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    display: flex;
+    gap:3em;
+    flex-wrap: wrap;
+}
+.content-box::-webkit-scrollbar{
+    width: 10px;
+}
+.content-box::-webkit-scrollbar-thumb{
+    background-color: #797979;
+    border-radius: 10px;
+    border: 1px solid #111827; 
+}
+.search{
+    width: 63vw;
+    height: 6vh;
+    margin-left: 5vw;
+    padding:.3em;
+    border: 1px solid #111827;
+}
+.search-button{
+    width: 2.5em;
+    height: 2.5em;
+    position:relative;
+    left:-3em;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+.overview{
+    height: 90vh;
+    width: 20vw;
+    background-color: #D9D9D9;
+}
+
+.card{
+    width: calc(65vw/5);
+    height: calc(65vw/4);
+    background-color: #E5E7EB;
+    border: 1px solid #111827;
+    border-radius: 6px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap:2em;
+}
+.card-drpdwn{
+    width: 90%;
+    color: #111827;
+}
+
+#create-card{
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap:2vh;
+}
+#create-card svg{
+    width: 5vw;
+    height: 5vw;
+    fill: #111827;
+}
+.create-card{
+    position:fixed;
+    left:60vw;
+    bottom:4vw;
+    background-color: white;
+}
+
+
+
+
+

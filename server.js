@@ -1,11 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-// const path = require('path')
 const app = express();
-
-const views = './views/';
-const fs = require('fs');
-const path = require("path");
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static('public'))
@@ -51,8 +46,6 @@ app.get('/management', function (req, res){
 app.get('/registration', function (req, res){
     res.render("registration");
 })
-
-
 
 
 

@@ -1,0 +1,45 @@
+.main-cont{
+    display: flex;
+    padding-top:1em;
+}
+.pageLogo{
+    padding:2em;
+    margin:2em;
+    border: 8px solid black;
+    border-radius: 100%;
+    height: fit-content;
+}
+.pageLogo svg{
+    height: 10vw;
+    width: 10vw;
+}
+
+.userList{
+    margin:2em;
+    width: 70vw;
+    height: 80vh;
+    border: 1px solid black;
+    overflow-y: scroll;
+}
+.userList-header{
+    background-color: gray;
+    border-bottom: 1px solid black;
+    text-align: center;
+    padding:1em;
+    font-size: 1.5vw;
+}
+.searchUserList{
+    display: block;
+    margin: 1em auto;
+    width: 95%;
+    padding:5px;
+}
+.usersList{
+    border-collapse: collapse;
+    width: 90%;
+    margin: auto;
+}
+.userList td,.userList th{
+    text-align: center;
+    padding:3px;
+}

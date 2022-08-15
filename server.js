@@ -1,11 +1,73 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const NodeCouchDb = require('node-couchdb');
+
 const app = express();
+
+const couch = new NodeCouchDb({
+    auth:{
+        user: "username",
+        password: "temppass1234"
+    }
+})
+
+const dbname = 'try_users';
+const viewURL = '_design/someuser/_view/trial';
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static('public'))
 
 app.set('view engine', 'ejs');
+
+couch.listDatabases().then(function (dbs){
+    console.log(dbs)
+})
+
+app.get('/',function (req,res){
+   couch.get(dbname, viewURL).then(
+       function(data, headers, status){
+           res.render('trial-couch', {
+               users:data.data.rows
+           });
+       },
+       function (err){
+           res.send(err);
+       });
+})
+
+app.post('/user/add', function(req, res){
+    const name = req.body.name;
+    const email = req.body.email;
+    //generate an id for each user
+    couch.uniqid().then(function(ids){
+        const id = ids[0];
+        //insert the users in db
+        couch.insert(dbname, {
+            _id: id,
+            name: name,
+            email: email
+        }).then(
+            function(data, headers, status){
+                res.redirect('/');
+            },
+            function(err){
+                res.send(err);
+            });
+    });
+});
+
+app.post('/user/delete/:id', function(req, res){
+    const id = req.params.id;
+    const rev = req.body.rev;
+
+    couch.del(dbname, id, rev).then(
+        function(data, headers, status){
+            res.redirect('/');
+        },
+        function(err){
+            res.send(err)
+        });
+})
 
 app.get('/login', function (req, res){
     res.render("login");

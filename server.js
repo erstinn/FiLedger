@@ -31,7 +31,7 @@ app.get('/header', function (req, res){
     res.render("header");
 })
 
-app.get('/index', function (req, res){
+app.get('/', function (req, res){
     res.render("index");
 })
 
@@ -47,9 +47,17 @@ app.get('/registration', function (req, res){
     res.render("registration");
 })
 
+app.get('/management/manage-people/admin',function (req,res){
+    res.render("managePeople");
+})
+
+app.get('/management/manage-documents/approver',function (req,res){
+    res.render("manageDocuments");
+})
 
 
-app.listen(process.env.PORT || 3000, function (){
+
+app.listen(3000, function (){
     console.log("Server started on port 3000")
 })
 

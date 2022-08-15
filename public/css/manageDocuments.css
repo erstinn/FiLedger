@@ -1,19 +1,46 @@
+.main-cont{
+    display: flex;
+    margin-top: 2em;
+    overflow-y: hidden;
+    justify-content: center;
+    padding-bottom: 4em;
+}
 .content-container{
-    margin: 2em auto 0;
-    width: 95vw;
-    height: 80vh;
-    overflow-y: scroll;
+    position: relative;
+    right:3em;
+    top:2em;
+    flex-direction: column;
+    width: 90vw;
+}
+.documentsContainer::-webkit-scrollbar{
+    width: 10px;
+    background-color: rgb(212, 212, 212);
+}
+.documentsContainer::-webkit-scrollbar-thumb{
+    background-color: gray;
+    border-radius: 10px;
 }
 .searchCont{
-    background-color: gray;
-    padding:.7em;
+    background-color: #61C6C6;
+    padding:1.4em;
     display: flex;
     align-items: center;
     justify-content: center;
+    border-left: 1px solid black;
+    border-right: 1px solid black;
+    border-top: 1px solid black;
+    border-radius: 10px 10px 0px 0px;
 }
 .titleSearch{
     width: 90%;
-    padding:.3em
+    padding:.8em;
+    border: none;
+    border-radius: 20px;
+    outline: none;
+}
+.documentsContainer{
+    overflow-y: scroll;
+    height: 75vh;
 }
 .documentsTable{
     width: 100%;
@@ -27,8 +54,25 @@
     padding:.5em;
 }
 .documentsTable .file:nth-child(even){
-    background-color: rgb(204, 204, 204);
+    background-color: rgba(0,0,0,.04);
 }
 .documentsTable tr{
     border: 1px solid black;
+}
+.documentsTable tr.file:hover{
+    background-color: yellow!important;
+}
+
+.pageLogo{
+    margin-left: 1em;
+    padding:1em;
+    border: 4px solid black;
+    border-radius: 100%;
+    height: fit-content;
+    background-color: white;
+    z-index: 999;
+}
+.pageLogo svg{
+    width: 3vw;
+    height: 3vw;
 }

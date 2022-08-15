@@ -1,20 +1,24 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap');
 *{
     margin:0;
     padding:0;
     box-sizing: border-box;
-    font-family: "Inter",sans-serif;
+    font-family: "Roboto",sans-serif;
 }
 .side-nav{
-    width:15vw;
+    width:25vw;
     height: 100vh;
     position: fixed;
-    border-right:1px solid rgb(17,24,39);
+    /* border-right:1px solid rgb(17,24,39); */
     transition:.3s;
     background-color: white;
+    z-index: 99;
+    box-shadow: 2px 0px 5px 10px rgba(0,0,0,.15);
     
 }
 .inactive-sidenav{
-    transform: translateX(-15vw);
+    transform: translateX(-25vw);
+    box-shadow: none;
 }
 
 .nav-header{
@@ -68,7 +72,7 @@
 }
 
 .header,.header-left{
-    background-color: #E5E7EB;
+    background-color: #61C6C6;
     display: flex;
     padding:.5em;
     align-items: center;
@@ -79,10 +83,19 @@
     height: 2vw;
     vertical-align: middle;
 }
+.circleLogo{
+    background-color: white;
+    border-radius: 100%;
+    padding:5px;
+    height: 4vw;
+    width: 4vw;
+    display: flex;
+}
 .prod-name{
     font-size: 2vw;
     vertical-align: middle;
     margin-left: 1rem;
+    color:#fff;
 }
 .header-left{
     width:75vw
@@ -90,14 +103,26 @@
 .header-right{
     display: flex;
     gap:2em;
+    position: relative;
 }
 .header-right svg{
     width: 2vw;
     height: 2vw;
     vertical-align: middle;
-    fill:rgb(17,24,39);
+    fill:#fff;
+    stroke: #111827;
 }
 .title{
     padding: 1em 0 2em 3em;
     color: #111827;
+}
+
+.notifNumber{
+    background-color: red;
+    color: white;
+    padding:3px;
+    position: absolute;
+    border-radius: 20px;
+    left:.9vw;
+    bottom:.7vw
 }

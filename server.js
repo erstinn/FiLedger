@@ -1,11 +1,20 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const nano = require('nano')('http://administrator:qF3ChYhp@localhost:5984');
 const app = express();
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static('public'))
 
 app.set('view engine', 'ejs');
+
+const dbList = nano.db.list();
+
+//show list of databases
+dbList.then(function (dbs){
+    console.log(dbs);
+});
+
 
 app.get('/login', function (req, res){
     res.render("login");

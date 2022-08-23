@@ -3,72 +3,25 @@
     display: flex;
     gap:5vw;
     margin-top: 3vw;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
 }
 .content-box{
     width: 65vw;
     height:90vh;
-    margin-left:5vw;
-    overflow-x: hidden;
-    overflow-y: scroll;
+    overflow: hidden;
     display: flex;
     gap:3em;
     flex-wrap: wrap;
-}
-.content-box::-webkit-scrollbar{
-    width: 10px;
-}
-.content-box::-webkit-scrollbar-thumb{
-    background-color: #797979;
-    border-radius: 10px;
-    border: 1px solid #111827; 
+    align-items: center;
+    justify-content: center;
 }
 .search{
-    width: 63vw;
+    width: 65vw;
     height: 6vh;
-    margin-left: 5vw;
     padding:.3em;
     border: 1px solid #111827;
-}
-.search-button{
-    width: 2.5em;
-    height: 2.5em;
-    position:relative;
-    left:-3em;
-    background: transparent;
-    border: none;
-    cursor: pointer;
-}
-
-.overview{
-    height: 90vh;
-    width: 20vw;
-    background-color: #D9D9D9;
-}
-
-.card{
-    width: calc(65vw/5);
-    height: calc(65vw/4);
-    background-color: #E5E7EB;
-    border: 1px solid #111827;
-    border-radius: 6px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap:2em;
-}
-.card-drpdwn{
-    width: 90%;
-    color: #111827;
-}
-
-#create-card{
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    gap:2vh;
 }
 #create-card svg{
     width: 5vw;
@@ -77,12 +30,140 @@
 }
 .create-card{
     position:fixed;
-    left:60vw;
-    bottom:4vw;
     background-color: white;
+    cursor: pointer;
+    bottom:4vw;
+    left:4vw;
+}
+
+.uploadFile{
+    width: 40vw;
+    height: 20vh;
+    position:fixed;
+    bottom:4vw;
+    left:12vw;
+    border-radius: 20px;
+    box-shadow: 3px 0px 10px 4px rgba(0, 0, 0, .25);
+    background-color: white;
+    padding:2em;
+    overflow-y: auto;
+}
+.addFile{
+    text-decoration: underline;
+    cursor: pointer;
+    color:#4C8C8E;
+}
+
+.uploadFile-cont{
+    display: flex;
+    flex-direction: column;
+    gap: .5vw;
 }
 
 
 
+.inactive{
+    display:none!important;
+}
+
+.folder-file{
+    width: 20vw;
+    height: 20vw;
+    background: url(../images/Copy_of_Untitled__2_-removebg-preview.png);
+    background-size: cover;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 20px;
+    cursor: pointer;
+}
+.folder-file:hover{
+    background-color: rgb(212, 212, 212);
+}
+
+.folderModal{
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(110, 110, 110, 0.399);
+    position: fixed;
+    border:#111827 1px;
+    display: flex;
+    top:0;
+    align-items: center;
+    justify-content: center;
+    -webkit-backdrop-filter: blur(4px);
+    backdrop-filter: blur(4px);
+}
+
+.mainModal{
+    width: 80vw;
+    height: 80vh;
+    background-color: white;
+    border-radius: 20px;
+    box-shadow: 3px 3px 10px 4px rgba(0, 0, 0, .25);
+    position: relative;
+    padding:3vw;
+    overflow-y: auto;
+}
+.mainModal::-webkit-scrollbar{
+    width: 5px;
+    background-color: rgba(0, 0, 0, 0);
+}
+.mainModal::-webkit-scrollbar-thumb{
+    background-color: rgb(63, 63, 63);
+    border-radius: 10px;
+}
+.mainModal h2{
+    text-align: center;
+}
+
+.documentsModal{
+    width: 100%;
+    text-align: center;
+    border-collapse: collapse;
+}
+.documentsModal td,.documentsModal th{
+    padding:.5em
+}
+.exitModal{
+    position: absolute;
+    top: 1em;
+    right:1em;
+    cursor: pointer;
+    
+}
+
+.content-box a{
+    text-decoration: none;
+    color:black;
+}
 
 
+.tableContextMenu{
+    height: 10vh;
+    width: 6vw;
+    border: 1px solid black;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+    position: absolute;
+    top:0;
+    transform: scale(0);
+    transform-origin: top left;
+}
+.active-context-menu{
+    transform: scale(1);
+    transition: transform 200ms ease-in-out;
+}
+.menu-items{
+  width: 100%;
+  text-align: center;
+}
+.menu-items:hover{
+    background-color: rgb(172, 172, 172);
+}
+.kebab{
+    cursor: pointer;
+}

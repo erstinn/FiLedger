@@ -90,6 +90,8 @@
     height: 4vw;
     width: 4vw;
     display: flex;
+    justify-content: center;
+    align-items: center;
 }
 .prod-name{
     font-size: 2vw;

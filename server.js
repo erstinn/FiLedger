@@ -1,13 +1,9 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const { generateFromEmail } = require("unique-username-generator");
+const generator = require('generate-password');
 const app = express();
-// const nano = require('nano')('http://administrator:qF3ChYhp@127.0.0.1:5984/');
-// const dbList = nano.db.list();
-//
-//
-// dbList.then(function (dbs){
-//     console.log(dbs)
-// })
+const nano = require('nano')('http://administrator:qF3ChYhp@127.0.0.1:5984/');
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static('public'))
@@ -15,6 +11,16 @@ app.use(express.static('public'))
 app.set('view engine', 'ejs');
 
 const departments = ["Sales","Marketing", "Human Resources", "Accounting"]
+
+const dbList = nano.db.list();
+//show list of databases
+dbList.then(function (dbs){
+    console.log(dbs)
+})
+
+//databases
+const userDB = nano.db.use('users');
+const userViews = "/_design/all_users/_view/all";
 
 app.get('/login', function (req, res){
     res.render("login");
@@ -56,16 +62,45 @@ app.get('/registration', function (req, res){
     res.render("registration", {dep: departments});
 })
 
-app.post("/registration", (req, res)=>{
-    const un = req.body.username;
-    const lname = req.body.lastname;
-    const fname = req.body.firstname;
+app.post("/registration", async function (req, res){
+    const userName = req.body.username; //generated
+    const lastName = req.body.lastname;
+    const firstName = req.body.firstname;
     const email = req.body.email;
-    const password = req.body.password;
+    const password = req.body.password; //generated
     const admin = req.body.isAdmin;
     const add_doc = req.body.add_doc;
     const dept = req.body.dept; //this works now
-    console.log(dept, lname, fname, email, password, un, admin, add_doc);
+
+    //generate id
+    let uuid = await nano.uuids(1);
+    let id = uuid.uuids[0];
+
+    //generate username
+    const username = generateFromEmail(
+        email,
+        3
+    );
+
+    //generate default password
+    const passw = generator.generate({
+        length: 10,
+        numbers: true
+    })
+
+    await userDB.insert({
+        _id: id,
+        firstname: firstName,
+        lastname: lastName,
+        email: email,
+        username: username,
+        password: passw,
+        department: dept,
+        add_doc: add_doc,
+        admin: admin
+    })
+
+    // console.log(dept, lname, fname, email, password, un, admin, add_doc);
 
 })
 

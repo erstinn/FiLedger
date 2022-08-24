@@ -1,0 +1,200 @@
+<%-include('header')-%>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/all-documents.css">
+    <link rel="stylesheet" href="/css/navbar.css">
+    <script src="/js/all-documents.js" defer></script>
+    <script src="/js/navbar.js" defer></script>
+
+</head>
+<body>
+    <!-- NAVBAR -->
+<nav class="side-nav inactive-sidenav" id="side-nav">
+    <div class="nav-header">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-list burger" viewBox="0 0 16 16">
+            <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/>
+        </svg>
+        <h3 class="menu">Menu</h3>
+        <div class="logo">
+            <img src="/images/Copy_of_Untitled-removebg-preview.png" width="50" class="menu-logo">
+            UserType
+        </div>
+    </div>
+    <div class="links">
+        <a href="/dashboard"><h4 class="nav-item">Dashboard</h4></a>
+        <a href="/documents"><h4 class="nav-item">Documents</h4></a>
+        <a href="/management"><h4 class="nav-item">Management</h4></a>
+        <a href="/approval-page"><h4 class="nav-item">Approval Page</h4></a>
+    </div>
+</nav>
+<!-- NAVBAR -->
+<!-- HEADER -->
+<header  class="header">
+    <div class="header-left">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-list burger-button" id="burger-button" viewBox="0 0 16 16">
+            <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/>
+        </svg>
+        <span class="circleLogo" style="margin-left:1em">
+            <img src="/images/Copy_of_Untitled-removebg-preview.png" alt="" class="menu-logo">
+        </span>
+        <h3 class="prod-name">FiLedger</h3>
+    </div>
+    <div class="header-right">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bell-fill" viewBox="0 0 16 16">
+            <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2zm.995-14.901a1 1 0 1 0-1.99 0A5.002 5.002 0 0 0 3 6c0 1.098-.5 6-2 7h14c-1.5-1-2-5.902-2-7 0-2.42-1.72-4.44-4.005-4.901z"/>
+        </svg>
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-fill" viewBox="0 0 16 16">
+            <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+        </svg>
+        <h3 class="username">hi, @username</h3>
+    </div>
+</header>
+<!-- HEADER -->
+
+
+<div class="upload-modal-cont">
+    <div class="upload-modal-box">
+        <input type="file" name="" id="" onchange="alert('file uploaded')">
+    </div>
+    <div class="upload-modal-point">
+
+    </div>
+</div>
+
+
+<div class="main-cont">
+    <div class="outer-tabs">
+        <a href="/dashboard"><div class="tabs">Dashboard</div></a>
+        <a href="../administration/admin"><div class="tabs">Administration</div></a>
+        <a href="/all-documents"><div class="tabs active-tab">All Documents</div></a>
+        <div class="search-bar">
+            <input type="search" name="searchDocs" id="searchDocs" class="searchDocs" placeholder="Search Documents...">
+        </div>
+    </div>
+    <div class="content-wrapper">
+        <div class="documents-container">
+            <div class="uploaded-docs">
+                <div class="table-title">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark-pdf" viewBox="0 0 16 16">
+                        <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2zM9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5v2z"/>
+                        <path d="M4.603 14.087a.81.81 0 0 1-.438-.42c-.195-.388-.13-.776.08-1.102.198-.307.526-.568.897-.787a7.68 7.68 0 0 1 1.482-.645 19.697 19.697 0 0 0 1.062-2.227 7.269 7.269 0 0 1-.43-1.295c-.086-.4-.119-.796-.046-1.136.075-.354.274-.672.65-.823.192-.077.4-.12.602-.077a.7.7 0 0 1 .477.365c.088.164.12.356.127.538.007.188-.012.396-.047.614-.084.51-.27 1.134-.52 1.794a10.954 10.954 0 0 0 .98 1.686 5.753 5.753 0 0 1 1.334.05c.364.066.734.195.96.465.12.144.193.32.2.518.007.192-.047.382-.138.563a1.04 1.04 0 0 1-.354.416.856.856 0 0 1-.51.138c-.331-.014-.654-.196-.933-.417a5.712 5.712 0 0 1-.911-.95 11.651 11.651 0 0 0-1.997.406 11.307 11.307 0 0 1-1.02 1.51c-.292.35-.609.656-.927.787a.793.793 0 0 1-.58.029zm1.379-1.901c-.166.076-.32.156-.459.238-.328.194-.541.383-.647.547-.094.145-.096.25-.04.361.01.022.02.036.026.044a.266.266 0 0 0 .035-.012c.137-.056.355-.235.635-.572a8.18 8.18 0 0 0 .45-.606zm1.64-1.33a12.71 12.71 0 0 1 1.01-.193 11.744 11.744 0 0 1-.51-.858 20.801 20.801 0 0 1-.5 1.05zm2.446.45c.15.163.296.3.435.41.24.19.407.253.498.256a.107.107 0 0 0 .07-.015.307.307 0 0 0 .094-.125.436.436 0 0 0 .059-.2.095.095 0 0 0-.026-.063c-.052-.062-.2-.152-.518-.209a3.876 3.876 0 0 0-.612-.053zM8.078 7.8a6.7 6.7 0 0 0 .2-.828c.031-.188.043-.343.038-.465a.613.613 0 0 0-.032-.198.517.517 0 0 0-.145.04c-.087.035-.158.106-.196.283-.04.192-.03.469.046.822.024.111.054.227.09.346z"/>
+                      </svg>
+                    Documents
+                    <div class="upload-buttons">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="upload-plus bi bi-plus" viewBox="0 0 16 16">
+                            <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+                        </svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="upload-share bi bi-arrow-return-right" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M1.5 1.5A.5.5 0 0 0 1 2v4.8a2.5 2.5 0 0 0 2.5 2.5h9.793l-3.347 3.346a.5.5 0 0 0 .708.708l4.2-4.2a.5.5 0 0 0 0-.708l-4-4a.5.5 0 0 0-.708.708L13.293 8.3H3.5A1.5 1.5 0 0 1 2 6.8V2a.5.5 0 0 0-.5-.5z"/>
+                          </svg>
+
+                    </div>
+                </div>
+                <table class="uploaded-docs-table">
+                    <tr class="table-header">
+                        <th>File Type</th>
+                        <th>Document Title</th>
+                        <th>File Size</th>
+                        <th>File Version</th>
+                        <th>Author</th>
+                        <th>Classification</th>
+                        <th>Modified By</th>
+                        <th>Last Modified</th>
+                        <th>Status</th>
+                    </tr>
+                    <tr class="data">
+                        <td>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-files" viewBox="0 0 16 16">
+                                <path d="M13 0H6a2 2 0 0 0-2 2 2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2 2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm0 13V4a2 2 0 0 0-2-2H5a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1zM3 4a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4z"/>
+                              </svg>
+                        </td>
+                        <td>Document Title 1</td>
+                        <td>5 MB</td>
+                        <td>4.0</td>
+                        <td>Erin Cordero</td>
+                        <td>Public</td>
+                        <td>Miciella Decano</td>
+                        <td>--/--/-- at 00:00</td>
+                        <td>Pending</td>
+                    </tr>
+                    <tr class="data">
+                        <td>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-files" viewBox="0 0 16 16">
+                                <path d="M13 0H6a2 2 0 0 0-2 2 2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2 2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm0 13V4a2 2 0 0 0-2-2H5a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1zM3 4a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4z"/>
+                              </svg>
+                        </td>
+                        <td>Document Title 1</td>
+                        <td>5 MB</td>
+                        <td>4.0</td>
+                        <td>Erin Cordero</td>
+                        <td>Public</td>
+                        <td>Miciella Decano</td>
+                        <td>--/--/-- at 00:00</td>
+                        <td>Pending</td>
+                    </tr>
+                    <tr class="data">
+                        <td>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-files" viewBox="0 0 16 16">
+                                <path d="M13 0H6a2 2 0 0 0-2 2 2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2 2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm0 13V4a2 2 0 0 0-2-2H5a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1zM3 4a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4z"/>
+                              </svg>
+                        </td>
+                        <td>Document Title 1</td>
+                        <td>5 MB</td>
+                        <td>4.0</td>
+                        <td>Erin Cordero</td>
+                        <td>Public</td>
+                        <td>Miciella Decano</td>
+                        <td>--/--/-- at 00:00</td>
+                        <td>Pending</td>
+                    </tr>
+                    <tr class="data">
+                        <td>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-files" viewBox="0 0 16 16">
+                                <path d="M13 0H6a2 2 0 0 0-2 2 2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2 2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm0 13V4a2 2 0 0 0-2-2H5a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1zM3 4a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4z"/>
+                              </svg>
+                        </td>
+                        <td>Document Title 1</td>
+                        <td>5 MB</td>
+                        <td>4.0</td>
+                        <td>Erin Cordero</td>
+                        <td>Public</td>
+                        <td>Miciella Decano</td>
+                        <td>--/--/-- at 00:00</td>
+                        <td>Pending</td>
+                    </tr>
+                    <tr class="data">
+                        <td>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-files" viewBox="0 0 16 16">
+                                <path d="M13 0H6a2 2 0 0 0-2 2 2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2 2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm0 13V4a2 2 0 0 0-2-2H5a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1zM3 4a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4z"/>
+                              </svg>
+                        </td>
+                        <td>Document Title 1</td>
+                        <td>5 MB</td>
+                        <td>4.0</td>
+                        <td>Erin Cordero</td>
+                        <td>Public</td>
+                        <td>Miciella Decano</td>
+                        <td>--/--/-- at 00:00</td>
+                        <td>Pending</td>
+                    </tr>
+                    <tr class="data">
+                        <td>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-files" viewBox="0 0 16 16">
+                                <path d="M13 0H6a2 2 0 0 0-2 2 2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2 2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm0 13V4a2 2 0 0 0-2-2H5a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1zM3 4a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4z"/>
+                              </svg>
+                        </td>
+                        <td>Document Title 1</td>
+                        <td>5 MB</td>
+                        <td>4.0</td>
+                        <td>Erin Cordero</td>
+                        <td>Public</td>
+                        <td>Miciella Decano</td>
+                        <td>--/--/-- at 00:00</td>
+                        <td>Pending</td>
+                    </tr>
+                    
+                    
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

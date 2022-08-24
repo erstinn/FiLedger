@@ -86,7 +86,7 @@
 .dropdown{
     display: block;
     width: 90%;
-    height: 2.9em;
+    height: 2em;
     margin: 2em auto;
     background-color: transparent;
     border: none;
@@ -97,7 +97,6 @@
     outline: none;
     position: relative;
 }
-
 .drpdwn-choices{
     width:100%;
     height: 0;
@@ -122,11 +121,11 @@
 .choices{
     list-style: none;
 }
-.choices option{
+.choices li{
     padding: 10px;
     border-bottom: 1px solid rgb(177, 177, 177);
 }
-.choices option:hover{
+.choices li:hover{
     background-color: rgba(65, 65, 65, 0.193);
 }
 .down{
@@ -144,9 +143,4 @@
     text-decoration: none;
     color: #6ECDCA;
     font-family: 'Roboto', sans-serif;
-}
-
-label{
-    margin: 20px;
-    position: relative;
 }

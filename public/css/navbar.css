@@ -47,7 +47,7 @@
     flex-direction: column;
 }
 .menu-logo{
-    width:4vw;
+    width:2.5vw;
 }
 .links{
     display: flex;
@@ -74,7 +74,7 @@
 .header,.header-left{
     background-color: #61C6C6;
     display: flex;
-    padding:.5em;
+    padding:.2em;
     align-items: center;
     color:rgb(17,24,39);
 }
@@ -86,17 +86,16 @@
 .circleLogo{
     background-color: white;
     border-radius: 100%;
-    padding:5px;
-    height: 4vw;
-    width: 4vw;
+    height: 3vw;
+    width: 3vw;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 .prod-name{
-    font-size: 2vw;
+    font-size: 1.8vw;
     vertical-align: middle;
-    margin-left: 1rem;
+    margin-left: .5vw;
     color:#fff;
 }
 .header-left{
@@ -108,8 +107,8 @@
     position: relative;
 }
 .header-right svg{
-    width: 2vw;
-    height: 2vw;
+    width: 1.4vw;
+    height: 1.4vw;
     vertical-align: middle;
     fill:#fff;
     stroke: #111827;

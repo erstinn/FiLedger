@@ -1,8 +1,10 @@
+// import {deptdata} from './views/registration.ejs';
 const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
 const nano = require('nano')('http://administrator:qF3ChYhp@127.0.0.1:5984/');
 const dbList = nano.db.list();
+
 
 dbList.then(function (dbs){
     console.log(dbs)
@@ -83,8 +85,8 @@ app.post("/registration", (req, res)=>{
     const password = req.body.password;
     const admin = req.body.isAdmin;
     const add_doc = req.body.add_doc;
-    // const dept = req.body.deptdata; //this dOES NOT WORK
-    console.log( lname, fname, email, password, un, admin, add_doc);
+    const dept = req.body.dept; //this works now
+    console.log(dept, lname, fname, email, password, un, admin, add_doc);
 
 })
 

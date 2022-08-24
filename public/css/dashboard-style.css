@@ -1,169 +1,105 @@
+*{
+    margin: 0;
+    padding:0;
+    box-sizing: border-box;
+}
 .main-cont{
-    padding-bottom: 3em;
-    display: flex;
-    gap:5vw;
-    margin-top: 3vw;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-}
-.content-box{
-    width: 65vw;
-    height:90vh;
-    overflow: hidden;
-    display: flex;
-    gap:3em;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
-}
-.search{
-    width: 65vw;
-    height: 6vh;
-    padding:.3em;
-    border: 1px solid #111827;
-}
-#create-card svg{
-    width: 5vw;
-    height: 5vw;
-    fill: #111827;
-}
-.create-card{
-    position:fixed;
-    background-color: white;
-    cursor: pointer;
-    bottom:4vw;
-    left:4vw;
-}
-
-.uploadFile{
-    width: 40vw;
-    height: 20vh;
-    position:fixed;
-    bottom:4vw;
-    left:12vw;
-    border-radius: 20px;
-    box-shadow: 3px 0px 10px 4px rgba(0, 0, 0, .25);
-    background-color: white;
-    padding:2em;
-    overflow-y: auto;
-}
-.addFile{
-    text-decoration: underline;
-    cursor: pointer;
-    color:#4C8C8E;
-}
-
-.uploadFile-cont{
     display: flex;
     flex-direction: column;
-    gap: .5vw;
 }
-
-
-
-.inactive{
-    display:none!important;
-}
-
-.folder-file{
-    width: 20vw;
-    height: 20vw;
-    background: url(../images/Copy_of_Untitled__2_-removebg-preview.png);
-    background-size: cover;
+.outer-tabs{
     display: flex;
+    gap:.2vw;
     align-items: center;
-    justify-content: center;
-    border-radius: 20px;
-    cursor: pointer;
+    border-bottom: 2px solid #ccc;
 }
-.folder-file:hover{
-    background-color: rgb(212, 212, 212);
+.tabs{
+    border-radius: 5px 5px 0px 0px;
+    background: linear-gradient(to bottom,rgb(213, 213, 213),rgb(255, 255, 255));
+    padding:1.3vh;
+    border:1px solid black
 }
-
-.folderModal{
-    width: 100vw;
-    height: 100vh;
-    background-color: rgba(110, 110, 110, 0.399);
-    position: fixed;
-    border:#111827 1px;
-    display: flex;
-    top:0;
-    align-items: center;
-    justify-content: center;
-    -webkit-backdrop-filter: blur(4px);
-    backdrop-filter: blur(4px);
+.search-bar{
+    margin-left: auto;
+    margin-right: 3vw;
+    width: 25vw;
 }
-
-.mainModal{
-    width: 80vw;
-    height: 80vh;
-    background-color: white;
-    border-radius: 20px;
-    box-shadow: 3px 3px 10px 4px rgba(0, 0, 0, .25);
-    position: relative;
-    padding:3vw;
-    overflow-y: auto;
-}
-.mainModal::-webkit-scrollbar{
-    width: 5px;
-    background-color: rgba(0, 0, 0, 0);
-}
-.mainModal::-webkit-scrollbar-thumb{
-    background-color: rgb(63, 63, 63);
-    border-radius: 10px;
-}
-.mainModal h2{
-    text-align: center;
-}
-
-.documentsModal{
+.searchDocs{
+    height: 98%;
     width: 100%;
-    text-align: center;
-    border-collapse: collapse;
-}
-.documentsModal td,.documentsModal th{
-    padding:.5em
-}
-.exitModal{
-    position: absolute;
-    top: 1em;
-    right:1em;
-    cursor: pointer;
-    
 }
 
-.content-box a{
+.status-cont{
+    height: 80vh;
+    width: 90vw;
+    margin:5vh auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    column-gap: 4vw;
+    row-gap: vw;
+}
+
+.active-tab{
+    background: white!important;
+    border-bottom: none;
+    z-index: 1;
+    position: relative;
+    top:3px
+}
+.tabs:hover{
+    background: rgb(236, 236, 236);
+}
+.statuses{
+    width:30vw;
+    height: 30vh;
+    position: relative;
+    border-radius: 5px;
+    box-shadow: 0px 5px   rgb(66, 65, 95);
+    border: rgb(146, 146, 146) 1px solid;
+    transition: .2s;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+}
+.statuses:hover{
+    transform: translateY(5px);
+    box-shadow: none;
+}
+
+.status-box{
+    width: 100%;
+    height: 10vh;
+    display: flex;
+    position: absolute;
+    bottom: 0;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+    border-radius: 5px;
+}
+
+.accepted{
+    background-color: rgb(55, 205, 115);
+}
+.rejected{
+    background-color: rgb(205, 55, 55);
+}
+.pending{
+    background-color: rgb(255, 255, 81);
+}
+.statuses svg{
+    fill: white;
+    width: 50%;
+    height: 50%;
+    position:absolute;
+    top:10%;
+    stroke: white;
+    stroke-width: 2px;
+}
+
+.status-cont a{
     text-decoration: none;
     color:black;
-}
-
-
-.tableContextMenu{
-    height: 10vh;
-    width: 6vw;
-    border: 1px solid black;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background-color: white;
-    position: absolute;
-    top:0;
-    transform: scale(0);
-    transform-origin: top left;
-}
-.active-context-menu{
-    transform: scale(1);
-    transition: transform 200ms ease-in-out;
-}
-.menu-items{
-  width: 100%;
-  text-align: center;
-}
-.menu-items:hover{
-    background-color: rgb(172, 172, 172);
-}
-.kebab{
-    cursor: pointer;
 }

@@ -1,256 +1,88 @@
-<%- include("header")-%>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/css/navbar.css">
-    <link rel="stylesheet" href="/css/dashboard-style.css">
-    <script src="/js/navbar.js" defer></script>
-    <script src="./js/dashboard.js" defer></script>
+<%-include("header")-%>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/dashboard-style.css">
+<link rel="stylesheet" href="/css/navbar.css">
+<script src="/js/dashboard.js" defer></script>
+<script src="/js/navbar.js" defer></script>
+
 </head>
 <body>
 <!-- NAVBAR -->
 <nav class="side-nav inactive-sidenav" id="side-nav">
-    <div class="nav-header">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-list burger" viewBox="0 0 16 16">
-            <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/>
-        </svg>
-        <h3 class="menu">Menu</h3>
-        <div class="logo">
-            <img src="/images/Copy_of_Untitled-removebg-preview.png" width="50" class="menu-logo">
-            UserType
-        </div>
+<div class="nav-header">
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-list burger" viewBox="0 0 16 16">
+        <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/>
+    </svg>
+    <h3 class="menu">Menu</h3>
+    <div class="logo">
+        <img src="/images/Copy_of_Untitled-removebg-preview.png" width="50" class="menu-logo">
+        UserType
     </div>
-    <div class="links">
-        <a href="/dashboard"><h4 class="nav-item">Dashboard</h4></a>
-        <a href="/documents"><h4 class="nav-item">Documents</h4></a>
-        <a href="/management"><h4 class="nav-item">Management</h4></a>
-        <a href="/approval-page"><h4 class="nav-item">Approval Page</h4></a>
-    </div>
+</div>
+<div class="links">
+    <a href="/dashboard"><h4 class="nav-item">Dashboard</h4></a>
+    <a href="/documents"><h4 class="nav-item">Documents</h4></a>
+    <a href="/management"><h4 class="nav-item">Management</h4></a>
+    <a href="/approval-page"><h4 class="nav-item">Approval Page</h4></a>
+</div>
 </nav>
 <!-- NAVBAR -->
 <!-- HEADER -->
 <header  class="header">
-    <div class="header-left">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-list burger-button" id="burger-button" viewBox="0 0 16 16">
-            <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/>
-        </svg>
-        <span class="circleLogo" style="margin-left:1em">
-            <img src="/images/Copy_of_Untitled-removebg-preview.png" alt="" class="menu-logo">
-        </span>
-        <h3 class="prod-name">FiLedger</h3>
-    </div>
-    <div class="header-right">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bell-fill" viewBox="0 0 16 16">
-            <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2zm.995-14.901a1 1 0 1 0-1.99 0A5.002 5.002 0 0 0 3 6c0 1.098-.5 6-2 7h14c-1.5-1-2-5.902-2-7 0-2.42-1.72-4.44-4.005-4.901z"/>
-        </svg>
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-fill" viewBox="0 0 16 16">
-            <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
-        </svg>
-        <h3 class="username">hi, @username</h3>
-    </div>
+<div class="header-left">
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-list burger-button" id="burger-button" viewBox="0 0 16 16">
+        <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/>
+    </svg>
+    <span class="circleLogo" style="margin-left:1em">
+        <img src="/images/Copy_of_Untitled-removebg-preview.png" alt="" class="menu-logo">
+    </span>
+    <h3 class="prod-name">FiLedger</h3>
+</div>
+<div class="header-right">
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bell-fill" viewBox="0 0 16 16">
+        <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2zm.995-14.901a1 1 0 1 0-1.99 0A5.002 5.002 0 0 0 3 6c0 1.098-.5 6-2 7h14c-1.5-1-2-5.902-2-7 0-2.42-1.72-4.44-4.005-4.901z"/>
+    </svg>
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-fill" viewBox="0 0 16 16">
+        <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+    </svg>
+    <h3 class="username">hi, @username</h3>
+</div>
 </header>
 <!-- HEADER -->
-<div class="create-card" id="create-card">
-    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
-        <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z"/>
-    </svg>
-</div>
-<div class="uploadFile inactive">
-    <span class="upload-text">Upload any file type with file size of 1 GB or less</span>
-    <div class="uploadFile-cont">
-
-    </div>
-    <span class="addFile">Add File</span>
-</div>
-
-<div class="folderModal inactive">
-    <div class="mainModal">
-        <span class="exitModal">&times;</span>
-        <h2><span class="fileStatus-modal">Pending Documents</span></h2>
-        <table class="documentsModal">
-            <tr>
-                <th>File Type</th>
-                <th>Document Title</th>
-                <th>Category</th>
-                <th>Tags</th>
-                <th>Comment</th>
-            </tr>
-            <tr>
-                <td>PDF</td>
-                <td>Document Title 1</td>
-                <td>Category 1</td>
-                <td>Tags, Tag2</td>
-                <td>blah blah blah</td>
-                <td class="kebab">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="kebabButt bi bi-three-dots-vertical" viewBox="0 0 16 16">
-                        <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/>
-                    </svg>
-                </td>
-            </tr>
-            <tr>
-                <td>PDF</td>
-                <td>Document Title 1</td>
-                <td>Category 1</td>
-                <td>Tags, Tag2</td>
-                <td>blah blah blah</td>
-                <td class="kebab">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="kebabButt bi bi-three-dots-vertical" viewBox="0 0 16 16">
-                        <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/>
-                    </svg>
-                </td>
-            </tr>
-            <tr>
-                <td>PDF</td>
-                <td>Document Title 1</td>
-                <td>Category 1</td>
-                <td>Tags, Tag2</td>
-                <td>blah blah blah</td>
-                <td class="kebab">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="kebabButt bi bi-three-dots-vertical" viewBox="0 0 16 16">
-                        <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/>
-                    </svg>
-                </td>
-            </tr>
-            <tr>
-                <td>PDF</td>
-                <td>Document Title 1</td>
-                <td>Category 1</td>
-                <td>Tags, Tag2</td>
-                <td>blah blah blah</td>
-                <td class="kebab">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="kebabButt bi bi-three-dots-vertical" viewBox="0 0 16 16">
-                        <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/>
-                    </svg>
-                </td>
-            </tr>
-            <tr>
-                <td>PDF</td>
-                <td>Document Title 1</td>
-                <td>Category 1</td>
-                <td>Tags, Tag2</td>
-                <td>blah blah blah</td>
-                <td class="kebab">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="kebabButt bi bi-three-dots-vertical" viewBox="0 0 16 16">
-                        <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/>
-                    </svg>
-                </td>
-            </tr>
-            <tr>
-                <td>PDF</td>
-                <td>Document Title 1</td>
-                <td>Category 1</td>
-                <td>Tags, Tag2</td>
-                <td>blah blah blah</td>
-                <td class="kebab">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="kebabButt bi bi-three-dots-vertical" viewBox="0 0 16 16">
-                        <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/>
-                    </svg>
-                </td>
-            </tr>
-            <tr>
-                <td>PDF</td>
-                <td>Document Title 1</td>
-                <td>Category 1</td>
-                <td>Tags, Tag2</td>
-                <td>blah blah blah</td>
-                <td class="kebab">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="kebabButt bi bi-three-dots-vertical" viewBox="0 0 16 16">
-                        <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/>
-                    </svg>
-                </td>
-            </tr>
-            <tr>
-                <td>PDF</td>
-                <td>Document Title 1</td>
-                <td>Category 1</td>
-                <td>Tags, Tag2</td>
-                <td>blah blah blah</td>
-                <td class="kebab">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="kebabButt bi bi-three-dots-vertical" viewBox="0 0 16 16">
-                        <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/>
-                    </svg>
-                </td>
-            </tr>
-            <tr>
-                <td>PDF</td>
-                <td>Document Title 1</td>
-                <td>Category 1</td>
-                <td>Tags, Tag2</td>
-                <td>blah blah blah</td>
-                <td class="kebab">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="kebabButt bi bi-three-dots-vertical" viewBox="0 0 16 16">
-                        <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/>
-                    </svg>
-                </td>
-            </tr>
-            <tr>
-                <td>PDF</td>
-                <td>Document Title 1</td>
-                <td>Category 1</td>
-                <td>Tags, Tag2</td>
-                <td>blah blah blah</td>
-                <td class="kebab">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="kebabButt bi bi-three-dots-vertical" viewBox="0 0 16 16">
-                        <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/>
-                    </svg>
-                </td>
-            </tr>
-            <tr>
-                <td>PDF</td>
-                <td>Document Title 1</td>
-                <td>Category 1</td>
-                <td>Tags, Tag2</td>
-                <td>blah blah blah</td>
-                <td class="kebab">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="kebabButt bi bi-three-dots-vertical" viewBox="0 0 16 16">
-                        <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/>
-                    </svg>
-                </td>
-            </tr>
-            <tr>
-                <td>PDF</td>
-                <td>Document Title 1</td>
-                <td>Category 1</td>
-                <td>Tags, Tag2</td>
-                <td>blah blah blah</td>
-                <td class="kebab">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="kebabButt bi bi-three-dots-vertical" viewBox="0 0 16 16">
-                        <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/>
-                    </svg>
-                </td>
-            </tr>
-
-            
-        </table>
-    </div>
-</div>
-
-<div class="tableContextMenu">
-    <span class="menu-items">Accept</span>
-    <span class="menu-items">Reject</span>
-</div>
-
-<div class="title">
-    <h1>Dashboard</h1>
-</div>
 <div class="main-cont">
-    <div class="search-cont">
-        <input type="search" name="search" id="search" class="search" placeholder="Search..." autocomplete="off">
+    <div class="outer-tabs">
+        <a href="/dashboard"><div class="tabs active-tab">DASHBOARD</div></a>
+        <a href="administration/admin"><div class="tabs">ADMINISTRATION</div></a>
+        <a href="/user-page"><div class="tabs">DOCUMENTS</div></a>
+        <div class="search-bar">
+            <input type="search" name="searchDocs" id="searchDocs" class="searchDocs" placeholder="Search Documents...">
+        </div>
     </div>
-    <div class="content-box" id="content-box">
-            <div class="folder-file">
-                <span class="fileStatus">Pending Documents</span>
+    <div class="status-cont">
+        <a href="/dashboard/accepted-docs">
+            <div class="statuses accepted">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-lg" viewBox="0 0 16 16">
+                    <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022Z"/>
+                </svg>
+                <span class="status-box">Accepted</span>
             </div>
-            <div class="folder-file">
-                <span class="fileStatus">Accepted Documents</span>
+        </a>
+        <a href="/dashboard/rejected-docs">
+            <div class="statuses rejected">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+                    <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z"/>
+                </svg>
+                <span class="status-box">Rejected</span>
             </div>
-            <div class="folder-file">
-                <span class="fileStatus">Rejected Documents</span>
+        </a>
+        <a href="/dashboard/pending-docs">
+            <div class="statuses pending">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-hourglass" viewBox="0 0 16 16">
+                    <path d="M2 1.5a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-1v1a4.5 4.5 0 0 1-2.557 4.06c-.29.139-.443.377-.443.59v.7c0 .213.154.451.443.59A4.5 4.5 0 0 1 12.5 13v1h1a.5.5 0 0 1 0 1h-11a.5.5 0 1 1 0-1h1v-1a4.5 4.5 0 0 1 2.557-4.06c.29-.139.443-.377.443-.59v-.7c0-.213-.154-.451-.443-.59A4.5 4.5 0 0 1 3.5 3V2h-1a.5.5 0 0 1-.5-.5zm2.5.5v1a3.5 3.5 0 0 0 1.989 3.158c.533.256 1.011.791 1.011 1.491v.702c0 .7-.478 1.235-1.011 1.491A3.5 3.5 0 0 0 4.5 13v1h7v-1a3.5 3.5 0 0 0-1.989-3.158C8.978 9.586 8.5 9.052 8.5 8.351v-.702c0-.7.478-1.235 1.011-1.491A3.5 3.5 0 0 0 11.5 3V2h-7z"/>
+                </svg>
+                <span class="status-box">Pending</span>
             </div>
-            <a href="/documents">
-                <div class="folder-file">
-                    <span class="fileStatus">All Documents</span>
-                </div>
-            </a>
+        </a>
     </div>
 </div>
-</body>
-</html>

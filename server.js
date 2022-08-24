@@ -47,8 +47,8 @@ app.get('/registration', function (req, res){
     res.render("registration");
 })
 
-app.get('/management/manage-people/admin',function (req,res){
-    res.render("managePeople");
+app.get('/administration/admin',function (req,res){
+    res.render("admin");
 })
 
 app.get('/management/manage-documents/approver',function (req,res){
@@ -57,6 +57,16 @@ app.get('/management/manage-documents/approver',function (req,res){
 
 app.get('/user-page',(req,res)=>{
     res.render("user-page")
+})
+
+app.get("/dashboard/accepted-docs",(req,res)=>{
+    res.render("accepted-docs")
+})
+app.get("/dashboard/rejected-docs",(req,res)=>{
+    res.render("rejected-docs")
+})
+app.get("/dashboard/pending-docs",(req,res)=>{
+    res.render("pending-docs")
 })
 
 

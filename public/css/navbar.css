@@ -12,7 +12,7 @@
     /* border-right:1px solid rgb(17,24,39); */
     transition:.3s;
     background-color: white;
-    z-index: 99;
+    z-index: 99999999999999999999999999;
     box-shadow: 2px 0px 5px 10px rgba(0,0,0,.15);
     
 }
@@ -127,4 +127,9 @@
     border-radius: 20px;
     left:.9vw;
     bottom:.7vw
+}
+
+a{
+    text-decoration: none;
+    color: black;
 }

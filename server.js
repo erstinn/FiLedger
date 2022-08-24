@@ -1,6 +1,12 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
+const nano = require('nano')('http://administrator:qF3ChYhp@127.0.0.1:5984/');
+const dbList = nano.db.list();
+
+dbList.then(function (dbs){
+    console.log(dbs)
+})
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static('public'))
@@ -71,7 +77,15 @@ app.get("/dashboard/pending-docs",(req,res)=>{
 
 app.post("/registration", (req, res)=>{
     const un = req.body.username;
-    console.log(un);
+    const lname = req.body.lastname;
+    const fname = req.body.firstname;
+    const email = req.body.email;
+    const password = req.body.password;
+    const admin = req.body.isAdmin;
+    const add_doc = req.body.add_doc;
+    // const dept = req.body.deptdata; //this dOES NOT WORK
+    console.log( lname, fname, email, password, un, admin, add_doc);
+
 })
 
 app.listen(process.env.PORT || 3000, function (){

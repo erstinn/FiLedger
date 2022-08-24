@@ -71,7 +71,7 @@ app.get("/dashboard/pending-docs",(req,res)=>{
 
 
 
-app.listen(process.env.PORT||80, function (){
+app.listen(process.env.PORT || 3000, function (){
     console.log("Server started on port 3000")
 })
 

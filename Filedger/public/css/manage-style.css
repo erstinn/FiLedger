@@ -1,0 +1,129 @@
+html{
+    scroll-behavior: smooth;
+}
+.manage-docs,.delete-docs,.manage-people{
+    height: 90vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.manage-docs-cont,.delete-docs-cont,.manage-people-cont{
+    width: 90vw;
+    height: 70vh;
+    display: flex;
+    align-items: center;
+}
+.manage-docs-logo,.delete-docs-logo,.manage-people-logo{
+    width: 30%;
+    height:inherit ;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap:1em;
+}
+
+.manage-docs-form{
+    width: 70%;
+    height:inherit ;
+    border: 1px solid #111827;
+    border-radius: 6px;
+    padding:2.5em;
+   
+    
+}
+.logo-container{
+    width: 25vw;
+    height: 25vw;
+    background-color: white;
+    border-radius: 100%;
+    border:4px solid #111827;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.logo-container svg{
+    width: 8vw;
+    height: 8vw;
+    fill: #111827;
+}
+.form-buttons{
+    display: block;
+    padding:.5em;
+    width:90%;
+    text-align: left;
+    border: #111827 1 px solid;
+    background-color: white ;
+    color: #111827;
+    font-size: 1.5vw;;
+    transition: .1s;
+    cursor: pointer;
+}
+.form-buttons:hover{
+    background-color: #111827;
+    color:white;
+}
+.form-buttons-cont{
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    justify-content: center;
+    align-items: center;
+}
+.docs-list-cont{
+    width: 70%;
+    height: 60%;
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+}
+.delete-docs-cont input[type="search"]{
+    height: 6vh;
+    padding:.3em;
+}
+.docs-card{
+    width: calc(100%/4);
+    height: 100%;
+    background-color: #E5E7EB;
+    border: #111827 1px solid;
+    border-radius: 6px;
+}
+.outer-cont{
+    display: flex;
+    width: 100%;
+    gap:1em;
+    height: 100%;
+}
+.manage-people-forms{
+    width: 70%;
+    height:100%;
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap:1em
+}
+.people-forms-buttons{
+    padding:.5em;
+    width:90%;
+    text-align: left;
+    border: #111827 1 px solid;
+    background-color: white ;
+    color: #111827;
+    font-size: 1.5vw;;
+    transition: .1s;
+    cursor: pointer;;
+
+}
+.people-forms-buttons:hover{
+    color: white;
+    background-color: #111827;
+}
+
+.header{
+    position:sticky;
+    top:0px;
+}
+.side-nav{
+    z-index: 999;
+}

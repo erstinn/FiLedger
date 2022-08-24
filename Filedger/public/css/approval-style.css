@@ -1,0 +1,45 @@
+.main-cont{
+    padding-bottom: 3em;
+    display: flex;
+    gap:5vw;
+    margin-top: 3vw;
+}
+.content-box{
+    width: 100vw;
+    height:90vh;
+    margin-left:5vw;
+    display: flex;
+    gap:3em;
+    flex-wrap: wrap;
+}
+.search{
+    width: 63vw;
+    height: 6vh;
+    margin-left: 5vw;
+    padding:.3em;
+    border: 1px solid #111827;
+}
+.search-button{
+    width: 2.5em;
+    height: 2.5em;
+    position:relative;
+    left:-3em;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+}
+.card{
+    width: calc(65vw/5);
+    height: calc(65vw/4);
+    background-color: #E5E7EB;
+    border: 1px solid #111827;
+    border-radius: 6px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap:2em;
+}
+.search-cont{
+    display: flex;
+}

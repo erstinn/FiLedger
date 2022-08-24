@@ -1,0 +1,898 @@
+<%-include('header')-%>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/user-page.css">
+    <link rel="stylesheet" href="/css/navbar.css">
+    <script src="/js/user-page.js" defer></script>
+    <script src="/js/navbar.js" defer></script>
+
+</head>
+<body>
+    <!-- NAVBAR -->
+<nav class="side-nav inactive-sidenav" id="side-nav">
+    <div class="nav-header">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-list burger" viewBox="0 0 16 16">
+            <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/>
+        </svg>
+        <h3 class="menu">Menu</h3>
+        <div class="logo">
+            <img src="/images/Copy_of_Untitled-removebg-preview.png" width="50" class="menu-logo">
+            UserType
+        </div>
+    </div>
+    <div class="links">
+        <a href="/dashboard"><h4 class="nav-item">Dashboard</h4></a>
+        <a href="/documents"><h4 class="nav-item">Documents</h4></a>
+        <a href="/management"><h4 class="nav-item">Management</h4></a>
+        <a href="/approval-page"><h4 class="nav-item">Approval Page</h4></a>
+    </div>
+</nav>
+<!-- NAVBAR -->
+<!-- HEADER -->
+<header  class="header">
+    <div class="header-left">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-list burger-button" id="burger-button" viewBox="0 0 16 16">
+            <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/>
+        </svg>
+        <span class="circleLogo" style="margin-left:1em">
+            <img src="/images/Copy_of_Untitled-removebg-preview.png" alt="" class="menu-logo">
+        </span>
+        <h3 class="prod-name">FiLedger</h3>
+    </div>
+    <div class="header-right">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bell-fill" viewBox="0 0 16 16">
+            <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2zm.995-14.901a1 1 0 1 0-1.99 0A5.002 5.002 0 0 0 3 6c0 1.098-.5 6-2 7h14c-1.5-1-2-5.902-2-7 0-2.42-1.72-4.44-4.005-4.901z"/>
+        </svg>
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-fill" viewBox="0 0 16 16">
+            <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+        </svg>
+        <h3 class="username">hi, @username</h3>
+    </div>
+</header>
+<!-- HEADER -->
+
+
+<div class="upload-modal-cont">
+    <div class="upload-modal-box">
+        <input type="file" name="" id="">
+    </div>
+    <div class="upload-modal-point">
+
+    </div>
+</div>
+
+
+<div class="main-cont">
+    <div class="outer-tabs">
+        <a href="/dashboard"><div class="tabs">DASHBOARD</div></a>
+        <a href="administration/admin"><div class="tabs">ADMINISTRATION</div></a>
+        <a href="/user-page"><div class="tabs active-tab">DOCUMENTS</div></a>
+        <div class="search-bar">
+            <input type="search" name="searchDocs" id="searchDocs" class="searchDocs" placeholder="Search Documents...">
+        </div>
+    </div>
+    <div class="inner-tabs">
+        <div class="tabs active-tab">USER</div>
+    </div>
+
+    <div class="content-wrapper">
+        <div class="documents-container">
+            <div class="uploaded-docs">
+                <div class="table-title">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-upload" viewBox="0 0 16 16">
+                    <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
+                    <path d="M7.646 1.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 2.707V11.5a.5.5 0 0 1-1 0V2.707L5.354 4.854a.5.5 0 1 1-.708-.708l3-3z"/>
+                    </svg>
+                    Uploaded Documents
+                    <div class="upload-buttons">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="upload-plus bi bi-plus" viewBox="0 0 16 16">
+                            <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+                        </svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="upload-share bi bi-arrow-return-right" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M1.5 1.5A.5.5 0 0 0 1 2v4.8a2.5 2.5 0 0 0 2.5 2.5h9.793l-3.347 3.346a.5.5 0 0 0 .708.708l4.2-4.2a.5.5 0 0 0 0-.708l-4-4a.5.5 0 0 0-.708.708L13.293 8.3H3.5A1.5 1.5 0 0 1 2 6.8V2a.5.5 0 0 0-.5-.5z"/>
+                          </svg>
+
+                    </div>
+                </div>
+                <table class="uploaded-docs-table">
+                    <tr class="table-header">
+                        <th>File Type</th>
+                        <th>Document Title</th>
+                        <th>Tag</th>
+                        <th>Classification</th>
+                        <th>Comment</th>
+                        <th>Status</th>
+                    </tr>
+                    <tr class="data">
+                        <td>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-files" viewBox="0 0 16 16">
+                                <path d="M13 0H6a2 2 0 0 0-2 2 2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2 2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm0 13V4a2 2 0 0 0-2-2H5a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1zM3 4a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4z"/>
+                              </svg>
+                        </td>
+                        <td>Document 1</td>
+                        <td>Tag1,Tag2</td>
+                        <td>Public</td>
+                        <td>blah blah blah blah</td>
+                        <td>Not Published</td>
+                    </tr>
+                    <tr class="data">
+                        <td>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-files" viewBox="0 0 16 16">
+                                <path d="M13 0H6a2 2 0 0 0-2 2 2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2 2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm0 13V4a2 2 0 0 0-2-2H5a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1zM3 4a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4z"/>
+                              </svg>
+                        </td>
+                        <td>Document 1</td>
+                        <td>Tag1,Tag2</td>
+                        <td>Public</td>
+                        <td>blah blah blah blah</td>
+                        <td>Not Published</td>
+                    </tr>
+                    <tr class="data">
+                        <td>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-files" viewBox="0 0 16 16">
+                                <path d="M13 0H6a2 2 0 0 0-2 2 2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2 2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm0 13V4a2 2 0 0 0-2-2H5a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1zM3 4a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4z"/>
+                              </svg>
+                        </td>
+                        <td>Document 1</td>
+                        <td>Tag1,Tag2</td>
+                        <td>Public</td>
+                        <td>blah blah blah blah</td>
+                        <td>Not Published</td>
+                    </tr>
+                    <tr class="data">
+                        <td>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-files" viewBox="0 0 16 16">
+                                <path d="M13 0H6a2 2 0 0 0-2 2 2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2 2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm0 13V4a2 2 0 0 0-2-2H5a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1zM3 4a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4z"/>
+                              </svg>
+                        </td>
+                        <td>Document 1</td>
+                        <td>Tag1,Tag2</td>
+                        <td>Public</td>
+                        <td>blah blah blah blah</td>
+                        <td>Not Published</td>
+                    </tr>
+                    <tr class="data">
+                        <td>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-files" viewBox="0 0 16 16">
+                                <path d="M13 0H6a2 2 0 0 0-2 2 2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2 2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm0 13V4a2 2 0 0 0-2-2H5a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1zM3 4a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4z"/>
+                              </svg>
+                        </td>
+                        <td>Document 1</td>
+                        <td>Tag1,Tag2</td>
+                        <td>Public</td>
+                        <td>blah blah blah blah</td>
+                        <td>Not Published</td>
+                    </tr>
+                    <tr class="data">
+                        <td>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-files" viewBox="0 0 16 16">
+                                <path d="M13 0H6a2 2 0 0 0-2 2 2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2 2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm0 13V4a2 2 0 0 0-2-2H5a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1zM3 4a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4z"/>
+                              </svg>
+                        </td>
+                        <td>Document 1</td>
+                        <td>Tag1,Tag2</td>
+                        <td>Public</td>
+                        <td>blah blah blah blah</td>
+                        <td>Not Published</td>
+                    </tr>
+                    <tr class="data">
+                        <td>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-files" viewBox="0 0 16 16">
+                                <path d="M13 0H6a2 2 0 0 0-2 2 2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2 2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm0 13V4a2 2 0 0 0-2-2H5a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1zM3 4a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4z"/>
+                              </svg>
+                        </td>
+                        <td>Document 1</td>
+                        <td>Tag1,Tag2</td>
+                        <td>Public</td>
+                        <td>blah blah blah blah</td>
+                        <td>Not Published</td>
+                    </tr>
+                    <tr class="data">
+                        <td>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-files" viewBox="0 0 16 16">
+                                <path d="M13 0H6a2 2 0 0 0-2 2 2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2 2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm0 13V4a2 2 0 0 0-2-2H5a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1zM3 4a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4z"/>
+                              </svg>
+                        </td>
+                        <td>Document 1</td>
+                        <td>Tag1,Tag2</td>
+                        <td>Public</td>
+                        <td>blah blah blah blah</td>
+                        <td>Not Published</td>
+                    </tr>
+                    <tr class="data">
+                        <td>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-files" viewBox="0 0 16 16">
+                                <path d="M13 0H6a2 2 0 0 0-2 2 2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2 2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm0 13V4a2 2 0 0 0-2-2H5a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1zM3 4a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4z"/>
+                              </svg>
+                        </td>
+                        <td>Document 1</td>
+                        <td>Tag1,Tag2</td>
+                        <td>Public</td>
+                        <td>blah blah blah blah</td>
+                        <td>Not Published</td>
+                    </tr>
+                    <tr class="data">
+                        <td>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-files" viewBox="0 0 16 16">
+                                <path d="M13 0H6a2 2 0 0 0-2 2 2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2 2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm0 13V4a2 2 0 0 0-2-2H5a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1zM3 4a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4z"/>
+                              </svg>
+                        </td>
+                        <td>Document 1</td>
+                        <td>Tag1,Tag2</td>
+                        <td>Public</td>
+                        <td>blah blah blah blah</td>
+                        <td>Not Published</td>
+                    </tr>
+                    <tr class="data">
+                        <td>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-files" viewBox="0 0 16 16">
+                                <path d="M13 0H6a2 2 0 0 0-2 2 2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2 2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm0 13V4a2 2 0 0 0-2-2H5a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1zM3 4a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4z"/>
+                              </svg>
+                        </td>
+                        <td>Document 1</td>
+                        <td>Tag1,Tag2</td>
+                        <td>Public</td>
+                        <td>blah blah blah blah</td>
+                        <td>Not Published</td>
+                    </tr>
+                    <tr class="data">
+                        <td>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-files" viewBox="0 0 16 16">
+                                <path d="M13 0H6a2 2 0 0 0-2 2 2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2 2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm0 13V4a2 2 0 0 0-2-2H5a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1zM3 4a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4z"/>
+                              </svg>
+                        </td>
+                        <td>Document 1</td>
+                        <td>Tag1,Tag2</td>
+                        <td>Public</td>
+                        <td>blah blah blah blah</td>
+                        <td>Not Published</td>
+                    </tr>
+                    <tr class="data">
+                        <td>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-files" viewBox="0 0 16 16">
+                                <path d="M13 0H6a2 2 0 0 0-2 2 2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2 2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm0 13V4a2 2 0 0 0-2-2H5a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1zM3 4a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4z"/>
+                              </svg>
+                        </td>
+                        <td>Document 1</td>
+                        <td>Tag1,Tag2</td>
+                        <td>Public</td>
+                        <td>blah blah blah blah</td>
+                        <td>Not Published</td>
+                    </tr>
+                    <tr class="data">
+                        <td>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-files" viewBox="0 0 16 16">
+                                <path d="M13 0H6a2 2 0 0 0-2 2 2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2 2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm0 13V4a2 2 0 0 0-2-2H5a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1zM3 4a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4z"/>
+                              </svg>
+                        </td>
+                        <td>Document 1</td>
+                        <td>Tag1,Tag2</td>
+                        <td>Public</td>
+                        <td>blah blah blah blah</td>
+                        <td>Not Published</td>
+                    </tr>
+                    <tr class="data">
+                        <td>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-files" viewBox="0 0 16 16">
+                                <path d="M13 0H6a2 2 0 0 0-2 2 2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2 2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm0 13V4a2 2 0 0 0-2-2H5a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1zM3 4a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4z"/>
+                              </svg>
+                        </td>
+                        <td>Document 1</td>
+                        <td>Tag1,Tag2</td>
+                        <td>Public</td>
+                        <td>blah blah blah blah</td>
+                        <td>Not Published</td>
+                    </tr>
+                    <tr class="data">
+                        <td>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-files" viewBox="0 0 16 16">
+                                <path d="M13 0H6a2 2 0 0 0-2 2 2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2 2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm0 13V4a2 2 0 0 0-2-2H5a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1zM3 4a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4z"/>
+                              </svg>
+                        </td>
+                        <td>Document 1</td>
+                        <td>Tag1,Tag2</td>
+                        <td>Public</td>
+                        <td>blah blah blah blah</td>
+                        <td>Not Published</td>
+                    </tr>
+                    <tr class="data">
+                        <td>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-files" viewBox="0 0 16 16">
+                                <path d="M13 0H6a2 2 0 0 0-2 2 2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2 2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm0 13V4a2 2 0 0 0-2-2H5a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1zM3 4a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4z"/>
+                              </svg>
+                        </td>
+                        <td>Document 1</td>
+                        <td>Tag1,Tag2</td>
+                        <td>Public</td>
+                        <td>blah blah blah blah</td>
+                        <td>Not Published</td>
+                    </tr>
+                    <tr class="data">
+                        <td>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-files" viewBox="0 0 16 16">
+                                <path d="M13 0H6a2 2 0 0 0-2 2 2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2 2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm0 13V4a2 2 0 0 0-2-2H5a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1zM3 4a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4z"/>
+                              </svg>
+                        </td>
+                        <td>Document 1</td>
+                        <td>Tag1,Tag2</td>
+                        <td>Public</td>
+                        <td>blah blah blah blah</td>
+                        <td>Not Published</td>
+                    </tr>
+                    <tr class="data">
+                        <td>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-files" viewBox="0 0 16 16">
+                                <path d="M13 0H6a2 2 0 0 0-2 2 2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2 2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm0 13V4a2 2 0 0 0-2-2H5a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1zM3 4a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4z"/>
+                              </svg>
+                        </td>
+                        <td>Document 1</td>
+                        <td>Tag1,Tag2</td>
+                        <td>Public</td>
+                        <td>blah blah blah blah</td>
+                        <td>Not Published</td>
+                    </tr>
+                    <tr class="data">
+                        <td>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-files" viewBox="0 0 16 16">
+                                <path d="M13 0H6a2 2 0 0 0-2 2 2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2 2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm0 13V4a2 2 0 0 0-2-2H5a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1zM3 4a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4z"/>
+                              </svg>
+                        </td>
+                        <td>Document 1</td>
+                        <td>Tag1,Tag2</td>
+                        <td>Public</td>
+                        <td>blah blah blah blah</td>
+                        <td>Not Published</td>
+                    </tr>
+                    <tr class="data">
+                        <td>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-files" viewBox="0 0 16 16">
+                                <path d="M13 0H6a2 2 0 0 0-2 2 2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2 2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm0 13V4a2 2 0 0 0-2-2H5a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1zM3 4a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4z"/>
+                              </svg>
+                        </td>
+                        <td>Document 1</td>
+                        <td>Tag1,Tag2</td>
+                        <td>Public</td>
+                        <td>blah blah blah blah</td>
+                        <td>Not Published</td>
+                    </tr>
+                    <tr class="data">
+                        <td>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-files" viewBox="0 0 16 16">
+                                <path d="M13 0H6a2 2 0 0 0-2 2 2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2 2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm0 13V4a2 2 0 0 0-2-2H5a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1zM3 4a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4z"/>
+                              </svg>
+                        </td>
+                        <td>Document 1</td>
+                        <td>Tag1,Tag2</td>
+                        <td>Public</td>
+                        <td>blah blah blah blah</td>
+                        <td>Not Published</td>
+                    </tr>
+                    <tr class="data">
+                        <td>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-files" viewBox="0 0 16 16">
+                                <path d="M13 0H6a2 2 0 0 0-2 2 2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2 2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm0 13V4a2 2 0 0 0-2-2H5a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1zM3 4a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4z"/>
+                              </svg>
+                        </td>
+                        <td>Document 1</td>
+                        <td>Tag1,Tag2</td>
+                        <td>Public</td>
+                        <td>blah blah blah blah</td>
+                        <td>Not Published</td>
+                    </tr>
+                    <tr class="data">
+                        <td>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-files" viewBox="0 0 16 16">
+                                <path d="M13 0H6a2 2 0 0 0-2 2 2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2 2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm0 13V4a2 2 0 0 0-2-2H5a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1zM3 4a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4z"/>
+                              </svg>
+                        </td>
+                        <td>Document 1</td>
+                        <td>Tag1,Tag2</td>
+                        <td>Public</td>
+                        <td>blah blah blah blah</td>
+                        <td>Not Published</td>
+                    </tr>
+                    <tr class="data">
+                        <td>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-files" viewBox="0 0 16 16">
+                                <path d="M13 0H6a2 2 0 0 0-2 2 2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2 2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm0 13V4a2 2 0 0 0-2-2H5a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1zM3 4a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4z"/>
+                              </svg>
+                        </td>
+                        <td>Document 1</td>
+                        <td>Tag1,Tag2</td>
+                        <td>Public</td>
+                        <td>blah blah blah blah</td>
+                        <td>Not Published</td>
+                    </tr>
+                    <tr class="data">
+                        <td>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-files" viewBox="0 0 16 16">
+                                <path d="M13 0H6a2 2 0 0 0-2 2 2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2 2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm0 13V4a2 2 0 0 0-2-2H5a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1zM3 4a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4z"/>
+                              </svg>
+                        </td>
+                        <td>Document 1</td>
+                        <td>Tag1,Tag2</td>
+                        <td>Public</td>
+                        <td>blah blah blah blah</td>
+                        <td>Not Published</td>
+                    </tr>
+                    <tr class="data">
+                        <td>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-files" viewBox="0 0 16 16">
+                                <path d="M13 0H6a2 2 0 0 0-2 2 2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2 2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm0 13V4a2 2 0 0 0-2-2H5a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1zM3 4a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4z"/>
+                              </svg>
+                        </td>
+                        <td>Document 1</td>
+                        <td>Tag1,Tag2</td>
+                        <td>Public</td>
+                        <td>blah blah blah blah</td>
+                        <td>Not Published</td>
+                    </tr>
+                    <tr class="data">
+                        <td>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-files" viewBox="0 0 16 16">
+                                <path d="M13 0H6a2 2 0 0 0-2 2 2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2 2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm0 13V4a2 2 0 0 0-2-2H5a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1zM3 4a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4z"/>
+                              </svg>
+                        </td>
+                        <td>Document 1</td>
+                        <td>Tag1,Tag2</td>
+                        <td>Public</td>
+                        <td>blah blah blah blah</td>
+                        <td>Not Published</td>
+                    </tr>
+                    <tr class="data">
+                        <td>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-files" viewBox="0 0 16 16">
+                                <path d="M13 0H6a2 2 0 0 0-2 2 2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2 2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm0 13V4a2 2 0 0 0-2-2H5a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1zM3 4a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4z"/>
+                              </svg>
+                        </td>
+                        <td>Document 1</td>
+                        <td>Tag1,Tag2</td>
+                        <td>Public</td>
+                        <td>blah blah blah blah</td>
+                        <td>Not Published</td>
+                    </tr>
+                    <tr class="data">
+                        <td>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-files" viewBox="0 0 16 16">
+                                <path d="M13 0H6a2 2 0 0 0-2 2 2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2 2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm0 13V4a2 2 0 0 0-2-2H5a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1zM3 4a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4z"/>
+                              </svg>
+                        </td>
+                        <td>Document 1</td>
+                        <td>Tag1,Tag2</td>
+                        <td>Public</td>
+                        <td>blah blah blah blah</td>
+                        <td>Not Published</td>
+                    </tr>
+                    <tr class="data">
+                        <td>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-files" viewBox="0 0 16 16">
+                                <path d="M13 0H6a2 2 0 0 0-2 2 2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2 2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm0 13V4a2 2 0 0 0-2-2H5a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1zM3 4a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4z"/>
+                              </svg>
+                        </td>
+                        <td>Document 1</td>
+                        <td>Tag1,Tag2</td>
+                        <td>Public</td>
+                        <td>blah blah blah blah</td>
+                        <td>Not Published</td>
+                    </tr>
+                    <tr class="data">
+                        <td>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-files" viewBox="0 0 16 16">
+                                <path d="M13 0H6a2 2 0 0 0-2 2 2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2 2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm0 13V4a2 2 0 0 0-2-2H5a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1zM3 4a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4z"/>
+                              </svg>
+                        </td>
+                        <td>Document 1</td>
+                        <td>Tag1,Tag2</td>
+                        <td>Public</td>
+                        <td>blah blah blah blah</td>
+                        <td>Not Published</td>
+                    </tr>
+                    <tr class="data">
+                        <td>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-files" viewBox="0 0 16 16">
+                                <path d="M13 0H6a2 2 0 0 0-2 2 2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2 2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm0 13V4a2 2 0 0 0-2-2H5a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1zM3 4a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4z"/>
+                              </svg>
+                        </td>
+                        <td>Document 1</td>
+                        <td>Tag1,Tag2</td>
+                        <td>Public</td>
+                        <td>blah blah blah blah</td>
+                        <td>Not Published</td>
+                    </tr>
+                    <tr class="data">
+                        <td>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-files" viewBox="0 0 16 16">
+                                <path d="M13 0H6a2 2 0 0 0-2 2 2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2 2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm0 13V4a2 2 0 0 0-2-2H5a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1zM3 4a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4z"/>
+                              </svg>
+                        </td>
+                        <td>Document 1</td>
+                        <td>Tag1,Tag2</td>
+                        <td>Public</td>
+                        <td>blah blah blah blah</td>
+                        <td>Not Published</td>
+                    </tr>
+                    <tr class="data">
+                        <td>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-files" viewBox="0 0 16 16">
+                                <path d="M13 0H6a2 2 0 0 0-2 2 2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2 2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm0 13V4a2 2 0 0 0-2-2H5a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1zM3 4a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4z"/>
+                              </svg>
+                        </td>
+                        <td>Document 1</td>
+                        <td>Tag1,Tag2</td>
+                        <td>Public</td>
+                        <td>blah blah blah blah</td>
+                        <td>Not Published</td>
+                    </tr>
+                    <tr class="data">
+                        <td>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-files" viewBox="0 0 16 16">
+                                <path d="M13 0H6a2 2 0 0 0-2 2 2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2 2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm0 13V4a2 2 0 0 0-2-2H5a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1zM3 4a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4z"/>
+                              </svg>
+                        </td>
+                        <td>Document 1</td>
+                        <td>Tag1,Tag2</td>
+                        <td>Public</td>
+                        <td>blah blah blah blah</td>
+                        <td>Not Published</td>
+                    </tr>
+                    <tr class="data">
+                        <td>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-files" viewBox="0 0 16 16">
+                                <path d="M13 0H6a2 2 0 0 0-2 2 2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2 2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm0 13V4a2 2 0 0 0-2-2H5a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1zM3 4a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4z"/>
+                              </svg>
+                        </td>
+                        <td>Document 1</td>
+                        <td>Tag1,Tag2</td>
+                        <td>Public</td>
+                        <td>blah blah blah blah</td>
+                        <td>Not Published</td>
+                    </tr>
+                    <tr class="data">
+                        <td>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-files" viewBox="0 0 16 16">
+                                <path d="M13 0H6a2 2 0 0 0-2 2 2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2 2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm0 13V4a2 2 0 0 0-2-2H5a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1zM3 4a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4z"/>
+                              </svg>
+                        </td>
+                        <td>Document 1</td>
+                        <td>Tag1,Tag2</td>
+                        <td>Public</td>
+                        <td>blah blah blah blah</td>
+                        <td>Not Published</td>
+                    </tr>
+                    <tr class="data">
+                        <td>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-files" viewBox="0 0 16 16">
+                                <path d="M13 0H6a2 2 0 0 0-2 2 2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2 2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm0 13V4a2 2 0 0 0-2-2H5a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1zM3 4a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4z"/>
+                              </svg>
+                        </td>
+                        <td>Document 1</td>
+                        <td>Tag1,Tag2</td>
+                        <td>Public</td>
+                        <td>blah blah blah blah</td>
+                        <td>Not Published</td>
+                    </tr>
+                    <tr class="data">
+                        <td>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-files" viewBox="0 0 16 16">
+                                <path d="M13 0H6a2 2 0 0 0-2 2 2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2 2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm0 13V4a2 2 0 0 0-2-2H5a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1zM3 4a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4z"/>
+                              </svg>
+                        </td>
+                        <td>Document 1</td>
+                        <td>Tag1,Tag2</td>
+                        <td>Public</td>
+                        <td>blah blah blah blah</td>
+                        <td>Not Published</td>
+                    </tr>
+                    <tr class="data">
+                        <td>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-files" viewBox="0 0 16 16">
+                                <path d="M13 0H6a2 2 0 0 0-2 2 2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2 2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm0 13V4a2 2 0 0 0-2-2H5a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1zM3 4a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4z"/>
+                              </svg>
+                        </td>
+                        <td>Document 1</td>
+                        <td>Tag1,Tag2</td>
+                        <td>Public</td>
+                        <td>blah blah blah blah</td>
+                        <td>Not Published</td>
+                    </tr>
+                    <tr class="data">
+                        <td>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-files" viewBox="0 0 16 16">
+                                <path d="M13 0H6a2 2 0 0 0-2 2 2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2 2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm0 13V4a2 2 0 0 0-2-2H5a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1zM3 4a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4z"/>
+                              </svg>
+                        </td>
+                        <td>Document 1</td>
+                        <td>Tag1,Tag2</td>
+                        <td>Public</td>
+                        <td>blah blah blah blah</td>
+                        <td>Not Published</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="downloaded-docs">
+               <div class="table-title">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-download" viewBox="0 0 16 16">
+                        <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
+                        <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
+                    </svg>
+                        Downloaded Documents
+                </div>
+                <table class="downloaded-docs-table">
+                    <tr class="table-header">
+                        <th>File Type</th>
+                        <th>Document Title</th>
+                        <th>Tag</th>
+                        <th>Classification</th>
+                        <th>Comment</th>
+                        <th>Status</th>
+                    </tr>
+                    <tr class="data">
+                        <td>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-files" viewBox="0 0 16 16">
+                                <path d="M13 0H6a2 2 0 0 0-2 2 2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2 2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm0 13V4a2 2 0 0 0-2-2H5a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1zM3 4a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4z"/>
+                              </svg>
+                        </td>
+                        <td>Document 1</td>
+                        <td>Tag1,Tag2</td>
+                        <td>Public</td>
+                        <td>blah blah blah blah</td>
+                        <td>Not Published</td>
+                    </tr>
+                    <tr class="data">
+                        <td>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-files" viewBox="0 0 16 16">
+                                <path d="M13 0H6a2 2 0 0 0-2 2 2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2 2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm0 13V4a2 2 0 0 0-2-2H5a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1zM3 4a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4z"/>
+                              </svg>
+                        </td>
+                        <td>Document 1</td>
+                        <td>Tag1,Tag2</td>
+                        <td>Public</td>
+                        <td>blah blah blah blah</td>
+                        <td>Not Published</td>
+                    </tr>
+                    <tr class="data">
+                        <td>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-files" viewBox="0 0 16 16">
+                                <path d="M13 0H6a2 2 0 0 0-2 2 2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2 2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm0 13V4a2 2 0 0 0-2-2H5a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1zM3 4a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4z"/>
+                              </svg>
+                        </td>
+                        <td>Document 1</td>
+                        <td>Tag1,Tag2</td>
+                        <td>Public</td>
+                        <td>blah blah blah blah</td>
+                        <td>Not Published</td>
+                    </tr>
+                    <tr class="data">
+                        <td>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-files" viewBox="0 0 16 16">
+                                <path d="M13 0H6a2 2 0 0 0-2 2 2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2 2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm0 13V4a2 2 0 0 0-2-2H5a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1zM3 4a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4z"/>
+                              </svg>
+                        </td>
+                        <td>Document 1</td>
+                        <td>Tag1,Tag2</td>
+                        <td>Public</td>
+                        <td>blah blah blah blah</td>
+                        <td>Not Published</td>
+                    </tr>
+                    <tr class="data">
+                        <td>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-files" viewBox="0 0 16 16">
+                                <path d="M13 0H6a2 2 0 0 0-2 2 2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2 2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm0 13V4a2 2 0 0 0-2-2H5a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1zM3 4a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4z"/>
+                              </svg>
+                        </td>
+                        <td>Document 1</td>
+                        <td>Tag1,Tag2</td>
+                        <td>Public</td>
+                        <td>blah blah blah blah</td>
+                        <td>Not Published</td>
+                    </tr>
+                    <tr class="data">
+                        <td>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-files" viewBox="0 0 16 16">
+                                <path d="M13 0H6a2 2 0 0 0-2 2 2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2 2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm0 13V4a2 2 0 0 0-2-2H5a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1zM3 4a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4z"/>
+                              </svg>
+                        </td>
+                        <td>Document 1</td>
+                        <td>Tag1,Tag2</td>
+                        <td>Public</td>
+                        <td>blah blah blah blah</td>
+                        <td>Not Published</td>
+                    </tr>
+                    <tr class="data">
+                        <td>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-files" viewBox="0 0 16 16">
+                                <path d="M13 0H6a2 2 0 0 0-2 2 2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2 2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm0 13V4a2 2 0 0 0-2-2H5a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1zM3 4a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4z"/>
+                              </svg>
+                        </td>
+                        <td>Document 1</td>
+                        <td>Tag1,Tag2</td>
+                        <td>Public</td>
+                        <td>blah blah blah blah</td>
+                        <td>Not Published</td>
+                    </tr>
+                    <tr class="data">
+                        <td>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-files" viewBox="0 0 16 16">
+                                <path d="M13 0H6a2 2 0 0 0-2 2 2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2 2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm0 13V4a2 2 0 0 0-2-2H5a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1zM3 4a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4z"/>
+                              </svg>
+                        </td>
+                        <td>Document 1</td>
+                        <td>Tag1,Tag2</td>
+                        <td>Public</td>
+                        <td>blah blah blah blah</td>
+                        <td>Not Published</td>
+                    </tr>
+                    <tr class="data">
+                        <td>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-files" viewBox="0 0 16 16">
+                                <path d="M13 0H6a2 2 0 0 0-2 2 2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2 2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm0 13V4a2 2 0 0 0-2-2H5a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1zM3 4a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4z"/>
+                              </svg>
+                        </td>
+                        <td>Document 1</td>
+                        <td>Tag1,Tag2</td>
+                        <td>Public</td>
+                        <td>blah blah blah blah</td>
+                        <td>Not Published</td>
+                    </tr>
+                    <tr class="data">
+                        <td>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-files" viewBox="0 0 16 16">
+                                <path d="M13 0H6a2 2 0 0 0-2 2 2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2 2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm0 13V4a2 2 0 0 0-2-2H5a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1zM3 4a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4z"/>
+                              </svg>
+                        </td>
+                        <td>Document 1</td>
+                        <td>Tag1,Tag2</td>
+                        <td>Public</td>
+                        <td>blah blah blah blah</td>
+                        <td>Not Published</td>
+                    </tr>
+                    <tr class="data">
+                        <td>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-files" viewBox="0 0 16 16">
+                                <path d="M13 0H6a2 2 0 0 0-2 2 2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2 2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm0 13V4a2 2 0 0 0-2-2H5a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1zM3 4a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4z"/>
+                              </svg>
+                        </td>
+                        <td>Document 1</td>
+                        <td>Tag1,Tag2</td>
+                        <td>Public</td>
+                        <td>blah blah blah blah</td>
+                        <td>Not Published</td>
+                    </tr>
+                    <tr class="data">
+                        <td>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-files" viewBox="0 0 16 16">
+                                <path d="M13 0H6a2 2 0 0 0-2 2 2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2 2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm0 13V4a2 2 0 0 0-2-2H5a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1zM3 4a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4z"/>
+                              </svg>
+                        </td>
+                        <td>Document 1</td>
+                        <td>Tag1,Tag2</td>
+                        <td>Public</td>
+                        <td>blah blah blah blah</td>
+                        <td>Not Published</td>
+                    </tr>
+                    <tr class="data">
+                        <td>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-files" viewBox="0 0 16 16">
+                                <path d="M13 0H6a2 2 0 0 0-2 2 2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2 2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm0 13V4a2 2 0 0 0-2-2H5a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1zM3 4a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4z"/>
+                              </svg>
+                        </td>
+                        <td>Document 1</td>
+                        <td>Tag1,Tag2</td>
+                        <td>Public</td>
+                        <td>blah blah blah blah</td>
+                        <td>Not Published</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class="version-history">
+            <div class="version-history-cont">
+                <div class="table-title">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clock-history" viewBox="0 0 16 16">
+                        <path d="M8.515 1.019A7 7 0 0 0 8 1V0a8 8 0 0 1 .589.022l-.074.997zm2.004.45a7.003 7.003 0 0 0-.985-.299l.219-.976c.383.086.76.2 1.126.342l-.36.933zm1.37.71a7.01 7.01 0 0 0-.439-.27l.493-.87a8.025 8.025 0 0 1 .979.654l-.615.789a6.996 6.996 0 0 0-.418-.302zm1.834 1.79a6.99 6.99 0 0 0-.653-.796l.724-.69c.27.285.52.59.747.91l-.818.576zm.744 1.352a7.08 7.08 0 0 0-.214-.468l.893-.45a7.976 7.976 0 0 1 .45 1.088l-.95.313a7.023 7.023 0 0 0-.179-.483zm.53 2.507a6.991 6.991 0 0 0-.1-1.025l.985-.17c.067.386.106.778.116 1.17l-1 .025zm-.131 1.538c.033-.17.06-.339.081-.51l.993.123a7.957 7.957 0 0 1-.23 1.155l-.964-.267c.046-.165.086-.332.12-.501zm-.952 2.379c.184-.29.346-.594.486-.908l.914.405c-.16.36-.345.706-.555 1.038l-.845-.535zm-.964 1.205c.122-.122.239-.248.35-.378l.758.653a8.073 8.073 0 0 1-.401.432l-.707-.707z"/>
+                        <path d="M8 1a7 7 0 1 0 4.95 11.95l.707.707A8.001 8.001 0 1 1 8 0v1z"/>
+                        <path d="M7.5 3a.5.5 0 0 1 .5.5v5.21l3.248 1.856a.5.5 0 0 1-.496.868l-3.5-2A.5.5 0 0 1 7 9V3.5a.5.5 0 0 1 .5-.5z"/>
+                    </svg>
+                    Version History
+                </div>
+                <table class="version-history-table">
+                    <tr class="table-header">
+                        <th>Last Modified</th>
+                        <th>Modified by</th>
+                        <th>File size</th>
+                        <th>File version</th>
+                    </tr>
+                    <tr class="data">
+                        <td>7/18/2022</td>
+                        <td>Cordero</td>
+                        <td>5 MB</td>
+                        <td>4.0</td>
+                    </tr>
+                    <tr class="data">
+                        <td>7/18/2022</td>
+                        <td>Cordero</td>
+                        <td>5 MB</td>
+                        <td>4.0</td>
+                    </tr>
+                    <tr class="data">
+                        <td>7/18/2022</td>
+                        <td>Cordero</td>
+                        <td>5 MB</td>
+                        <td>4.0</td>
+                    </tr>
+                    <tr class="data">
+                        <td>7/18/2022</td>
+                        <td>Cordero</td>
+                        <td>5 MB</td>
+                        <td>4.0</td>
+                    </tr>
+                    <tr class="data">
+                        <td>7/18/2022</td>
+                        <td>Cordero</td>
+                        <td>5 MB</td>
+                        <td>4.0</td>
+                    </tr>
+                    <tr class="data">
+                        <td>7/18/2022</td>
+                        <td>Cordero</td>
+                        <td>5 MB</td>
+                        <td>4.0</td>
+                    </tr>
+                    <tr class="data">
+                        <td>7/18/2022</td>
+                        <td>Cordero</td>
+                        <td>5 MB</td>
+                        <td>4.0</td>
+                    </tr>
+                    <tr class="data">
+                        <td>7/18/2022</td>
+                        <td>Cordero</td>
+                        <td>5 MB</td>
+                        <td>4.0</td>
+                    </tr>
+                    <tr class="data">
+                        <td>7/18/2022</td>
+                        <td>Cordero</td>
+                        <td>5 MB</td>
+                        <td>4.0</td>
+                    </tr>
+                    <tr class="data">
+                        <td>7/18/2022</td>
+                        <td>Cordero</td>
+                        <td>5 MB</td>
+                        <td>4.0</td>
+                    </tr>
+                    <tr class="data">
+                        <td>7/18/2022</td>
+                        <td>Cordero</td>
+                        <td>5 MB</td>
+                        <td>4.0</td>
+                    </tr>
+                    <tr class="data">
+                        <td>7/18/2022</td>
+                        <td>Cordero</td>
+                        <td>5 MB</td>
+                        <td>4.0</td>
+                    </tr>
+                    <tr class="data">
+                        <td>7/18/2022</td>
+                        <td>Cordero</td>
+                        <td>5 MB</td>
+                        <td>4.0</td>
+                    </tr>
+                    <tr class="data">
+                        <td>7/18/2022</td>
+                        <td>Cordero</td>
+                        <td>5 MB</td>
+                        <td>4.0</td>
+                    </tr>
+                    <tr class="data">
+                        <td>7/18/2022</td>
+                        <td>Cordero</td>
+                        <td>5 MB</td>
+                        <td>4.0</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

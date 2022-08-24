@@ -1,0 +1,89 @@
+<%- include("header")-%>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/navbar.css">
+    <link rel="stylesheet" href="/css/approval-style.css">
+    <script src="../navbar.js" defer></script>
+    <!-- <script src="./js/dashboard.js" defer></script> -->
+</head>
+<body>
+<!-- NAVBAR -->
+<nav class="side-nav inactive-sidenav" id="side-nav">
+    <div class="nav-header">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-list burger" viewBox="0 0 16 16">
+            <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/>
+        </svg>
+        <h3 class="menu">Menu</h3>
+        <div class="logo">
+            <img src="../public/images/Copy_of_Untitled-removebg-preview.png" width="50" class="menu-logo">
+            UserType
+        </div>
+    </div>
+    <div class="links">
+        <a href="/dashboard"><h4 class="nav-item">Dashboard</h4></a>
+        <a href="/documents"><h4 class="nav-item">Documents</h4></a>
+        <a href="/management"><h4 class="nav-item">Management</h4></a>
+        <a href="/approval-page"><h4 class="nav-item">Approval Page</h4></a>
+    </div>
+</nav>
+<!-- NAVBAR -->
+<!-- HEADER -->
+<header class="header">
+    <div class="header-left">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-list burger-button" id="burger-button" viewBox="0 0 16 16">
+            <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/>
+        </svg>
+        <span class="circleLogo" style="margin-left:1em">
+            <img src="/images/Copy_of_Untitled-removebg-preview.png" alt="" class="menu-logo">
+        </span>
+        <h3 class="prod-name">FiLedger</h3>
+    </div>
+    <div class="header-right">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bell-fill" viewBox="0 0 16 16">
+            <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2zm.995-14.901a1 1 0 1 0-1.99 0A5.002 5.002 0 0 0 3 6c0 1.098-.5 6-2 7h14c-1.5-1-2-5.902-2-7 0-2.42-1.72-4.44-4.005-4.901z"/>
+        </svg>
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-fill" viewBox="0 0 16 16">
+            <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+        </svg>
+        <h3 class="username">hi, @username</h3>
+    </div>
+</header>
+<!-- HEADER -->
+<div class="title">
+    <h1>Approval page</h1>
+</div>
+<div class="search-cont">
+    <input type="search" name="search" id="search" class="search" placeholder="Search...">
+    <button class="search-button">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+        </svg>
+    </button>
+    <select name="sort" id="sortBy">
+        <option value="" hidden selected disabled>Sort By</option>
+        <option value="alphabetical">Alphabetical</option>
+        <option value="date">Date Modified</option>
+        <optgroup label="Document Type">
+            <option value="public">Public</option>
+            <option value="internal">Internal</option>
+            <option value="confidential">Confidential</option>
+        </optgroup>
+    </select>
+</div>
+<div class="main-cont">
+    <div class="content-box" id="content-box">
+        <div class="card"></div>
+        <div class="card"></div>
+        <div class="card"></div>
+        <div class="card"></div>
+        <div class="card"></div>
+        <div class="card"></div>
+        <div class="card"></div>
+        <div class="card"></div>
+        <div class="card"></div>
+        <div class="card"></div>
+        <div class="card"></div>
+        <div class="card"></div>
+    </div>
+</div>
+</body>
+</html>

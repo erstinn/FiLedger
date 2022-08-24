@@ -69,7 +69,10 @@ app.get("/dashboard/pending-docs",(req,res)=>{
     res.render("pending-docs")
 })
 
-
+app.post("/registration", (req, res)=>{
+    const un = req.body.username;
+    console.log(un);
+})
 
 app.listen(process.env.PORT || 3000, function (){
     console.log("Server started on port 3000")

@@ -23,7 +23,34 @@ const userDB = nano.db.use('users');
 const userViews = "/_design/all_users/_view/all";
 
 app.get('/login', function (req, res){
-    res.render("login");
+    res.render("login", {dep: departments});
+})
+
+//Gets the data obtained from Login Form
+app.post('/login', async function (req, res) {
+    const varemail = req.body.email;
+    const passw = req.body.password;
+    const dept = req.body.dept;
+
+    const q = {
+        selector: {
+            email: {"$eq": varemail},
+            password: {"$eq": passw},
+            department: {"$eq": dept}
+        },
+    };
+    const response = await userDB.find(q).then(function(err){
+        if(err){
+            res.render('failure-reg'); //placeholder, will change pag oki na
+        }
+        res.redirect('/dashboard')
+    })
+    console.log(response);
+    // if(response.docs.email === varemail){
+    //     res.redirect('/dashboard')
+    // }else{
+    //     console.log("failed");
+    // }
 })
 
 app.get('/approval-page', function (req, res){

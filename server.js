@@ -32,25 +32,33 @@ app.post('/login', async function (req, res) {
     const passw = req.body.password;
     const dept = req.body.dept;
 
+    //created an index
+    const indexDef = {
+        index: { fields: ["email", "password", "department"]},
+        type: "json",
+        name: "trial-index"
+    }
+    const index = await userDB.createIndex(indexDef);
+
     const q = {
         selector: {
-            email: {"$eq": varemail},
-            password: {"$eq": passw},
-            department: {"$eq": dept}
-        },
-    };
-    const response = await userDB.find(q).then(function(err){
-        if(err){
-            res.render('failure-reg'); //placeholder, will change pag oki na
+            "email": varemail,
+            "password": passw,
+            "department": dept
         }
+    };
+
+    const response = await userDB.find(q)
+
+    //need double equal lang para gumana
+    if(response.docs == ''){
+       res.render('failure-reg') //placeholder
+    }else{
         res.redirect('/dashboard')
-    })
-    console.log(response);
-    // if(response.docs.email === varemail){
-    //     res.redirect('/dashboard')
-    // }else{
-    //     console.log("failed");
-    // }
+    }
+
+    // console.log(response.docs)
+    // console.log(q, index);
 })
 
 app.get('/approval-page', function (req, res){

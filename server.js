@@ -62,7 +62,7 @@ app.get('/registration', function (req, res){
     res.render("registration", {dep: departments});
 })
 
-app.post("/registration", async function (req, res){
+app.post("/registration/status", async function (req, res){
     const userName = req.body.username; //generated
     const lastName = req.body.lastname;
     const firstName = req.body.firstname;
@@ -99,6 +99,14 @@ app.post("/registration", async function (req, res){
         add_doc: add_doc,
         admin: admin
     })
+
+    if(res.statusCode === 200){
+        res.render('success-reg');
+    }
+    else{
+        //not sure if need
+        res.render('failure-reg');
+    }
 
     // console.log(dept, lname, fname, email, password, un, admin, add_doc);
 

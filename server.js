@@ -31,8 +31,10 @@ app.post('/login', async function (req, res) {
     const varemail = req.body.email;
     const passw = req.body.password;
     const dept = req.body.dept;
+    var logErr = '';
 
     //created an index
+    // not sure if index is used by ill keep it here nalang muna -dana
     const indexDef = {
         index: { fields: ["email", "password", "department"]},
         type: "json",
@@ -51,14 +53,15 @@ app.post('/login', async function (req, res) {
     const response = await userDB.find(q)
 
     //need double equal lang para gumana
+    console.log(response)
     if(response.docs == ''){
-       res.render('failure-reg') //placeholder
+        logErr = 'Incorrect Login Credentials. Please try again...';
+        //sends login error to login.ejs
+        res.render('login', {dep:departments, logErr:logErr})//placeholder
     }else{
         res.redirect('/dashboard')
     }
 
-    // console.log(response.docs)
-    // console.log(q, index);
 })
 
 app.get('/approval-page', function (req, res){

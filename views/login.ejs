@@ -32,6 +32,9 @@
                     <p>Don't have an account yet? <a href="/registration">Sign Up</a></p>
                     <button type="submit">Login</button>
                 </div>
+                <% if(locals.logErr) { %>
+                    <div class="errMessage" role="alertdialog"><%= logErr %></div>
+                <% } %>
             </form>
         </div>
     </div>
@@ -39,4 +42,3 @@
 </div>
 <!-- end of main container -->
 </body>
-</html>

@@ -144,3 +144,9 @@
     color: #6ECDCA;
     font-family: 'Roboto', sans-serif;
 }
+
+/*FOR ERROR MESSAGE*/
+.errMessage {
+    margin-left: 1.5em;
+    color: crimson;
+}

@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 const express = require('express');
 const bodyParser = require('body-parser');
 const nano = require('nano')('http://administrator:qF3ChYhp@localhost:5984');

@@ -11,26 +11,25 @@
     <div class="sign-up">
         <h1>Create Account</h1>
         <div class="form">
-            <form action="">
+            <form method ="POST" action="">
                 <div class="fields">
-                    <input type="text" name="full-name" placeholder="Full Name" autocomplete="off">
+                    <input type="text" name="lastname" placeholder="Last Name" autocomplete="off">
+                    <input type="text" name="firstname" placeholder="First Name" autocomplete="off">
+<!--                    <input type="text" name="username" placeholder="Username" autocomplete="off">-->
                     <input type="email" name="email" placeholder="Email" autocomplete="off" required>
-                    <input type="password" name="password" placeholder="Password">
-                    <div class="dropdown">
-                        <span id="drpdwn-value">Department</span>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-down-fill down" id="down" viewBox="0 0 16 16">
-                            <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
-                        </svg>
+<!--                    <input type="password" name="password" placeholder="Password">-->
+                    <select name="dept" class="dropdown">
                         <div class="drpdwn-choices">
-                            <ul class="choices">
-                                <li class="choice-val">Department1</li>
-                                <li  class="choice-val">Department2</li>
-                                <li  class="choice-val">Department3</li>
-                                <li  class="choice-val">Department4</li>
-                                <li  class="choice-val">Department5</li>
-                            </ul>
+                            <option class="choice-val" value="" disabled selected>Choose Department</option>
+                            <% for(let i =0; i<=dep.length; i++){%>
+                                <option class="choice-val" ><%= dep[i] %></option>
+                            <%}%>
                         </div>
-                    </div>
+                    </select>
+                    <label for="admin">Admin?</label>
+                    <input type="checkbox" id="admin" name="isAdmin" ><br><br>
+                    <label for="admin">Can add documents?</label>
+                    <input type="checkbox" id="add-doc" name="add_doc" ><br>
                     <p>Already have an account? <a href="/login">Log in</a></p>
                     <button type="submit">Sign Up</button>
                 </div>

@@ -12,11 +12,8 @@
 .tabs{
     border-radius: 5px 5px 0px 0px;
     background: linear-gradient(to bottom,rgb(213, 213, 213),rgb(255, 255, 255));
-    border:1px solid black;
-    border-bottom: none;
-    margin-top: 2vw;
-    font-size: 1vw;
-    padding:.6vw;
+    padding:1.3vh;
+    border:1px solid black
 }
 .search-bar{
     margin-left: auto;

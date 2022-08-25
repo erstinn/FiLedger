@@ -16,11 +16,8 @@
 .tabs{
     border-radius: 5px 5px 0px 0px;
     background: linear-gradient(to bottom,rgb(213, 213, 213),rgb(255, 255, 255));
-    border:1px solid black;
-    border-bottom: none;
-    margin-top: 2vw;
-    font-size: 1vw;
-    padding:.6vw;
+    padding:1.3vh;
+    border:1px solid black
 }
 .search-bar{
     margin-left: auto;
@@ -105,95 +102,4 @@
 .status-cont a{
     text-decoration: none;
     color:black;
-}
-
-.addDocs {
-    display: flex;
-    position: fixed;
-    width: 4vw;
-    height: 4vw;
-    z-index: 9;
-    bottom:4vw;
-    left:4vw;
-    cursor: pointer;
-}
-.addDocs svg{
-    width: 100%;
-    height: 100%;
-    fill:#111827;
-}
-
-.tooltip{
-    position: absolute;
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-}
-.tooltip .body{
-    background-color: #111827;
-    color:white;
-    padding:1vw;
-    border-radius: 5px;
-
-    width:5vw;
-    height: 5vw;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: .7vw;
-    text-align: center;
-}
-
-.tooltip .point{
-    width:0;
-    height:0;
-
-    border-left: 10px solid transparent;
-    border-right: 10px solid transparent;
-    border-top: 10px solid #111827;
-}
-
-.inactive{
-    opacity: 0;
-    transition: .3s;
-}
-.inactive.uploadModal{
-    transform: scaleX(0);
-    transition: .2s;
-    transform-origin: left;
-}
-
-.uploadModal .body{
-    background-color: #111827;
-    color:white;
-    padding:1vw;
-    border-radius: 5px;
-
-    width:20vw;
-    height: 5vw;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: .7vw;
-    text-align: center;
-}
-
-.uploadModal .point{
-    width:0;
-    height:0;
-
-    border-top: 10px solid transparent;
-    border-bottom: 10px solid transparent;
-    border-right: 10px solid #111827;
-}
-
-.uploadModal{
-    position: absolute;
-    display: flex;
-    align-items: center;
-    z-index: 999;
-    top:20vw;
-    transform: scaleX(1);
-    transition: .2s;
-    transform-origin: left;
 }

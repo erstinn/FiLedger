@@ -161,8 +161,8 @@ app.get('/management/manage-documents/approver',function (req,res){
     res.render("manageDocuments");
 })
 
-app.get('/user-page',(req,res)=>{
-    res.render("user-page")
+app.get('/all-documents',(req,res)=>{
+    res.render("all-documents")
 })
 
 app.get("/dashboard/accepted-docs",(req,res)=>{

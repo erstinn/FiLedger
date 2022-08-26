@@ -15,5 +15,13 @@
   "description": "",
   "main": "server.js",
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/erstinn/FiLedger.git"
+  },
+  "bugs": {
+    "url": "https://github.com/erstinn/FiLedger/issues"
+  },
+  "homepage": "https://github.com/erstinn/FiLedger#readme"
 }

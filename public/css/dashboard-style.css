@@ -7,30 +7,6 @@
     display: flex;
     flex-direction: column;
 }
-.outer-tabs{
-    display: flex;
-    gap:.2vw;
-    align-items: center;
-    border-bottom: 2px solid #ccc;
-}
-.tabs{
-    border-radius: 5px 5px 0px 0px;
-    background: linear-gradient(to bottom,rgb(213, 213, 213),rgb(255, 255, 255));
-    border:1px solid black;
-    border-bottom: none;
-    margin-top: 2vw;
-    font-size: 1vw;
-    padding:.6vw;
-}
-.search-bar{
-    margin-left: auto;
-    margin-right: 3vw;
-    width: 25vw;
-}
-.searchDocs{
-    height: 98%;
-    width: 100%;
-}
 
 .status-cont{
     height: 80vh;
@@ -41,18 +17,6 @@
     justify-content: center;
     align-items: center;
     column-gap: 4vw;
-    row-gap: vw;
-}
-
-.active-tab{
-    background: white!important;
-    border-bottom: none;
-    z-index: 1;
-    position: relative;
-    top:3px
-}
-.tabs:hover{
-    background: rgb(236, 236, 236);
 }
 .statuses{
     width:30vw;
@@ -121,6 +85,7 @@
     width: 100%;
     height: 100%;
     fill:#111827;
+    cursor: pointer;
 }
 
 .tooltip{
@@ -156,44 +121,4 @@
 .inactive{
     opacity: 0;
     transition: .3s;
-}
-.inactive.uploadModal{
-    transform: scaleX(0);
-    transition: .2s;
-    transform-origin: left;
-}
-
-.uploadModal .body{
-    background-color: #111827;
-    color:white;
-    padding:1vw;
-    border-radius: 5px;
-
-    width:20vw;
-    height: 5vw;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: .7vw;
-    text-align: center;
-}
-
-.uploadModal .point{
-    width:0;
-    height:0;
-
-    border-top: 10px solid transparent;
-    border-bottom: 10px solid transparent;
-    border-right: 10px solid #111827;
-}
-
-.uploadModal{
-    position: absolute;
-    display: flex;
-    align-items: center;
-    z-index: 999;
-    top:20vw;
-    transform: scaleX(1);
-    transition: .2s;
-    transform-origin: left;
 }

@@ -22,9 +22,8 @@
 </div>
 <div class="links">
     <a href="/dashboard"><h4 class="nav-item">Dashboard</h4></a>
-    <a href="/documents"><h4 class="nav-item">Documents</h4></a>
-    <a href="/management"><h4 class="nav-item">Management</h4></a>
-    <a href="/approval-page"><h4 class="nav-item">Approval Page</h4></a>
+    <a href="../administration/admin"><h4 class="nav-item">Administration</h4></a>
+    <a href="/all-documents"><h4 class="nav-item">All Documents</h4></a>
 </div>
 </nav>
 <!-- NAVBAR -->
@@ -52,34 +51,22 @@
 <!-- HEADER -->
 
 <div class="addDocs">
-    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
-        <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z"/>
-      </svg>
+    <label for="addFile">
+        <input type="file" name="addFile" id="addFile" style="display:none">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
+            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z"/>
+          </svg>
+    </label>
+   
 </div>
 
 <div class="tooltip">
     <div class="body">Click to Upload a File</div>
     <div class="point"></div>
 </div>
-<div class="uploadModal inactive">
-    <div class="point">
-
-    </div>
-    <div class="body">
-        <input type="file" name="fileUp" id="fileUp" onchange="alert('File Uploaded')">
-    </div>
-</div>
 
 
 <div class="main-cont">
-    <div class="outer-tabs">
-        <a href="/dashboard"><div class="tabs active-tab">Dashboard</div></a>
-        <a href="../administration/admin"><div class="tabs">Administration</div></a>
-        <a href="/all-documents"><div class="tabs">All Documents</div></a>
-        <div class="search-bar">
-            <input type="search" name="searchDocs" id="searchDocs" class="searchDocs" placeholder="Search Documents...">
-        </div>
-    </div>
     <div class="status-cont">
         <a href="/dashboard/accepted-docs">
             <div class="statuses accepted">

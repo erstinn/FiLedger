@@ -3,44 +3,13 @@
     padding: 0;
     box-sizing: border-box;
 }
-.outer-tabs{
-    display: flex;
-    gap:.2vw;
-    align-items: center;
-    border-bottom: 2px solid #ccc;
-}
-.tabs{
-    border-radius: 5px 5px 0px 0px;
-    background: linear-gradient(to bottom,rgb(213, 213, 213),rgb(255, 255, 255));
-    border:1px solid black;
-    border-bottom: none;
-    margin-top: 2vw;
-    font-size: 1vw;
-    padding:.6vw;
-}
-.search-bar{
-    margin-left: auto;
-    margin-right: 3vw;
-    width: 25vw;
-}
-.searchDocs{
-    height: 98%;
-    width: 100%;
-}
-.active-tab{
-    background: white!important;
-    border-bottom: none;
-    z-index: 1;
-    position: relative;
-    top:3px
-}
-.tabs:hover{
-    background: rgb(236, 236, 236);
+.main-cont{
+    padding-bottom: 25vw;
 }
 .pendingDocs-list{
     width:95vw;
     height: 80vh;
-    margin:2vh auto;
+    margin:10vh auto;
     display: flex;
     flex-direction: column;
 }
@@ -97,7 +66,7 @@
 }
 
 .forApproval{
-    margin-top: .5vw;
+    margin-top: 2vw;
 }
 
 

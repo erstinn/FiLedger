@@ -7,41 +7,6 @@ a{
     text-decoration: none;
     color:black
 }
-.outer-tabs{
-    display: flex;
-    gap:.2vw;
-    align-items: center;
-    border-bottom: 2px solid #ccc;
-}
-.search-bar{
-    margin-left: auto;
-    margin-right: 3vw;
-    width: 25vw;
-}
-.searchDocs{
-    height: 98%;
-    width: 100%;
-}
-
-
-.tabs{
-    border-radius: 5px 5px 0px 0px;
-    background: linear-gradient(to bottom,rgb(213, 213, 213),rgb(255, 255, 255));
-    border:1px solid black;
-    border-bottom: none;
-    margin-top: 2vw;
-    font-size: 1vw;
-    padding:.6vw;
-}
-.tabs:hover{
-    background: rgb(236, 236, 236);
-}
-.active-tab{
-    background:white!important;
-    z-index: 99;
-    position: relative;
-    top:3px;
-}
 
 .content-wrapper{
     height: 100vh;
@@ -49,6 +14,8 @@ a{
     display: flex;
     height: 82vh;
     gap:.2vh;
+    margin-top: 3vw;
+    padding-bottom: 5vw;
 }
 .documents-container{
     height: 100%;
@@ -119,42 +86,5 @@ a{
     border-radius: 5px;
 }
 
-
-.upload-modal-cont{
-    position: absolute;
-    top:0;
-    z-index: 9;
-    display: flex;
-    align-items: center;
-    transform: scaleX(0);
-    transform-origin:right;
-    transition: .2s;
-}
-.upload-modal-box{
-    width:15vw;
-    height: 5vw;
-    background-color: #111827;
-    border-radius: 5px;
-    padding: .5vw;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: #fff;
-
-}
-.upload-modal-point{
-    width:0;
-    height: 0;
-    border-top: 10px solid transparent;
-    border-bottom: 10px solid transparent;
-    border-left: 10px solid #111827;
-}
-
-.active-modal{
-    transform: scaleX(1);
-    transition: .2s ;
-    transform-origin: right;
-
-}
 
 

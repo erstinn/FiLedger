@@ -3,7 +3,7 @@ const bodyParser = require('body-parser');
 const { generateFromEmail } = require("unique-username-generator");
 const generator = require('generate-password');
 const app = express();
-const nano = require('nano')('http://administrator:qF3ChYhp@127.0.0.1:5984/');
+// const nano = require('nano')('http://administrator:qF3ChYhp@127.0.0.1:5984/');
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static('public'))
@@ -12,14 +12,14 @@ app.set('view engine', 'ejs');
 
 const departments = ["Sales","Marketing", "Human Resources", "Accounting"]
 
-const dbList = nano.db.list();
+// const dbList = nano.db.list();
 //show list of databases
-dbList.then(function (dbs){
-    console.log(dbs)
-})
+// dbList.then(function (dbs){
+//     console.log(dbs)
+// })
 
 //databases
-const userDB = nano.db.use('users');
+// const userDB = nano.db.use('users');
 const userViews = "/_design/all_users/_view/all";
 
 app.get('/login', function (req, res){

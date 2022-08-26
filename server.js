@@ -31,15 +31,17 @@ app.post('/login', async function (req, res) {
     const varemail = req.body.email;
     const passw = req.body.password;
     const dept = req.body.dept;
-    var logErr = '';
+    let logErr = '';
 
-    //created an index
+    //created an index since mas advisable ata pag nag-qquery and nawawala yung warning :>
     // not sure if index is used by ill keep it here nalang muna -dana
     const indexDef = {
         index: { fields: ["email", "password", "department"]},
         type: "json",
         name: "trial-index"
     }
+
+    //needed lang para mawala warning but not sure di naman ata super need?
     const index = await userDB.createIndex(indexDef);
 
     const q = {
@@ -54,7 +56,7 @@ app.post('/login', async function (req, res) {
 
     //need double equal lang para gumana
     console.log(response)
-    if(response.docs == ''){
+    if(response.docs == '' || dept === undefined){
         logErr = 'Incorrect Login Credentials. Please try again...';
         //sends login error to login.ejs
         res.render('login', {dep:departments, logErr:logErr})//placeholder
@@ -62,6 +64,7 @@ app.post('/login', async function (req, res) {
         res.redirect('/dashboard')
     }
 
+    console.log(index);
 })
 
 app.get('/approval-page', function (req, res){

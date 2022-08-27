@@ -1,4 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap');
+:root{
+    --blue:##61C6C6;
+    --darkblue:#111827;
+}
 *{
     margin:0;
     padding:0;
@@ -131,4 +135,44 @@
 a{
     text-decoration: none;
     color: black;
+}
+
+
+.dropdown{
+    height:20vh;
+    width: 15vw;
+    background-color: #fff;
+    border-radius: 10px;
+    position:absolute;
+    z-index: 999999;
+    transition: .1s ease-in-out;
+    border:none;
+    transform: scaleY(0);
+    transform-origin: top;
+}
+.username-drpdwn{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+.choice{
+    width: 100%;
+    text-align: center;
+    padding:2vw;
+    border-bottom: 1px dotted #d1d1d1;
+    cursor: pointer;
+}
+.choice:hover{
+    background-color: #61C6C63A;
+}
+.active-dropdown{
+    border:1px solid var(--darkblue);
+    transform: scaleY(1);
+    transition: .1s ease-in-out;
+}
+
+.dropdownArrow{
+    cursor: pointer;
 }

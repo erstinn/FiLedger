@@ -4,7 +4,7 @@ const { generateFromEmail } = require("unique-username-generator");
 const generator = require('generate-password');
 const app = express();
 //todo comment out later:
-// const nano = require('nano')('http://administrator:qF3ChYhp@127.0.0.1:5984/');
+const nano = require('nano')('http://administrator:qF3ChYhp@127.0.0.1:5984/');
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static('public'))
@@ -14,14 +14,14 @@ app.set('view engine', 'ejs');
 const departments = ["Sales","Marketing", "Human Resources", "Accounting"]
 
 //todo someone commented out to make it work; remove befoer push
-// const dbList = nano.db.list();
-// // show list of databases
-// dbList.then(function (dbs){
-//     console.log(dbs)
-// })
-// // databases
-// const userDB = nano.db.use('users');
-// const userViews = "/_design/all_users/_view/all";
+const dbList = nano.db.list();
+// show list of databases
+dbList.then(function (dbs){
+    console.log(dbs)
+})
+// databases
+const userDB = nano.db.use('users');
+const userViews = "/_design/all_users/_view/all";
 //end comment out
 
 
@@ -58,25 +58,4 @@ app.use('/all-documents', allDocumentsRouter)
 app.use('/administration', adminRouter);
 
 
-//@Balala check these codes:
 
-//todo remove?
-// app.get('/approval-page', function (req, res){
-//     res.render("approval-page");
-// })
-
-//todo remove
-// app.get('/manage', function (req, res){
-//     res.render("manage");
-// })
-
-//todo remove
-// app.get('/management', function (req, res){
-//     res.render("management");
-// })
-
-
-//todo remove
-// app.get('/management/manage-documents/approver',function (req,res){
-//     res.render("manageDocuments");
-// })

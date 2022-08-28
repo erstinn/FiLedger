@@ -3,6 +3,7 @@ const router = express.Router()
 
 
 
+const departments = ["Sales","Marketing", "Human Resources", "Accounting"] //to remove when dynamic addition. of dept.s implemented
 
 router.get('/', function (req, res){
     res.render("login", {dep: departments});

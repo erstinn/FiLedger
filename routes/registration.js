@@ -3,6 +3,7 @@ const {generateFromEmail} = require("unique-username-generator");
 const generator = require("generate-password");
 const router = express.Router()
 
+const departments = ["Sales","Marketing", "Human Resources", "Accounting"] //to remove when dynamic addition. of dept.s implemented
 
 router.get('/', function (req, res){
     res.render("registration", {dep: departments});

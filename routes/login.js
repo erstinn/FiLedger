@@ -1,9 +1,10 @@
 const express = require('express')
 const router = express.Router()
-
-
-
-const departments = ["Sales","Marketing", "Human Resources", "Accounting"] //to remove when dynamic addition. of dept.s implemented
+// databases
+// const nano = require('nano')('http://administrator:qF3ChYhp@127.0.0.1:5984/');
+// const userDB = nano.db.use('users');
+// const userViews = "/_design/all_users/_view/all";
+// const departments = ["Sales","Marketing", "Human Resources", "Accounting"] //to remove when dynamic addition. of dept.s implemented
 
 router.get('/', function (req, res){
     res.render("login", {dep: departments});

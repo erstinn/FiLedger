@@ -4,7 +4,7 @@
     box-sizing: border-box;
 }
 .main-cont{
-    padding-bottom: 25vw;
+    padding-bottom: 10vw;
 }
 .pendingDocs-list{
     width:95vw;
@@ -28,14 +28,14 @@
 }
 .table-title{
     background-color: #61C6C6;
-    padding: 2vw;
+    padding: .2vw;
     border-top: 1px solid black;
     border-left: 1px solid black;
     border-right: 1px solid black;
     text-align: center;
     color: white;
     font-weight: 600;
-    font-size: 2vw;
+    font-size: 1.5vw;
     border-radius: 5px 5px 0px 0px;
     
 }

@@ -45,7 +45,7 @@ a{
 .uploaded-docs-table td,
 .uploaded-docs-table th{
     text-align: center;
-    padding:.6vw;
+    padding:.4vw;
 }
 
 
@@ -64,7 +64,7 @@ a{
 }
 .table-title{
     background-color: #61C6C6;
-    padding:1vw;
+    padding:.5vw;
     border-radius:5px 5px 0px 0px;
     color:white;
     font-size: 1.2vw;

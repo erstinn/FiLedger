@@ -48,6 +48,7 @@ const dashboardRouter = require("./routes/dashboard")
 const documentsRouter = require("./routes/documents")
 const allDocumentsRouter = require("./routes/all-documents")
 const adminRouter = require("./routes/administration")
+const viewDocumentsRouter = require("./routes/view-documents")
 //Mount all routers
 app.use('/login', loginRouter)
 app.use('/registration', regRouter)
@@ -55,6 +56,7 @@ app.use('/dashboard', dashboardRouter)
 app.use('/documents', documentsRouter)
 app.use('/all-documents', allDocumentsRouter)
 app.use('/administration', adminRouter);
+app.use('/view-documents', viewDocumentsRouter)
 
 
 

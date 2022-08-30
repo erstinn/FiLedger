@@ -1,0 +1,455 @@
+<%- include("header")-%>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/css/navbar.css">
+    <link rel="stylesheet" href="/css/view-documents.css">
+    <script src="/js/navbar.js"defer></script>
+    <script src="/js/view-documents.js"defer></script>
+</head>
+<body>
+<%-include("navbar-component")-%>
+
+<div class="main-cont">
+    <div class="basic-details">
+        <span class="svg"><!--SVF--></span><h1><span class="docName">Sample Doc</span></h1>
+        <span class="dateCreated">Created: <span class="date"></span>--/--/----</span>
+   </div>
+    <div class="docView">
+        <span class="auditEvents">Version History</span>
+        <div class="filtersCont">
+            <div class="filtersCont-form">
+                <table>
+                    <tr>
+                        <td>From date:</td>
+                        <td><input type="date" name="fromDate" id="fromDate"></td>
+                        <td>To date:</td>
+                        <td><input type="date" name="toDate" id="toDate"></td>
+                    </tr>
+                    <tr>
+                        <td>Filter by user:</td>
+                        <td><select name="userFilter" id="userFilter"></select></td>
+                        <td>Filter by activity:</td>
+                        <td><select name="activityFilter" id="activityFilter">
+                            <option value="" hidden selected disabled>Select activity</option>
+                            <option value="edited">Edited</option>
+                            <option value="dowloaded">Dowloaded</option>
+                        </select></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+       <div class="versionHist-table-cont">
+        <table class="versionHist">
+            <tr class="table-header">
+                <th>User</th>
+                <th>File size</th>
+                <th>File version</th>
+                <th>Timestamp</th>
+                <th>Status</th>
+                <th>Activity</th>
+                <th>Tags</th>
+                <th>Description</th>
+            </tr>
+            <tr class="data">
+                <td>Miciella Decano</td>
+                <td>5 MB</td>
+                <td>3.1</td>
+                <td>--/--/-- at 00:00</td>
+                <td>Accepted</td>
+                <td>Downloaded</th>
+                <td>--</td>
+                <td>--</td>
+            </tr>
+            <tr class="data">
+                <td>Miciella Decano</td>
+                <td>5 MB</td>
+                <td>3.1</td>
+                <td>--/--/-- at 00:00</td>
+                <td>Accepted</td>
+                <td>Downloaded</th>
+                <td>--</td>
+                <td>--</td>
+            </tr>
+            <tr class="data">
+                <td>Miciella Decano</td>
+                <td>5 MB</td>
+                <td>3.1</td>
+                <td>--/--/-- at 00:00</td>
+                <td>Accepted</td>
+                <td>Downloaded</th>
+                <td>--</td>
+                <td>--</td>
+            </tr>
+            <tr class="data">
+                <td>Miciella Decano</td>
+                <td>5 MB</td>
+                <td>3.1</td>
+                <td>--/--/-- at 00:00</td>
+                <td>Accepted</td>
+                <td>Downloaded</th>
+                <td>--</td>
+                <td>--</td>
+            </tr>
+            <tr class="data">
+                <td>Miciella Decano</td>
+                <td>5 MB</td>
+                <td>3.1</td>
+                <td>--/--/-- at 00:00</td>
+                <td>Accepted</td>
+                <td>Downloaded</th>
+                <td>--</td>
+                <td>--</td>
+            </tr>
+            <tr class="data">
+                <td>Miciella Decano</td>
+                <td>5 MB</td>
+                <td>3.1</td>
+                <td>--/--/-- at 00:00</td>
+                <td>Accepted</td>
+                <td>Downloaded</th>
+                <td>--</td>
+                <td>--</td>
+            </tr>
+            <tr class="data">
+                <td>Miciella Decano</td>
+                <td>5 MB</td>
+                <td>3.1</td>
+                <td>--/--/-- at 00:00</td>
+                <td>Accepted</td>
+                <td>Downloaded</th>
+                <td>--</td>
+                <td>--</td>
+            </tr>
+            <tr class="data">
+                <td>Miciella Decano</td>
+                <td>5 MB</td>
+                <td>3.1</td>
+                <td>--/--/-- at 00:00</td>
+                <td>Accepted</td>
+                <td>Downloaded</th>
+                <td>--</td>
+                <td>--</td>
+            </tr>
+            <tr class="data">
+                <td>Miciella Decano</td>
+                <td>5 MB</td>
+                <td>3.1</td>
+                <td>--/--/-- at 00:00</td>
+                <td>Accepted</td>
+                <td>Downloaded</th>
+                <td>--</td>
+                <td>--</td>
+            </tr>
+            <tr class="data">
+                <td>Miciella Decano</td>
+                <td>5 MB</td>
+                <td>3.1</td>
+                <td>--/--/-- at 00:00</td>
+                <td>Accepted</td>
+                <td>Downloaded</th>
+                <td>--</td>
+                <td>--</td>
+            </tr>
+            <tr class="data">
+                <td>Miciella Decano</td>
+                <td>5 MB</td>
+                <td>3.1</td>
+                <td>--/--/-- at 00:00</td>
+                <td>Accepted</td>
+                <td>Downloaded</th>
+                <td>--</td>
+                <td>--</td>
+            </tr>
+            <tr class="data">
+                <td>Miciella Decano</td>
+                <td>5 MB</td>
+                <td>3.1</td>
+                <td>--/--/-- at 00:00</td>
+                <td>Accepted</td>
+                <td>Downloaded</th>
+                <td>--</td>
+                <td>--</td>
+            </tr>
+            <tr class="data">
+                <td>Miciella Decano</td>
+                <td>5 MB</td>
+                <td>3.1</td>
+                <td>--/--/-- at 00:00</td>
+                <td>Accepted</td>
+                <td>Downloaded</th>
+                <td>--</td>
+                <td>--</td>
+            </tr>
+            <tr class="data">
+                <td>Miciella Decano</td>
+                <td>5 MB</td>
+                <td>3.1</td>
+                <td>--/--/-- at 00:00</td>
+                <td>Accepted</td>
+                <td>Downloaded</th>
+                <td>--</td>
+                <td>--</td>
+            </tr>
+            <tr class="data">
+                <td>Miciella Decano</td>
+                <td>5 MB</td>
+                <td>3.1</td>
+                <td>--/--/-- at 00:00</td>
+                <td>Accepted</td>
+                <td>Downloaded</th>
+                <td>--</td>
+                <td>--</td>
+            </tr>
+            <tr class="data">
+                <td>Miciella Decano</td>
+                <td>5 MB</td>
+                <td>3.1</td>
+                <td>--/--/-- at 00:00</td>
+                <td>Accepted</td>
+                <td>Downloaded</th>
+                <td>--</td>
+                <td>--</td>
+            </tr>
+            <tr class="data">
+                <td>Miciella Decano</td>
+                <td>5 MB</td>
+                <td>3.1</td>
+                <td>--/--/-- at 00:00</td>
+                <td>Accepted</td>
+                <td>Downloaded</th>
+                <td>--</td>
+                <td>--</td>
+            </tr>
+            <tr class="data">
+                <td>Miciella Decano</td>
+                <td>5 MB</td>
+                <td>3.1</td>
+                <td>--/--/-- at 00:00</td>
+                <td>Accepted</td>
+                <td>Downloaded</th>
+                <td>--</td>
+                <td>--</td>
+            </tr>
+            <tr class="data">
+                <td>Miciella Decano</td>
+                <td>5 MB</td>
+                <td>3.1</td>
+                <td>--/--/-- at 00:00</td>
+                <td>Accepted</td>
+                <td>Downloaded</th>
+                <td>--</td>
+                <td>--</td>
+            </tr>
+            <tr class="data">
+                <td>Miciella Decano</td>
+                <td>5 MB</td>
+                <td>3.1</td>
+                <td>--/--/-- at 00:00</td>
+                <td>Accepted</td>
+                <td>Downloaded</th>
+                <td>--</td>
+                <td>--</td>
+            </tr>
+            <tr class="data">
+                <td>Miciella Decano</td>
+                <td>5 MB</td>
+                <td>3.1</td>
+                <td>--/--/-- at 00:00</td>
+                <td>Accepted</td>
+                <td>Downloaded</th>
+                <td>--</td>
+                <td>--</td>
+            </tr>
+            <tr class="data">
+                <td>Miciella Decano</td>
+                <td>5 MB</td>
+                <td>3.1</td>
+                <td>--/--/-- at 00:00</td>
+                <td>Accepted</td>
+                <td>Downloaded</th>
+                <td>--</td>
+                <td>--</td>
+            </tr>
+            <tr class="data">
+                <td>Miciella Decano</td>
+                <td>5 MB</td>
+                <td>3.1</td>
+                <td>--/--/-- at 00:00</td>
+                <td>Accepted</td>
+                <td>Downloaded</th>
+                <td>--</td>
+                <td>--</td>
+            </tr>
+            <tr class="data">
+                <td>Miciella Decano</td>
+                <td>5 MB</td>
+                <td>3.1</td>
+                <td>--/--/-- at 00:00</td>
+                <td>Accepted</td>
+                <td>Downloaded</th>
+                <td>--</td>
+                <td>--</td>
+            </tr>
+            <tr class="data">
+                <td>Miciella Decano</td>
+                <td>5 MB</td>
+                <td>3.1</td>
+                <td>--/--/-- at 00:00</td>
+                <td>Accepted</td>
+                <td>Downloaded</th>
+                <td>--</td>
+                <td>--</td>
+            </tr>
+            <tr class="data">
+                <td>Miciella Decano</td>
+                <td>5 MB</td>
+                <td>3.1</td>
+                <td>--/--/-- at 00:00</td>
+                <td>Accepted</td>
+                <td>Downloaded</th>
+                <td>--</td>
+                <td>--</td>
+            </tr>
+            <tr class="data">
+                <td>Miciella Decano</td>
+                <td>5 MB</td>
+                <td>3.1</td>
+                <td>--/--/-- at 00:00</td>
+                <td>Accepted</td>
+                <td>Downloaded</th>
+                <td>--</td>
+                <td>--</td>
+            </tr>
+            <tr class="data">
+                <td>Miciella Decano</td>
+                <td>5 MB</td>
+                <td>3.1</td>
+                <td>--/--/-- at 00:00</td>
+                <td>Accepted</td>
+                <td>Downloaded</th>
+                <td>--</td>
+                <td>--</td>
+            </tr>
+            <tr class="data">
+                <td>Miciella Decano</td>
+                <td>5 MB</td>
+                <td>3.1</td>
+                <td>--/--/-- at 00:00</td>
+                <td>Accepted</td>
+                <td>Downloaded</th>
+                <td>--</td>
+                <td>--</td>
+            </tr>
+            <tr class="data">
+                <td>Miciella Decano</td>
+                <td>5 MB</td>
+                <td>3.1</td>
+                <td>--/--/-- at 00:00</td>
+                <td>Accepted</td>
+                <td>Downloaded</th>
+                <td>--</td>
+                <td>--</td>
+            </tr>
+            <tr class="data">
+                <td>Miciella Decano</td>
+                <td>5 MB</td>
+                <td>3.1</td>
+                <td>--/--/-- at 00:00</td>
+                <td>Accepted</td>
+                <td>Downloaded</th>
+                <td>--</td>
+                <td>--</td>
+            </tr>
+            <tr class="data">
+                <td>Miciella Decano</td>
+                <td>5 MB</td>
+                <td>3.1</td>
+                <td>--/--/-- at 00:00</td>
+                <td>Accepted</td>
+                <td>Downloaded</th>
+                <td>--</td>
+                <td>--</td>
+            </tr>
+            <tr class="data">
+                <td>Miciella Decano</td>
+                <td>5 MB</td>
+                <td>3.1</td>
+                <td>--/--/-- at 00:00</td>
+                <td>Accepted</td>
+                <td>Downloaded</th>
+                <td>--</td>
+                <td>--</td>
+            </tr>
+            <tr class="data">
+                <td>Miciella Decano</td>
+                <td>5 MB</td>
+                <td>3.1</td>
+                <td>--/--/-- at 00:00</td>
+                <td>Accepted</td>
+                <td>Downloaded</th>
+                <td>--</td>
+                <td>--</td>
+            </tr>
+            <tr class="data">
+                <td>Miciella Decano</td>
+                <td>5 MB</td>
+                <td>3.1</td>
+                <td>--/--/-- at 00:00</td>
+                <td>Accepted</td>
+                <td>Downloaded</th>
+                <td>--</td>
+                <td>--</td>
+            </tr>
+            <tr class="data">
+                <td>Miciella Decano</td>
+                <td>5 MB</td>
+                <td>3.1</td>
+                <td>--/--/-- at 00:00</td>
+                <td>Accepted</td>
+                <td>Downloaded</th>
+                <td>--</td>
+                <td>--</td>
+            </tr>
+            <tr class="data">
+                <td>Miciella Decano</td>
+                <td>5 MB</td>
+                <td>3.1</td>
+                <td>--/--/-- at 00:00</td>
+                <td>Accepted</td>
+                <td>Downloaded</th>
+                <td>--</td>
+                <td>--</td>
+            </tr>
+            <tr class="data">
+                <td>Miciella Decano</td>
+                <td>5 MB</td>
+                <td>3.1</td>
+                <td>--/--/-- at 00:00</td>
+                <td>Accepted</td>
+                <td>Downloaded</th>
+                <td>--</td>
+                <td>--</td>
+            </tr>
+            <tr class="data">
+                <td>Miciella Decano</td>
+                <td>5 MB</td>
+                <td>3.1</td>
+                <td>--/--/-- at 00:00</td>
+                <td>Accepted</td>
+                <td>Downloaded</th>
+                <td>--</td>
+                <td>--</td>
+            </tr>
+        </table>
+       </div>
+       <div class="buttons">
+        <button class="download">Download File</button>
+        <button class="revert" disabled>Revert selected version</button>
+        </div>
+    </div>
+</div>

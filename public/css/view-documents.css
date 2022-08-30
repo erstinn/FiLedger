@@ -1,0 +1,95 @@
+:root{
+    --blue: #61C6C6;
+    --darkblue: #111827;
+}
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: "Roboto",sans-serif;
+}
+.main-cont{
+    padding-bottom: 10vw;
+}
+
+.docView{
+    width:90vw;
+    margin: auto;
+    border: #111827 1px solid ;
+    border-radius: 0 0 10px 10px;
+}
+.basic-details{
+    background-color: var(--blue);
+    color: #fff;
+    margin: auto;
+    margin-top: 3vw;
+    width: 90vw;
+    border-radius: 10px 10px 0 0;
+    padding:0 .3vw;
+    border-top: var(--darkblue)1px solid;
+    border-left: var(--darkblue)1px solid;
+    border-right: var(--darkblue)1px solid;
+}
+.auditEvents{
+    text-align: center;
+    width: 100%;
+    display: block;
+    padding:.5vw;
+}
+.filtersCont{
+    padding:2rem;
+    border-top: var(--darkblue) 1px solid;
+    border-bottom: var(--darkblue) 1px solid;
+
+}
+.filtersCont-form{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.versionHist{
+    margin-top: 1.5rem;
+    border-collapse: collapse;
+    width: 100%;
+}
+.versionHist :is(td,th){
+    text-align: center;
+    padding:.5rem
+}
+
+.table-header :nth-last-child(1){
+    width:40%;
+}
+
+.docName{
+    font-size:1.5rem;
+}
+
+.versionHist-table-cont::-webkit-scrollbar{
+    width: 8px;
+}
+.versionHist-table-cont::-webkit-scrollbar-thumb{
+    background-color: #cdcdcd;
+}
+.versionHist-table-cont::-webkit-scrollbar-track{
+    background-color: #f0f0f0;
+}
+
+.versionHist-table-cont{
+    overflow-y: auto;
+    scrollbar-width: thin;
+    height: 75%;
+}
+
+.buttons{
+    margin:2rem .5rem 2rem auto;
+    width: fit-content;
+}
+
+.download,.revert{
+    padding:.5em
+}
+
+.clickedData{
+    background-color: var(--blue);
+}

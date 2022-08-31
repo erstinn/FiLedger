@@ -46,12 +46,13 @@ const upload = multer({
 //I FIX THIS WHEN OUR UI MASTER IS FINALLY HERE
 router.post('/upload',  upload.single('uploadDoc'),
     async function (req, res, next){
-        //todo necessary user info here esp.: privilege (if !creator/admin) ; they should have no upload button
+        //todo necessary user info here esp.: privilege (if !fileCreator/admin) ; they should have no upload button
         // - category, size, type, name,
         // - tags(array), state (always DRAFT state here), path (not sure),
         // - state_change_timestamp (always set right after first upload)
         // - auto-append ver control? if the file already exists
         // -
+        // WHEN DONE: REMOVE "for testing purposes"
         //console.log(req.file.destination) //path field but not needed?
 
 
@@ -66,54 +67,71 @@ router.post('/upload',  upload.single('uploadDoc'),
         const fileName = req.file.originalname;
         const fileType = path.extname(req.file.originalname); //extension; including dot
         const fileSize = await formatBytes(req.file.size);
-        const timestamp = currentTime.getMonth() + "/" + currentTime.getDay()+ "/" + currentTime.getFullYear() // e.g. 04/21/2000 21:32:11
+        const fileTimestamp = currentTime.getMonth() + "/" + currentTime.getDay()+ "/" + currentTime.getFullYear() // e.g. 04/21/2000 21:32:11
             + " " + currentTime.getHours()+ ":" + currentTime.getMinutes()+ ":" + currentTime.getSeconds();
-        // console.log(req.file.destination); //path but not needed i think
-        // res.status(204).send() //dno
+        const filePath = req.file.path; //path but not needed i think
 
         //TODO! check if filename exists already; add version where `state` = RESUBMITTED; else if new version and state: DRAFT
         //TODO! idk how to universally fix these states to other codes; maybe OOP stuff
         // WHEN IMPLEMENTED: add stateChangeTimestamp
         //for now assumes DRAFT state
-        const state = "Draft";
-        const stateTimestamp = state + " @ " + timestamp ; // @ to separate values later
+        const fileVersion = 1.0; //TODO when findDuplicate() for doc is implemented (auto increment INTEGER if duplicate)
+        const fileMinApprovers = 1; //TODO when UI for this is implemented
+        const state = "Draft"; //TODO when UI is implemented
+        const stateTimestamp = state + " @ " + fileTimestamp ; // @ to separate values later
+        const fileCreator = "Erin Cordero"; //TODO implement once sessions
 
         await docsDB.insert({
-            _id: id,
             name: fileName,
             type: fileType,
             size: fileSize,
             category: "standard",
             tags : [fileName, "random"],
+            version_num: fileVersion,
             state_history: [stateTimestamp],
-            "creator" : "Erin Cordero"
-        })
+            creator : fileCreator,
+            min_approvers : fileMinApprovers
+        }, id)
+
+        const findRev = await docQuery(id, fileName, fileCreator);
+        const rev = findRev[0]._rev;
+
+        fs.readFile(filePath, async (err, data) => { //dno if async
+            if (!err) {
+                await docsDB.attachment.insert(
+                    id,
+                    fileName,
+                    data,
+                    req.file.mimetype,
+                    {rev: rev}
+                )
+            }
+        });
+
 
 })
 
 
 
 //======================================== MIDDLEWARES ================================================================
-//QUERY MIDDLEWARE
-async function userQuery(req, res, next){
-    //todo uncomment when sessions are implemented
-    //const indexDef = { //copied cod lol
-    //     index: { fields: ["email", "password", "department"]},
-    //     type: "json",
-    //     name: "username-index"
-    // }
-    // const index = await userDB.createIndex(indexDef);
-    //
-    // const q = {
-    //     selector: {
-    //         "email": varemail,
-    //         "password": passw,
-    //         "department": dept
-    //     }
-    // };
-    // const response = await userDB.find(q)
-    //
-    // next();
+//QUERY MIDDLEWARE?
+async function docQuery(id, fileName, creator){
+    const indexDef = { //copied cod lol
+        index: { fields: ["_id", "name", "creator"]},
+        type: "json",
+        name: "doc-rev-index"
+    }
+    const index = await docsDB.createIndex(indexDef);
+
+    const q = {
+        selector: {
+            "_id": id,
+            "name": fileName,
+            "creator": creator
+        }
+    };
+    const rev = await docsDB.find(q);
+    return rev.docs;
 }
 
 async function documentsQuery(){
@@ -122,6 +140,7 @@ async function documentsQuery(){
 
 }
 
+//======================================== EXTRA FUNCS ================================================================
 
 //src: https://stackoverflow.com/questions/15900485/correct-way-to-convert-size-in-bytes-to-kb-mb-gb-in-javascript
 async function formatBytes(bytes, decimals = 2) { //dno if need to async

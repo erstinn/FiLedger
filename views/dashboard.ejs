@@ -54,3 +54,32 @@
         </a>
     </div>
 </div>
+
+<div id="myModal" class="modal">
+
+    <div class="modal-content">
+        <form id="uploadDoc" enctype="multipart/form-data" action="/dashboard/upload" method="POST">
+            <span class="close">&times;</span>
+            <div class="reject-title">
+                <p>Choose a file</p>
+            </div>
+
+            <div>
+                <p>Upload a file from your computer</p>
+            </div>
+
+            <div>
+                <label for="addFile" class="upload">
+                    <input type="file" onchange="this.form.submit()" name="uploadDoc" id="addFile">
+                    <input type="text" name="" id="" placeholder='Add tags seperated by ","'>
+                </label>
+            </div>
+
+            <div class="button-container">
+                <button>Upload Selected File</button>
+            </div>
+        </form>
+
+    </div>
+
+</div>

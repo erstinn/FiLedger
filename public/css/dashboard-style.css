@@ -1,41 +1,41 @@
-*{
+* {
     margin: 0;
-    padding:0;
+    padding: 0;
     box-sizing: border-box;
 }
-.main-cont{
+.main-cont {
     display: flex;
     flex-direction: column;
 }
 
-.status-cont{
+.status-cont {
     height: 80vh;
     width: 90vw;
-    margin:5vh auto;
+    margin: 5vh auto;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
     column-gap: 4vw;
 }
-.statuses{
-    width:30vw;
+.statuses {
+    width: 30vw;
     height: 30vh;
     position: relative;
     border-radius: 5px;
-    box-shadow: 0px 5px   rgb(66, 65, 95);
+    box-shadow: 0px 5px rgb(66, 65, 95);
     border: rgb(146, 146, 146) 1px solid;
-    transition: .2s;
+    transition: 0.2s;
     cursor: pointer;
     display: flex;
     justify-content: center;
 }
-.statuses:hover{
+.statuses:hover {
     transform: translateY(5px);
     box-shadow: none;
 }
 
-.status-box{
+.status-box {
     width: 100%;
     height: 10vh;
     display: flex;
@@ -47,28 +47,28 @@
     border-radius: 5px;
 }
 
-.accepted{
+.accepted {
     background-color: rgb(55, 205, 115);
 }
-.rejected{
+.rejected {
     background-color: rgb(205, 55, 55);
 }
-.pending{
+.pending {
     background-color: rgb(255, 255, 81);
 }
-.statuses svg{
+.statuses svg {
     fill: white;
     width: 50%;
     height: 50%;
-    position:absolute;
-    top:10%;
+    position: absolute;
+    top: 10%;
     stroke: white;
     stroke-width: 2px;
 }
 
-.status-cont a{
+.status-cont a {
     text-decoration: none;
-    color:black;
+    color: black;
 }
 
 .addDocs {
@@ -77,48 +77,137 @@
     width: 4vw;
     height: 4vw;
     z-index: 9;
-    bottom:4vw;
-    left:4vw;
+    bottom: 4vw;
+    left: 4vw;
     cursor: pointer;
 }
-.addDocs svg{
+.addDocs svg {
     width: 100%;
     height: 100%;
-    fill:#111827;
+    fill: #111827;
     cursor: pointer;
 }
 
-.tooltip{
+.tooltip {
     position: absolute;
     display: flex;
     align-items: center;
     flex-direction: column;
 }
-.tooltip .body{
+.tooltip .body {
     background-color: #111827;
-    color:white;
-    padding:1vw;
+    color: white;
+    padding: 1vw;
     border-radius: 5px;
 
-    width:5vw;
+    width: 5vw;
     height: 5vw;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: .7vw;
+    font-size: 0.7vw;
     text-align: center;
 }
 
-.tooltip .point{
-    width:0;
-    height:0;
+.tooltip .point {
+    width: 0;
+    height: 0;
 
     border-left: 10px solid transparent;
     border-right: 10px solid transparent;
     border-top: 10px solid #111827;
 }
 
-.inactive{
+.inactive {
     opacity: 0;
-    transition: .3s;
+    transition: 0.3s;
+}
+
+/* The Modal (background) */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0, 0, 0); /* Fallback color */
+    background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+}
+
+/* Modal Content/Box */
+.modal-content {
+    background-color: #fefefe;
+    padding: 10rem;
+    margin: 15% auto; /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 60%; /* Could be more or less, depending on screen size */
+}
+
+/* The Close Button */
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.reject-title {
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+.input-content {
+    margin: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-width: 500px;
+}
+.input-content button {
+    padding: 0.5vw;
+    margin-left: 0.5vw;
+    border: none;
+    color: black;
+    cursor: pointer;
+    border-radius: 5px;
+    background-color: rgb(218, 218, 36);
+}
+
+.input-content input {
+    padding: 5px;
+    width: 100%;
+}
+.upload {
+    display: flex;
+    justify-content: space-between;
+}
+
+.upload input {
+    margin-top: 20px;
+    padding: 5px;
+    border: #444 1px solid;
+    width: 45%;
+}
+
+.button-container {
+    margin-top: 10px;
+}
+
+.button-container button {
+    padding: 0.5vw;
+    border: none;
+    color: white;
+    cursor: pointer;
+    border-radius: 5px;
+    background-color: rgb(122, 215, 88);
 }

@@ -1,34 +1,36 @@
-*{
-    margin:0;
+* {
+    margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
-.main-cont{
+.main-cont {
     padding-bottom: 10vw;
 }
-.pendingDocs-list{
-    width:95vw;
+.pendingDocs-list {
+    width: 95vw;
     height: 80vh;
-    margin:10vh auto;
+    margin: 10vh auto;
     display: flex;
     flex-direction: column;
 }
-.pendingDocs-table{
+.pendingDocs-table {
     width: 100%;
     border-collapse: collapse;
     border: 1px solid black;
 }
-.pendingDocs-table svg{
+.pendingDocs-table svg {
     vertical-align: middle;
 }
-.pendingDocs-table td,th,tr{
+.pendingDocs-table td,
+th,
+tr {
     border: 1px solid black;
-    padding:.5vw;
+    padding: 0.5vw;
     border-spacing: 0px;
 }
-.table-title{
-    background-color: #61C6C6;
-    padding: .2vw;
+.table-title {
+    background-color: #61c6c6;
+    padding: 0.2vw;
     border-top: 1px solid black;
     border-left: 1px solid black;
     border-right: 1px solid black;
@@ -37,36 +39,97 @@
     font-weight: 600;
     font-size: 1.5vw;
     border-radius: 5px 5px 0px 0px;
-    
 }
-.data td:first-child{
+.data td:first-child {
     text-align: center;
 }
-.table-headers th:nth-child(2){
-    width:30%
+.table-headers th:nth-child(2) {
+    width: 30%;
 }
 
-.toApprove{
+.toApprove {
     text-align: center;
 }
 
-.pendingDocs-table button{
-    padding:.5vw;
-    margin-left: .5vw;
+.pendingDocs-table button {
+    padding: 0.5vw;
+    margin-left: 0.5vw;
     border: none;
-    color:white;
+    color: white;
     cursor: pointer;
     border-radius: 5px;
 }
-.reject{
+.reject {
     background-color: rgb(243, 102, 102);
 }
-.accept{
+.accept {
     background-color: rgb(122, 215, 88);
 }
 
-.forApproval{
+.forApproval {
     margin-top: 2vw;
 }
 
+/* The Modal (background) */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0, 0, 0); /* Fallback color */
+    background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+}
 
+/* Modal Content/Box */
+.modal-content {
+    background-color: #fefefe;
+    padding: 10rem;
+    margin: 15% auto; /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 60%; /* Could be more or less, depending on screen size */
+}
+
+/* The Close Button */
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.reject-title {
+    font-weight: bold;
+}
+.input-content {
+    margin: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-width: 500px;
+}
+.input-content button {
+    padding: 0.5vw;
+    margin-left: 0.5vw;
+    border: none;
+    color: black;
+    cursor: pointer;
+    border-radius: 5px;
+    background-color: rgb(218, 218, 36);
+}
+
+.input-content input {
+    padding: 5px;
+    width: 100%;
+}

@@ -49,18 +49,34 @@ router.post('/', async function (req, res) {
     const response = await userDB.find(q)
 
     //need double equal lang para gumana
-    console.log(response)
+    // console.log(response)
     if(response.docs === '' || dept === undefined){
         logErr = 'Incorrect Login Credentials. Please try again...';
         //sends login error to login.ejs
         res.render('login', {dep:departments, logErr:logErr})//placeholder
     }else{
+        //this is SOOO inefficient, placeholder lng and will change it soon pag na resolve q na how 2-dana
+        const q1 = {
+            selector: {
+                "email": varemail,
+                "password": passw,
+                "department": dept,
+                "admin": "on"
+            }
+        };
+
+        const adminRes = await userDB.find(q1)
+        if(adminRes.bookmark !== 'nil'){
+            req.session.admin = true;
+            console.log('ADMIN LOGGED IN')
+        }
+
         req.session.user = varemail;
-        console.log(req.session.user);
+        console.log(adminRes);
         res.redirect('/dashboard')
     }
 
-    console.log(index);
+    // console.log(index);
 })
 
 router.get('/logout', function(req, res){

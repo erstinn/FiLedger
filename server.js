@@ -44,6 +44,19 @@ function isAuthenticated (req, res, next){
         res.redirect('/')
     }
 }
+//checking if admin. will change it soon tho
+function isAdmin (req, res, next){
+    if(req.session.admin === true){
+        next();
+        console.log('This is an admin') //will delete, to check lang to
+        let isAdminVar = req.session.admin;
+        res.render('navbar-component', {isAdmin: isAdminVar})
+    }
+    else{
+        console.log("not an admin or a session");
+        res.redirect('/') //will change to unauthorized access page soon lolxz
+    }
+}
 
 app.get('/create-docs', function (req, res){
     res.render("create-docs");
@@ -77,7 +90,7 @@ app.use('/registration', regRouter)
 app.use('/dashboard', isAuthenticated, dashboardRouter)
 app.use('/documents', isAuthenticated, documentsRouter)
 app.use('/all-documents', isAuthenticated, allDocumentsRouter)
-app.use('/administration', isAuthenticated, adminRouter);
+app.use('/administration', isAuthenticated, isAdmin, adminRouter);
 app.use('/view-documents', isAuthenticated, viewDocumentsRouter)
 
 

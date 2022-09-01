@@ -4,9 +4,9 @@ const fs = require("fs") //remove?
 const path = require('path')
 
 // databases
-const nano = require('nano')('http://administrator:qF3ChYhp@127.0.0.1:5984/');
+// const nano = require('nano')('http://administrator:qF3ChYhp@127.0.0.1:5984/');
 // const docsDB = nano.db.use('documents');
-const docsDB = nano.db.use('testesdb');
+// const docsDB = nano.db.use('testesdb');
 // const docViews = "/_design/all_users/_view/all";
 // const departments = ["Sales","Marketing", "Human Resources", "Accounting"] //to remove when dynamic addition. of dept.s implemented
 
@@ -39,8 +39,6 @@ const upload = multer({
     },
 })
 
-
-
 //todo: change path?; plus redirection to current page; plus popup (#?)
 // popup to confirm certain info e.g. the
 //I FIX THIS WHEN OUR UI MASTER IS FINALLY HERE
@@ -56,11 +54,9 @@ router.post('/upload',  upload.single('uploadDoc'),
         //console.log(req.file.destination) //path field but not needed?
 
 
-        let uuid = await nano.uuids(1);
-        let id = uuid.uuids[0];
 
-        console.log("ahjiru") //testing purposes
-        console.log(req.file) //testing purposes
+        // console.log("ahjiru") //testing purposes
+        // console.log(req.file) //testing purposes
 
         //init all necessary fields :
         const currentTime = new Date();
@@ -75,49 +71,121 @@ router.post('/upload',  upload.single('uploadDoc'),
         //TODO! idk how to universally fix these states to other codes; maybe OOP stuff
         // WHEN IMPLEMENTED: add stateChangeTimestamp
         //for now assumes DRAFT state
-        const fileVersion = 1.0; //TODO when findDuplicate() for doc is implemented (auto increment INTEGER if duplicate)
+        let fileVersion = 1.0; //TODO when findDuplicate() for doc is implemented (auto increment INTEGER if duplicate)
         const fileMinApprovers = 1; //TODO when UI for this is implemented
         const state = "Draft"; //TODO when UI is implemented
         const stateTimestamp = state + " @ " + fileTimestamp ; // @ to separate values later
         const fileCreator = "Erin Cordero"; //TODO implement once sessions
 
-        await docsDB.insert({
-            name: fileName,
-            type: fileType,
-            size: fileSize,
-            category: "standard",
-            tags : [fileName, "random"],
-            version_num: fileVersion,
-            state_history: [stateTimestamp],
-            creator : fileCreator,
-            min_approvers : fileMinApprovers
-        }, id)
+        // const findRev = await docQuery(id, fileName, fileCreator);
+        // const rev = findRev[0]._rev;
 
-        const findRev = await docQuery(id, fileName, fileCreator);
-        const rev = findRev[0]._rev;
+        const indexDef = { //copied cod lol
+            index: { fields: ["name", "creator"]},
+            type: "json",
+            name: "doc-rev-index"
+        }
+        const index = await docsDB.createIndex(indexDef);
 
-        fs.readFile(filePath, async (err, data) => { //dno if async
-            if (!err) {
-                await docsDB.attachment.insert(
-                    id,
-                    fileName,
-                    data,
-                    req.file.mimetype,
-                    {rev: rev}
-                )
+        const q = {
+            selector: {
+                "name": fileName,
+                "creator": fileCreator
             }
-        });
+        };
+        const rev = await docsDB.find(q);
+        console.log(rev.docs)
+        console.log(rev)
+
+        //finally worked lol but di pa natry for attachments maybe tom
+        if(rev.docs == ''){
+            console.log('inserting')
+            let uuid = await nano.uuids(1);
+            let id = uuid.uuids[0];
+            await docsDB.insert({
+                name: fileName,
+                type: fileType,
+                size: fileSize,
+                category: "standard",
+                tags: [fileName, "random"],
+                version_num: fileVersion,
+                state_history: [stateTimestamp],
+                creator: fileCreator,
+                min_approvers: fileMinApprovers,
+                // _rev: rev
+            }, id)
+        }else{
+            console.log("updating")
+            const findRev = await docQuery(fileName, fileCreator);
+            const revi = findRev[0]._rev;
+            const doc = findRev[0]._id;
+            let fileVer = findRev[0].version_num
+            fileVer = fileVer+1
+            await docsDB.insert({
+                    name: fileName,
+                    type: fileType,
+                    size: fileSize,
+                    category: "standard",
+                    tags: [fileName, "random"],
+                    version_num: fileVer, //finally updates
+                    state_history: [stateTimestamp],
+                    creator: fileCreator,
+                    min_approvers: fileMinApprovers,
+                    _rev: revi
+                },doc,
+                function (err, response){
+                    if(!err){
+                        console.log("it worked")
+                    }else {
+                        console.log("failed")
+                    }
+                }
+            )
+        }
 
 
-})
+
+        //ORIGINAL CODE
+        // await docsDB.insert({
+        //     name: fileName,
+        //     type: fileType,
+        //     size: fileSize,
+        //     category: "standard",
+        //     tags: [fileName, "random"],
+        //     version_num: fileVersion,
+        //     state_history: [stateTimestamp],
+        //     creator: fileCreator,
+        //     min_approvers: fileMinApprovers,
+        //     // _rev: rev
+        // }, id)
+        //
+        //
+        // const findRev = await docQuery(id, fileName, fileCreator);
+        // const rev = findRev[0]._rev;
+
+
+        // fs.readFile(filePath, async (err, data) => { //dno if async
+        //     if (!err) {
+        //         await docsDB.attachment.insert(
+        //             id,
+        //             fileName,
+        //             data,
+        //             req.file.mimetype,
+        //             {rev: rev}
+        //         )
+        //     }
+        // });
+
+
+    })
 
 
 
 //======================================== MIDDLEWARES ================================================================
 //QUERY MIDDLEWARE?
-async function docQuery(id, fileName, creator){
+async function docQuery(fileName, creator){
     const indexDef = { //copied cod lol
-        index: { fields: ["_id", "name", "creator"]},
+        index: { fields: ["name", "creator"]},
         type: "json",
         name: "doc-rev-index"
     }
@@ -125,7 +193,6 @@ async function docQuery(id, fileName, creator){
 
     const q = {
         selector: {
-            "_id": id,
             "name": fileName,
             "creator": creator
         }
@@ -134,11 +201,14 @@ async function docQuery(id, fileName, creator){
     return rev.docs;
 }
 
-async function documentsQuery(){
-    //TODO! when sessions are implemented; ensure query limited to privilege (Smart Cont?)
 
 
-}
+
+// async function documentsQuery(){
+//     //TODO! when sessions are implemented; ensure query limited to privilege (Smart Cont?)
+//
+//
+// }
 
 //======================================== EXTRA FUNCS ================================================================
 

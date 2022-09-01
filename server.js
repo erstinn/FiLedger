@@ -6,12 +6,12 @@ const app = express();
 const session = require('express-session')
 //todo comment out later:
 // const nano = require('nano')('http://administrator:qF3ChYhp@127.0.0.1:5984/');
-//will delete
+
 // session var
 app.use(session({
     secret: 'secretkeytest',
     saveUninitialized: false,
-    cookie: {maxAge: 3600000}, //one hour maxAge, not sure abt this one
+    cookie: {maxAge: 3600000},
     resave: false
 }))
 
@@ -37,7 +37,7 @@ app.set('view engine', 'ejs');
 function isAuthenticated (req, res, next){
     if(req.session.user){
         next();
-        console.log('There is a session')
+        console.log('There is a session') //will delete, to check lang to
     }
     else{
         console.log("NO SESSION");
@@ -73,11 +73,12 @@ const viewDocumentsRouter = require("./routes/view-documents")
 //Mount all routers
 app.use('/login', loginRouter)
 app.use('/registration', regRouter)
+// added isAuthenticated function so that only authenticated sessions are able to access these pages
 app.use('/dashboard', isAuthenticated, dashboardRouter)
-app.use('/documents', documentsRouter)
-app.use('/all-documents', allDocumentsRouter)
-app.use('/administration', adminRouter);
-app.use('/view-documents', viewDocumentsRouter)
+app.use('/documents', isAuthenticated, documentsRouter)
+app.use('/all-documents', isAuthenticated, allDocumentsRouter)
+app.use('/administration', isAuthenticated, adminRouter);
+app.use('/view-documents', isAuthenticated, viewDocumentsRouter)
 
 
 

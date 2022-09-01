@@ -3,9 +3,19 @@ const bodyParser = require('body-parser');
 const { generateFromEmail } = require("unique-username-generator");
 const generator = require('generate-password');
 const app = express();
+const session = require('express-session')
 //todo comment out later:
 // const nano = require('nano')('http://administrator:qF3ChYhp@127.0.0.1:5984/');
+//will delete
+// session var
+app.use(session({
+    secret: 'secretkeytest',
+    saveUninitialized: false,
+    cookie: {maxAge: 3600000}, //one hour maxAge, not sure abt this one
+    resave: false
+}))
 
+//the rest
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static('public'))
 
@@ -23,6 +33,17 @@ app.set('view engine', 'ejs');
 // const userViews = "/_design/all_users/_view/all";
 //end comment out
 
+//function for checking sign-in
+function isAuthenticated (req, res, next){
+    if(req.session.user){
+        next();
+        console.log('There is a session')
+    }
+    else{
+        console.log("NO SESSION");
+        res.redirect('/')
+    }
+}
 
 app.get('/create-docs', function (req, res){
     res.render("create-docs");
@@ -52,7 +73,7 @@ const viewDocumentsRouter = require("./routes/view-documents")
 //Mount all routers
 app.use('/login', loginRouter)
 app.use('/registration', regRouter)
-app.use('/dashboard', dashboardRouter)
+app.use('/dashboard', isAuthenticated, dashboardRouter)
 app.use('/documents', documentsRouter)
 app.use('/all-documents', allDocumentsRouter)
 app.use('/administration', adminRouter);

@@ -7,7 +7,7 @@ const session = require('express-session')
 //todo comment out later:
 // const nano = require('nano')('http://administrator:qF3ChYhp@127.0.0.1:5984/');
 
-// session var
+// session var init
 app.use(session({
     secret: 'secretkeytest',
     saveUninitialized: false,
@@ -41,7 +41,8 @@ function isAuthenticated (req, res, next){
     }
     else{
         console.log("NO SESSION");
-        res.redirect('/')
+        let checkSession = false;
+        res.render('no-access', {checkSession: checkSession});
     }
 }
 //checking if admin. will change it soon tho
@@ -49,12 +50,10 @@ function isAdmin (req, res, next){
     if(req.session.admin === true){
         next();
         console.log('This is an admin') //will delete, to check lang to
-        let isAdminVar = req.session.admin;
-        res.render('navbar-component', {isAdmin: isAdminVar})
     }
     else{
         console.log("not an admin or a session");
-        res.redirect('/') //will change to unauthorized access page soon lolxz
+        res.render('no-access') //will change to unauthorized access page soon lolxz
     }
 }
 

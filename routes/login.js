@@ -48,9 +48,9 @@ router.post('/', async function (req, res) {
 
     const response = await userDB.find(q)
 
-    //need double equal lang para gumana
     // console.log(response)
-    if(response.docs === '' || dept === undefined){
+    //need double equal lang para gumana (di maka-access pag wrong pass)
+    if(response.docs == '' || dept === undefined){
         logErr = 'Incorrect Login Credentials. Please try again...';
         //sends login error to login.ejs
         res.render('login', {dep:departments, logErr:logErr})//placeholder

@@ -101,3 +101,12 @@ app.use('/view-documents', isAuthenticated, viewDocumentsRouter)
 
 
 
+//FOR DEVELOPMENT WITH NO AUTHENTICATION DO NOT REMOVE
+// app.use('/dashboard', dashboardRouter)
+// app.use('/documents', documentsRouter)
+// app.use('/all-documents', allDocumentsRouter)
+// app.use('/administration', isAdmin, adminRouter);
+// app.use('/view-documents', viewDocumentsRouter)
+
+
+

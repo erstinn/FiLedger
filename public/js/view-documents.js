@@ -36,8 +36,7 @@ const revertButt = document.querySelector('.revert');
 data.forEach(item => {
     item.addEventListener('click', () => {
         if (document.querySelector('.clickedData') != null) {
-            document
-                .querySelector('.clickedData')
+            document.querySelector('.clickedData')
                 .classList.remove('clickedData');
         }
         item.classList.add('clickedData');

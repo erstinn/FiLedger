@@ -15,6 +15,13 @@ app.use(session({
     resave: false
 }))
 
+// function to access sessions on all views
+app.use(function(req, res, next){
+    // res.locals = req.session;
+    res.locals.admin = req.session.admin
+    next();
+})
+
 //the rest
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static('public'))

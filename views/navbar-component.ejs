@@ -7,13 +7,24 @@
         <h3 class="menu">Menu</h3>
         <div class="logo">
             <img src="/images/Copy_of_Untitled-removebg-preview.png" width="50" class="menu-logo">
-            UserType
+            <%if (admin == true){%>
+                Admin
+            <%} else {%>
+                User
+            <%}%>
+<!--            UserType-->
         </div>
     </div>
     <div class="links">
-        <a href="/dashboard"><h4 class="nav-item">Dashboard</h4></a>
-        <a href="../administration/admin"><h4 class="nav-item">Administration</h4></a>
-        <a href="/all-documents"><h4 class="nav-item">All Documents</h4></a>
+        <%
+        if(admin === true){
+            <a href="/dashboard"><h4 class="nav-item">Dashboard</h4></a>
+            <a href="../administration/admin"><h4 class="nav-item">Administration</h4></a>
+            <a href="/all-documents"><h4 class="nav-item">All Documents</h4></a>
+        <%} else{
+            <a href="/dashboard"><h4 class="nav-item">Dashboard</h4></a>
+            <a href="/all-documents"><h4 class="nav-item">All Documents</h4></a>
+        <%}%>
     </div>
     </nav>
     <!-- NAVBAR -->

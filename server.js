@@ -5,7 +5,7 @@ const generator = require('generate-password');
 const app = express();
 const session = require('express-session')
 //todo comment out later:
-const nano = require('nano')('http://administrator:qF3ChYhp@127.0.0.1:5984/');
+const nano = require('nano')('http://administrator:qF3ChYhp@127.0.0.1:5984/' || process.env.COUCHDB_URL);
 
 // session var init
 app.use(session({
@@ -77,7 +77,7 @@ app.get('/', function (req, res){
 })
 
 
-app.listen(process.env.PORT || 3000 || process.env.COUCHDB_URL, function (){
+app.listen(process.env.PORT || 3000 || process.env.COUCHDB_URL , function (){
     console.log("Server started on port 3000")
 })
 

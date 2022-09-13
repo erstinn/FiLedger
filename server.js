@@ -5,7 +5,7 @@ const generator = require('generate-password');
 const app = express();
 const session = require('express-session')
 //todo comment out later:
-// const nano = require('nano')('http://administrator:qF3ChYhp@127.0.0.1:5984/');
+const nano = require('nano')('http://administrator:qF3ChYhp@127.0.0.1:5984/');
 
 // session var init
 app.use(session({
@@ -30,14 +30,14 @@ app.set('view engine', 'ejs');
 
 
 //todo commented out db
-// const dbList = nano.db.list();
-// // show list of databases
-// dbList.then(function (dbs){
-//     console.log(dbs)
-// })
-// // databases
-// const userDB = nano.db.use('users');
-// const userViews = "/_design/all_users/_view/all";
+const dbList = nano.db.list();
+// show list of databases
+dbList.then(function (dbs){
+    console.log(dbs)
+})
+// databases
+const userDB = nano.db.use('users');
+const userViews = "/_design/all_users/_view/all";
 //end comment out
 
 //function for checking sign-in

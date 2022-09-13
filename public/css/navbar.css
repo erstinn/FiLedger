@@ -1,4 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap');
+:root{
+    --blue:#61C6C6;
+    --darkblue:#111827;
+}
 *{
     margin:0;
     padding:0;
@@ -12,7 +16,7 @@
     /* border-right:1px solid rgb(17,24,39); */
     transition:.3s;
     background-color: white;
-    z-index: 99;
+    z-index: 99999999999999999999999999;
     box-shadow: 2px 0px 5px 10px rgba(0,0,0,.15);
     
 }
@@ -47,7 +51,7 @@
     flex-direction: column;
 }
 .menu-logo{
-    width:4vw;
+    width:2.5vw;
 }
 .links{
     display: flex;
@@ -74,7 +78,7 @@
 .header,.header-left{
     background-color: #61C6C6;
     display: flex;
-    padding:.5em;
+    padding:.2em;
     align-items: center;
     color:rgb(17,24,39);
 }
@@ -86,15 +90,16 @@
 .circleLogo{
     background-color: white;
     border-radius: 100%;
-    padding:5px;
-    height: 4vw;
-    width: 4vw;
+    height: 3vw;
+    width: 3vw;
     display: flex;
+    justify-content: center;
+    align-items: center;
 }
 .prod-name{
-    font-size: 2vw;
+    font-size: 1.8vw;
     vertical-align: middle;
-    margin-left: 1rem;
+    margin-left: .5vw;
     color:#fff;
 }
 .header-left{
@@ -106,8 +111,8 @@
     position: relative;
 }
 .header-right svg{
-    width: 2vw;
-    height: 2vw;
+    width: 1.4vw;
+    height: 1.4vw;
     vertical-align: middle;
     fill:#fff;
     stroke: #111827;
@@ -125,4 +130,49 @@
     border-radius: 20px;
     left:.9vw;
     bottom:.7vw
+}
+
+a{
+    text-decoration: none;
+    color: black;
+}
+
+
+.dropdown{
+    height:20vh;
+    width: 15vw;
+    background-color: #fff;
+    border-radius: 10px;
+    position:absolute;
+    z-index: 999999;
+    transition: .1s ease-in-out;
+    border:none;
+    transform: scaleY(0);
+    transform-origin: top;
+}
+.username-drpdwn{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+.choice{
+    width: 100%;
+    text-align: center;
+    padding:2vw;
+    border-bottom: 1px dotted #d1d1d1;
+    cursor: pointer;
+}
+.choice:hover{
+    background-color: #61C6C63A;
+}
+.active-dropdown{
+    border:1px solid var(--darkblue);
+    transform: scaleY(1);
+    transition: .1s ease-in-out;
+}
+
+.dropdownArrow{
+    cursor: pointer;
 }

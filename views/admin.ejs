@@ -1,0 +1,140 @@
+<%- include("header")-%>
+    <!DOCTYPE html>
+    <html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <link rel="stylesheet" href="/css/navbar.css">
+        <link rel="stylesheet" href="/css/admin.css">
+        <script src="/js/navbar.js" defer></script>
+        <script src="/js/admin.js" defer></script>
+    </head>
+
+    <body>
+        <%-include("navbar-component")-%>
+
+            <div class="detailsModal-wrapper inactive">
+                <div class="detailsModal">
+                    <span class="exitModal">&times;</span>
+                    <div class="modalTitle"><span class="name-user"></span></div>
+                    <div><span class="class-type"></span></div>
+                    <div class="modalDepartment"><span class="department-user"></span></div>
+                    <div class="table-wrapper">
+                        <table class="modalTable tableUser">
+                            <tr>
+                                <th>Document Titles</th>
+                                <th>Access Status</th>
+                            </tr>
+                            <tr class="data">
+                                <td>Document 1</td>
+                                <td>Viewer</td>
+                            </tr>
+
+                            <tr class="data">
+                                <td>Document 1</td>
+                                <td>Viewer</td>
+                            </tr>
+
+                            <tr class="data">
+                                <td>Document 1</td>
+                                <td>Viewer</td>
+                            </tr>
+
+                            <tr class="data">
+                                <td>Document 1</td>
+                                <td>Viewer</td>
+                            </tr>
+
+                            <tr class="data">
+                                <td>Document 1</td>
+                                <td>Viewer</td>
+                            </tr>
+
+                        </table>
+                        <table class="modalTable tableDoc inactive">
+                            <tr>
+                                <th>Username</th>
+                                <th>Access Status</th>
+                            </tr>
+                            <tr class="data">
+                                <td>Mark</td>
+                                <td>Viewer</td>
+                            </tr>
+                            <tr class="data">
+                                <td>Mark</td>
+                                <td>Viewer</td>
+                            </tr>
+                            <tr class="data">
+                                <td>Mark</td>
+                                <td>Viewer</td>
+                            </tr>
+                            <tr class="data">
+                                <td>Mark</td>
+                                <td>Viewer</td>
+                            </tr>
+                            <tr class="data">
+                                <td>Mark</td>
+                                <td>Viewer</td>
+                            </tr>
+                            <tr class="data">
+                                <td>Mark</td>
+                                <td>Viewer</td>
+                            </tr>
+                            <tr class="data">
+                                <td>Mark</td>
+                                <td>Viewer</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="modalButtons">
+                        <button class="modal-deleteButton modalButton">Delete Account</button>
+                        <div class="accessButtons">
+                            <button class="modal-changeButton modalButton" disabled>Change Access</button>
+                            <button class="modal-revokeButton modalButton" disabled>Revoke Access</button>
+                            <button class="modal-grantButton modalButton" disabled>Grant Access</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="main-cont">
+                <div class="viewsTabs">
+                    <span>Privileged Access Management: </span>
+                    <span class="viewsMode inactive">Manage People</span>
+                    <span class="viewsMode">Manage Documents</span>
+                </div>
+                <div class="userList">
+                    <div class="userList-header">
+                        List of Users
+                    </div>
+                    <input type="search" name="usersList" id="searchUserList" class="searchUserList"
+                        placeholder="Search Username...">
+                    <table class="usersList" id="userList">
+                        <tr>
+                            <th>Name</th>
+                            <th>Department</th>
+                            <th>Documents</th>
+                        </tr>
+                    </table>
+
+
+
+                    <table class="usersList inactive" id="documentList">
+                        <tr>
+                            <th>Document title</th>
+                            <th>Document Classification Type</th>
+                            <th>Number of Approvers</th>
+                            <th>Number of Users</th>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            </div>
+    </body>
+
+    </html>

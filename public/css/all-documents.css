@@ -1,0 +1,90 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+a{
+    text-decoration: none;
+    color:black
+}
+
+.content-wrapper{
+    height: 100vh;
+    background-color: white;
+    display: flex;
+    height: 82vh;
+    gap:.2vh;
+    margin-top: 3vw;
+    padding-bottom: 5vw;
+}
+.documents-container{
+    height: 100%;
+    display: flex;
+    width: 100%;
+    padding: .5vh;
+    flex-direction: column;
+    gap:.2vh;
+
+}
+
+
+.uploaded-docs{
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+    border: 1px solid black;
+    border-radius:5px 5px 0px 0px;
+
+}
+
+
+.uploaded-docs-table{
+    width: 100%;
+    border-collapse:collapse ;
+}
+.uploaded-docs-table td,
+.uploaded-docs-table th{
+    text-align: center;
+    padding:.4vw;
+}
+
+
+
+.table-header, th[colspan="6"]{
+    background-color: rgb(217, 217, 217);
+    border-bottom: 1px solid black;
+}
+
+.uploaded-docs::-webkit-scrollbar{
+    width:5px;
+}
+.uploaded-docs::-webkit-scrollbar-thumb{
+    border-radius: 5px;
+    background-color: rgb(186, 186, 186);
+}
+.table-title{
+    background-color: #61C6C6;
+    padding:.5vw;
+    border-radius:5px 5px 0px 0px;
+    color:white;
+    font-size: 1.2vw;
+    display: flex;
+}
+.table-title svg{
+    width: 1.2vw;
+    height: auto;
+}
+.upload-buttons{
+    margin-left:auto;
+    margin-right:1vw;
+    gap:2vw;
+    display: flex;
+    cursor: pointer;
+}
+.upload-buttons svg:hover{
+    background-color:#3e9393;
+    border-radius: 5px;
+}
+
+
+

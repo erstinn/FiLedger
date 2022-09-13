@@ -1,0 +1,134 @@
+:root {
+    --blue: #61c6c6;
+    --darkblue: #111827;
+}
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: 'Roboto', sans-serif;
+}
+.main-cont {
+    padding-bottom: 10vw;
+    margin-top: 2vw;
+}
+
+.docView {
+    width: 90vw;
+    margin: auto;
+    border: #111827 1px solid;
+    border-radius: 0 0 10px 10px;
+}
+.auditEvents {
+    text-align: center;
+    width: 100%;
+    display: block;
+    padding: 0.5vw;
+}
+
+.versionHist {
+    margin-top: 1.5rem;
+    border-collapse: collapse;
+    width: 100%;
+}
+.versionHist :is(td, th) {
+    text-align: center;
+    padding: 0.5rem;
+}
+
+.table-header :nth-last-child(1) {
+    width: 40%;
+}
+
+.docName {
+    font-size: 1.5rem;
+}
+
+.versionHist-table-cont::-webkit-scrollbar {
+    width: 8px;
+}
+.versionHist-table-cont::-webkit-scrollbar-thumb {
+    background-color: #cdcdcd;
+}
+.versionHist-table-cont::-webkit-scrollbar-track {
+    background-color: #f0f0f0;
+}
+
+.versionHist-table-cont {
+    overflow-y: auto;
+    scrollbar-width: thin;
+    height: 75%;
+}
+
+.buttons {
+    margin: 2rem 0.5rem 2rem auto;
+    width: fit-content;
+}
+
+.download,
+.revert {
+    padding: 0.5vw;
+}
+
+.clickedData {
+    background-color: var(--blue);
+}
+
+.flex {
+    display: flex;
+}
+
+.info-cont {
+    width: 50%;
+    padding: 0 5rem 0 5rem;
+    height: 100vh;
+    top: 0;
+    position: sticky;
+    border-right: 1px solid var(--darkblue);
+}
+
+.file-cont {
+    width: 50%;
+    padding: 0 5rem 0 5rem;
+    height: 100vh;
+    top: 0;
+    position: sticky;
+}
+
+.file-title {
+    justify-content: center;
+    align-items: center;
+    gap:.3vw;
+    margin-top: .6vw;
+}
+.file-title .editable-docName{
+    padding:0.5vw;
+    width: 60%;
+}
+
+
+.file-name {
+    border: #444 1px solid;
+    margin-right: 10px;
+    padding: 5px;
+}
+
+.metadata {
+    margin-top: .5vw;
+}
+
+.metadata-section {
+    border-top: var(--darkblue) 1px solid;
+}
+.metadata-section:last-child {
+    border-bottom: var(--darkblue) 1px solid;
+}
+
+.metadata table {
+    width: 100%;
+}
+
+.metadata table td {
+    width: 50%;
+    padding: 10px 0 10px 0;
+}

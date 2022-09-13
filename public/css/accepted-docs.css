@@ -1,0 +1,53 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+.acceptedDocs-list {
+    width: 95vw;
+    height: 80vh;
+    margin: 10vh auto;
+}
+.acceptedDocs-table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid black;
+}
+.acceptedDocs-table svg {
+    vertical-align: middle;
+}
+.acceptedDocs-table td,
+th,
+tr {
+    border: 1px solid black;
+    padding: 0.5vw;
+    border-spacing: 0px;
+}
+.table-title {
+    background-color: #61c6c6;
+    padding: 0.2vw;
+    border-top: 1px solid black;
+    border-left: 1px solid black;
+    border-right: 1px solid black;
+    text-align: center;
+    color: white;
+    font-weight: 600;
+    font-size: 2vw;
+    border-radius: 5px 5px 0px 0px;
+}
+.data td:first-child {
+    text-align: center;
+}
+.table-headers th:nth-child(2) {
+    width: 30%;
+}
+
+.accept {
+    background-color: rgb(122, 215, 88);
+    padding: 0.5vw;
+    margin-left: 0.5vw;
+    border: none;
+    color: white;
+    cursor: pointer;
+    border-radius: 5px;
+}

@@ -86,7 +86,7 @@
 .dropdown{
     display: block;
     width: 90%;
-    height: 2em;
+    height: 3em;
     margin: 2em auto;
     background-color: transparent;
     border: none;
@@ -143,4 +143,10 @@
     text-decoration: none;
     color: #6ECDCA;
     font-family: 'Roboto', sans-serif;
+}
+
+/*FOR ERROR MESSAGE*/
+.errMessage {
+    margin-left: 1.5em;
+    color: crimson;
 }

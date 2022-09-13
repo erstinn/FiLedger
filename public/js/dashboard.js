@@ -1,30 +1,52 @@
-let container = document.getElementById("content-box");
-let createCard = document.getElementById("create-card");
-let ID = 0;
-// create card
-createCard.addEventListener("click",()=>{
-    const newCard = document.createElement("div");
-    const newDropdwn = document.createElement("select")
-    const newID = document.createElement("h2");
-    const status = ['Accepted','Pending','In Progress','Rejected','For Approval'];
-    
-    newID.innerText = `${++ID}`
-    newID.classList.add("card-ID")
-    newDropdwn.classList.add("card-drpdwn");
-    newCard.classList.add("card");
-    newCard.appendChild(newDropdwn);
-    newCard.appendChild(newID);
-    status.map(e=>{
-        const newOption = document.createElement('option');
-        newOption.classList.add('card-status');
-        newOption.value = e;
-        newOption.innerHTML = e;
-        console.log(e);
-        newDropdwn.appendChild(newOption);
-    })
-    container.appendChild(newCard);
+const tooltip = document.querySelector(".tooltip");
+const addButton = document.querySelector(".addDocs")
+const modal = document.querySelector(".modal");
+const close = document.querySelector(".close");
+const tagsList = document.querySelector(".tag-list");
+const tagInput = document.querySelector('.tag-input')
+const tag = document.querySelectorAll(".tag")
 
-    
-});
+const listOfTags = []
 
-// create card
+window.addEventListener("load",()=>{
+    tooltip.style.top = window.scrollY + (addButton.getBoundingClientRect().top-tooltip.offsetHeight)+"px";
+    tooltip.style.left = window.scrollX + (addButton.getBoundingClientRect().right-addButton.offsetWidth-5)+"px";
+})
+setTimeout(()=>{
+    tooltip.classList.add("inactive");
+},3000)
+
+addButton.addEventListener("mouseover",()=>{
+    tooltip.classList.remove("inactive");
+
+    setTimeout(()=>{
+        tooltip.classList.add("inactive");
+    },3000)
+})
+
+
+addButton.addEventListener("click",()=>{
+    modal.style.display = "block";
+})
+close.addEventListener("click",()=>{
+    modal.style.display = "none";
+})
+
+tagInput.addEventListener("keyup",(e)=>{
+    if(e.key==","){
+        const newTag = document.createElement('li');
+        newTag.classList.add("tag");
+        newTag.innerHTML = tagInput.value.replace(",","");
+        listOfTags.push(tagInput.value.replace(",",""));
+        tagsList.appendChild(newTag)
+        tagInput.value = ""
+
+
+        newTag.addEventListener("dblclick",()=>{
+            tagsList.removeChild(newTag);
+        })
+    }
+})
+
+//dear backend, pop out removed child from listOfTags
+

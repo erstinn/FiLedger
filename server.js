@@ -83,6 +83,7 @@ app.listen(process.env.PORT || 3000, function (){
 
 // Init all routers
 const loginRouter = require("./routes/login")
+const logoutRouter = require("./routes/logout")
 const regRouter = require("./routes/registration")
 const dashboardRouter = require("./routes/dashboard")
 const documentsRouter = require("./routes/documents")
@@ -92,6 +93,7 @@ const viewDocumentsRouter = require("./routes/view-documents")
 //Mount all routers
 app.use('/login', loginRouter)
 app.use('/registration', regRouter)
+app.use('/logout', logoutRouter)
 // added isAuthenticated function so that only authenticated sessions are able to access these pages
 app.use('/dashboard', isAuthenticated, dashboardRouter)
 app.use('/documents', isAuthenticated, documentsRouter)

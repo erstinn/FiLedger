@@ -72,7 +72,7 @@ router.post('/', async function (req, res) {
         }
 
         req.session.user = varemail;
-        console.log(adminRes);
+        // console.log(adminRes); //for testing
         res.redirect('/dashboard')
     }
 

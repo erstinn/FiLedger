@@ -72,18 +72,20 @@
 
             <div class="inputs-container">
                 <label for="addFile" class="upload">
-                    <input type="file" onchange="this.form.submit()" name="uploadDoc" id="addFile">
+                    <input type="file" name="uploadDoc" id="addFile">
                 </label>
 
                 <div class="tags">
-                    <ul class="tag-list">
+                    <ul class="tag-list" name="taglist">
                     </ul>
                     <input type="text" name="" id="" placeholder='Add tags seperated by ","' class="tag-input">
                 </div>
             </div>
 
+            <input type="text" name="tags" id="tagsValue" style="display:none;">
+
             <div class="button-container">
-                <button>Upload Selected File</button>
+                <button onclick="this.form.submit()">Upload Selected File</button>
             </div>
         </form>
 

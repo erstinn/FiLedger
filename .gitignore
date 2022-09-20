@@ -92,3 +92,4 @@ fabric.properties
 
 #disable pushing of dependencies/libs itself
 node_modules/
+uploads/

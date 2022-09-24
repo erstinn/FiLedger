@@ -3,7 +3,8 @@ const router = express.Router()
 
 
 
-router.get('/',function (req,res){
+router.get('/:id',function (req,res){
+    
     res.render("view-documents");
 })
 

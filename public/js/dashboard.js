@@ -5,8 +5,10 @@ const close = document.querySelector(".close");
 const tagsList = document.querySelector(".tag-list");
 const tagInput = document.querySelector('.tag-input')
 const tag = document.querySelectorAll(".tag")
+const form = document.getElementById("uploadDoc")
 
-const listOfTags = []
+const tagValue = document.getElementById("tagsValue")
+tagValue.value = ""
 
 window.addEventListener("load",()=>{
     tooltip.style.top = window.scrollY + (addButton.getBoundingClientRect().top-tooltip.offsetHeight)+"px";
@@ -34,19 +36,21 @@ close.addEventListener("click",()=>{
 
 tagInput.addEventListener("keyup",(e)=>{
     if(e.key==","){
-        const newTag = document.createElement('li');
-        newTag.classList.add("tag");
-        newTag.innerHTML = tagInput.value.replace(",","");
-        listOfTags.push(tagInput.value.replace(",",""));
-        tagsList.appendChild(newTag)
-        tagInput.value = ""
+        if(tagInput.value!=","){
+            var newTag = document.createElement('li');
+            newTag.classList.add("tag");
+            newTag.innerHTML = tagInput.value.replace(",","");
+            tagsList.appendChild(newTag)
+            tagValue.value += tagInput.value
+            tagInput.value = ""
+        }
+        
 
 
         newTag.addEventListener("dblclick",()=>{
+            tagValue.value = tagValue.value.replace(newTag.innerHTML+",","")
             tagsList.removeChild(newTag);
+
         })
     }
 })
-
-//dear backend, pop out removed child from listOfTags
-

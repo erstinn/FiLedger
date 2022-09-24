@@ -5,8 +5,9 @@ const path = require('path')
 
 // databases
 const nano = require('nano')('http://administrator:qF3ChYhp@127.0.0.1:5984/');
-// const docsDB = nano.db.use('documents');
-const docsDB = nano.db.use('testesdb');
+// const nano = require('nano')('http://root:root@127.0.0.1:5984/');
+const docsDB = nano.db.use('documents');
+// const docsDB = nano.db.use('testesdb');
 const docViews = "/_design/all_users/_view/all";
 const departments = ["Sales","Marketing", "Human Resources", "Accounting"] //to remove when dynamic addition. of dept.s implemented
 
@@ -75,6 +76,11 @@ router.post('/upload',  upload.single('uploadDoc'),
         const state = "Draft"; //TODO when UI is implemented
         const stateTimestamp = state + " @ " + fileTimestamp ; // @ to separate values later
         const fileCreator = "Erin Cordero"; //TODO implement once sessions
+        let fileTagsList = []
+        let stateTimestampList = []
+        let fileTags = `${fileName}|${req.body.tags.substring(0,req.body.tags.length-1)}|@ ${currentTime} V${parseFloat(fileVersion).toFixed(2)}`
+        fileTagsList.push(fileTags)
+        stateTimestampList.push(stateTimestamp)
 
         //created another index for querying if there is an existing file
         const indexDef = { //copied cod lol
@@ -105,9 +111,9 @@ router.post('/upload',  upload.single('uploadDoc'),
                 type: fileType,
                 size: fileSize,
                 category: "standard",
-                tags: [fileName, "random"],
+                tags_history: fileTagsList,
                 version_num: fileVersion,
-                state_history: [stateTimestamp],
+                state_history: stateTimestampList,
                 creator: fileCreator,
                 min_approvers: fileMinApprovers
             }, id)
@@ -117,15 +123,28 @@ router.post('/upload',  upload.single('uploadDoc'),
             const revi = findRev[0]._rev;
             const doc = findRev[0]._id;
             let fileVer = findRev[0].version_num;
-            fileVer = fileVer+1
+            let tags = findRev[0].tags_history
+            let stateTimestamps = findRev[0].state_history
+            if(fileTags.split("|")[1] == ""){
+                fileVer++;
+                fileTags = `${fileName}|${tags[tags.length-1].split("|")[1]}|@ ${currentTime} V${parseFloat(fileVer).toFixed(2)}`
+            }else if(fileTags.split("|")[1] == tags[tags.length-1].split("|")[1]){
+                fileVer++;
+                fileTags = `${fileName}|${tags[tags.length-1].split("|")[1]}|@ ${currentTime} V${parseFloat(fileVer).toFixed(2)}`
+            }else if(fileTags.split("|")[1] != tags[tags.length-1].split("|")[1]){
+                fileVer+=0.1;
+                fileTags = `${fileName}|${req.body.tags.substring(0,req.body.tags.length-1)}|@ ${currentTime} V${parseFloat(fileVer).toFixed(2)}`
+            }
+            tags.push(fileTags)
+            stateTimestamps.push(stateTimestamp)
             await docsDB.insert({
                     name: fileName,
                     type: fileType,
                     size: fileSize,
                     category: "standard",
-                    tags: [fileName, "random"],
-                    version_num: fileVer, //finally updates
-                    state_history: [stateTimestamp],
+                    tags_history: tags,
+                    version_num: parseFloat(fileVer).toFixed(2), //finally updates
+                    state_history: stateTimestamps,
                     creator: fileCreator,
                     min_approvers: fileMinApprovers,
                     _rev: revi

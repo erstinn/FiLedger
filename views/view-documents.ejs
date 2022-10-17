@@ -31,15 +31,15 @@
                 <table>
                   <tr>
                     <td>File Type:</td>
-                    <td>PDF</td>
+                    <td><%=data.docs[0].type.slice(1).toUpperCase()%></td>
                   </tr>
                   <tr>
                     <td>File Size:</td>
-                    <td>5MB</td>
+                    <td><%=data.docs[0].size%></td>
                   </tr>
                   <tr>
                     <td>File Version:</td>
-                    <td>1.0</td>
+                    <td><%=data.docs[0].version_num%></td>
                   </tr>
                 </table>
               </div>
@@ -47,19 +47,14 @@
                 <table>
                   <tr>
                     <td>Last Modified By:</td>
-                    <td>Erin Cordero</td>
+                    <td><%=data.docs[0].creator%></td>
                   </tr>
                   <tr>
                     <td>Last modified on:</td>
-                    <td>Thursday, September 1, 2022 at 4:57 PM</td>
+                    <td><%=data.docs[0].state_history[data.docs[0].state_history.length-1].slice(8)%></td>
                   </tr>
-                  <tr>
-                    <td>Last Accessed:</td>
-                    <td>56 minutes ago</td>
-                  </tr>
-                  <tr>
                     <td>Created On:</td>
-                    <td>Sunday, January 15, 2022 at 6:32 PM</td>
+                    <td><%=data.docs[0].state_history[0].slice(8)%></td>
                   </tr>
                 </table>
               </div>
@@ -71,7 +66,7 @@
                   </tr>
                   <tr>
                     <td>Tags:</td>
-                    <td></td>
+                    <td><%=data.docs[0].tags_history[data.docs[0].tags_history.length-1].split("|")[1]%></td>
                   </tr>
                   <tr>
                     <td>Page Count:</td>
@@ -80,10 +75,6 @@
                   <tr>
                     <td>Status:</td>
                     <td>Accepted</td>
-                  </tr>
-                  <tr>
-                    <td>Department:</td>
-                    <td>Accounting</td>
                   </tr>
                 </table>
               </div>

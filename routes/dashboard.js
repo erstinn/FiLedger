@@ -4,8 +4,8 @@ const fs = require("fs") //remove?
 const path = require('path')
 
 // databases
-const nano = require('nano')('http://administrator:qF3ChYhp@127.0.0.1:5984/');
-// const nano = require('nano')('http://root:root@127.0.0.1:5984/');
+// const nano = require('nano')('http://administrator:qF3ChYhp@127.0.0.1:5984/');
+const nano = require('nano')('http://root:root@127.0.0.1:5984/');
 const docsDB = nano.db.use('documents');
 // const docsDB = nano.db.use('testesdb');
 const docViews = "/_design/all_users/_view/all";
@@ -66,6 +66,7 @@ router.post('/upload',  upload.single('uploadDoc'),
         const fileTimestamp = currentTime.getMonth() + "/" + currentTime.getDay()+ "/" + currentTime.getFullYear() // e.g. 04/21/2000 21:32:11
             + " " + currentTime.getHours()+ ":" + currentTime.getMinutes()+ ":" + currentTime.getSeconds();
         const filePath = req.file.path; //path but not needed i think
+        console.log(filePath)
 
         //TODO! check if filename exists already; add version where `state` = RESUBMITTED; else if new version and state: DRAFT
         //TODO! idk how to universally fix these states to other codes; maybe OOP stuff
@@ -115,7 +116,10 @@ router.post('/upload',  upload.single('uploadDoc'),
                 version_num: fileVersion,
                 state_history: stateTimestampList,
                 creator: fileCreator,
-                min_approvers: fileMinApprovers
+                min_approvers: fileMinApprovers,
+                last_activity:"Upload",
+                page_count,
+                status:"Pending",
             }, id)
         }else{
             console.log("updating")
@@ -235,3 +239,8 @@ async function formatBytes(bytes, decimals = 2) { //dno if need to async
 //======================================== X CODES ================================================================
 
 module.exports = router
+
+/**
+ * 
+ * 
+ */

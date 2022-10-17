@@ -5,8 +5,8 @@ const generator = require('generate-password');
 const app = express();
 const session = require('express-session')
 //todo comment out later:
-// const nano = require('nano')('http://administrator:qF3ChYhp@127.0.0.1:5984/');
-const nano = require('nano')('http://root:root@127.0.0.1:5984/');
+const nano = require('nano')('http://administrator:qF3ChYhp@127.0.0.1:5984/');
+// const nano = require('nano')('http://root:root@127.0.0.1:5984/');
 
 // session var init
 app.use(session({

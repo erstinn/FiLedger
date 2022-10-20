@@ -59,4 +59,4 @@ async function register(user) {
     }
 }
 
-register("appUser");
+await register("appUser");

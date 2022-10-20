@@ -2,6 +2,7 @@
   "name": "blockchain-based-dms",
   "version": "1.0.0",
   "dependencies": {
+    "@hyperledger/caliper-cli": "^0.4.2",
     "body-parser": "^1.20.0",
     "crypto-js": "^4.1.1",
     "cucumber": "^6.0.7",

@@ -75,6 +75,7 @@ const yaml = require("js-yaml");
 const fs = require('fs');
 const path = require('path');
 const { createConnection } = require('net');
+// const CDBKVS = require("fabric-client/lib/impl/CouchDBKeyValueStore.js");
 
 const express = require('express')
 const {generateFromEmail} = require("unique-username-generator");
@@ -131,8 +132,8 @@ router.post("/status", async function (req, res){
         firstname: firstName,
         lastname: lastName,
         email: email,
-        username: adminid,
-        password: adminpw,
+        username: username,
+        password: passw,
         department: dept,
         add_doc: add_doc,
         admin: admin

@@ -84,9 +84,9 @@ const { enc } = require('crypto-js');
 const router = express.Router()
 //databases TODO delete test code later
 const nano = require('nano')('http://administrator:qF3ChYhp@127.0.0.1:5984/');
-// const nano = require('nano')('http://root:root@127.0.0.1:5984/');
-// const nano = require('nano')('http://admin:pw123@127.0.0.1:5984/');
 const userDB = nano.db.use('users');
+
+
 const userViews = "/_design/all_users/_view/all";
 const departments = ["Sales","Marketing", "Human Resources", "Accounting"] //to remove when dynamic addition. of dept.s implemented
 
@@ -170,8 +170,7 @@ router.post("/status", async function (req, res){
             //TODO test bagin
             const walletPath = path.join(process.cwd(), 'wallet', mspId);
             // const wallet = await Wallets.newFileSystemWallet(walletPath);
-            // const wallet = await Wallets.newCouchDBWallet(nano, userDB);
-            const wallet = await Wallets.newCouchDBWallet(nano,"users");
+            const wallet = await Wallets.newCouchDBWallet('http://administrator:qF3ChYhp@127.0.0.1:5984/',"users");
             //TODO test end
             console.log(`Wallet path: ${walletPath}`); //dno if irrelevant if couchdb code
 

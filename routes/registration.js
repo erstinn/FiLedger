@@ -83,7 +83,8 @@ const SHA1  = require('crypto-js/sha1');
 const { enc } = require('crypto-js');
 const router = express.Router()
 //databases TODO delete test code later
-const nano = require('nano')('http://administrator:qF3ChYhp@127.0.0.1:5984/');
+// const nano = require('nano')('http://administrator:qF3ChYhp@127.0.0.1:5984/');
+const nano = require('nano')('http://admin:pw123@127.0.0.1:5984/');
 const userDB = nano.db.use('users');
 
 
@@ -170,7 +171,8 @@ router.post("/status", async function (req, res){
             //TODO test bagin
             const walletPath = path.join(process.cwd(), 'wallet', mspId);
             // const wallet = await Wallets.newFileSystemWallet(walletPath);
-            const wallet = await Wallets.newCouchDBWallet('http://administrator:qF3ChYhp@127.0.0.1:5984/',"users");
+            const wallet = await Wallets.newCouchDBWallet('http://admin:pw123@127.0.0.1:5984/',"users");
+            // const wallet = await Wallets.newCouchDBWallet(nano,"users");
             //TODO test end
             console.log(`Wallet path: ${walletPath}`); //dno if irrelevant if couchdb code
 
@@ -205,3 +207,4 @@ router.post("/status", async function (req, res){
 })
 
 module.exports = router
+

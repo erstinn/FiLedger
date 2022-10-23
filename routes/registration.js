@@ -171,8 +171,7 @@ router.post("/status", async function (req, res){
             const walletPath = path.join(process.cwd(), 'wallet', mspId);
             // const wallet = await Wallets.newFileSystemWallet(walletPath);
             // const wallet = await Wallets.newCouchDBWallet(nano, userDB);
-            const wallet = await Wallets.newCouchDBWallet('http://admin:pw123@127.0.0.1:5984/',"users");
-
+            const wallet = await Wallets.newCouchDBWallet(nano,"users");
             //TODO test end
             console.log(`Wallet path: ${walletPath}`); //dno if irrelevant if couchdb code
 

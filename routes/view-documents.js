@@ -15,7 +15,15 @@ router.get('/:id', async function (req,res){
             "_id":req.params.id
         }
     })
-    res.render("view-documents",{data:data});
+    res.render("view-documents",{data:data,username : req.session.username});
+})
+
+router.post('/delete/:id', async (req,res)=>{
+    const rev = await docsDB.find({selector:{
+        "_id":req.params.id
+    }})
+    await docsDB.destroy(req.params.id,rev.docs[0]._rev)
+    res.redirect('/all-documents')
 })
 
 module.exports = router

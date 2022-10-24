@@ -18,17 +18,17 @@ router.get('/', function (req, res){
 
     console.log(req.body.username)
     console.log(req.body.email)
-    res.render("dashboard", {username : req.body.username}); //after session, username
+    res.render("dashboard", {username : req.session.username}); //after session, username
 })
 
 router.get("/accepted-docs",(req,res)=>{
-    res.render("accepted-docs")
+    res.render("accepted-docs",{username : req.session.username})
 })
 router.get("/rejected-docs",(req,res)=>{
-    res.render("rejected-docs")
+    res.render("rejected-docs",{username : req.session.username})
 })
 router.get("/pending-docs",(req,res)=>{
-    res.render("pending-docs")
+    res.render("pending-docs",{username : req.session.username})
 })
 
 //======================================== UPLOAD FILE-RELATED CODES ================================================================
@@ -80,7 +80,7 @@ router.post('/upload',  upload.single('uploadDoc'),
         const fileCreator = "Erin Cordero"; //TODO implement once sessions
         let fileTagsList = []
         let stateTimestampList = []
-        let fileTags = `${fileName}|${req.body.tags.substring(0,req.body.tags.length-1)}|@ ${currentTime} V${parseFloat(fileVersion).toFixed(2)}`
+        let fileTags = `${fileName}|${req.body.tags.substring(0,req.body.tags.length-1)}|@ ${fileTimestamp} V${parseFloat(fileVersion).toFixed(2)}`
         fileTagsList.push(fileTags)
         stateTimestampList.push(stateTimestamp)
 

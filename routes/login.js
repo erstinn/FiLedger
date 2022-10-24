@@ -73,8 +73,8 @@ router.post('/', async function (req, res) {
             req.session.admin = true;
             console.log('ADMIN LOGGED IN')
         }
-
         req.session.user = varemail;
+        req.session.username = adminRes.docs[0].username;
         // console.log(adminRes); //for testing
         res.redirect('/dashboard')
     }

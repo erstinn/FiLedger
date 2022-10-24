@@ -5,7 +5,7 @@
 // const { enc } = require('crypto-js');
 // const router = express.Router()
 // //databases
-// const nano = require('nano')('http://administrator:qF3ChYhp@127.0.0.1:5984/');
+//const nano = require('nano')('http://administrator:qF3ChYhp@127.0.0.1:5984/');
 // // const nano = require('nano')('http://root:root@127.0.0.1:5984/');
 // const userDB = nano.db.use('users');
 // const userViews = "/_design/all_users/_view/all";
@@ -83,8 +83,8 @@ const SHA1  = require('crypto-js/sha1');
 const { enc } = require('crypto-js');
 const router = express.Router()
 //databases TODO delete test code later
-// const nano = require('nano')('http://administrator:qF3ChYhp@127.0.0.1:5984/');
-const nano = require('nano')('http://admin:mysecretpassword@127.0.0.1:5984/');
+const nano = require('nano')('http://administrator:qF3ChYhp@127.0.0.1:5984/');
+//const nano = require('nano')('http://admin:mysecretpassword@127.0.0.1:5984/');
 const userDB = nano.db.use('users');
 
 

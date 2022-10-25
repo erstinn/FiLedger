@@ -171,14 +171,14 @@ router.post("/status", async function (req, res){
             //TODO test bagin
             const walletPath = path.join(process.cwd(), 'wallet', mspId);
             // const wallet = await Wallets.newFileSystemWallet(walletPath);
-            const wallet = await Wallets.newCouchDBWallet('http://admin:mysecretpassword@127.0.0.1:5984',"users");
+            const wallet = await Wallets.newCouchDBWallet('http://administrator:qF3ChYhp@127.0.0.1:5984/',"users");
             //TODO test end
             console.log(`Wallet path: ${walletPath}`); //dno if irrelevant if couchdb code
 
             // Check to see if we've already enrolled the admin user.
             const identity = await wallet.get(adminid);
             if (identity) {
-                console.log('An identity for the admin user "admin" already exists in the wallet');
+                console.log(`An identity for the admin user '${username}' already exists in the wallet`);
                 return;
             }
 
@@ -192,11 +192,11 @@ router.post("/status", async function (req, res){
                 mspId: mspId,
                 type: 'X.509',
             };
-            await wallet.put('admin', x509Identity);
-            console.log('Successfully enrolled admin user "admin" and imported it into the wallet');
+            await wallet.put(username, x509Identity);
+            console.log(`Successfully enrolled admin user '${username}'and imported it into the wallet`);
 
         } catch (error) {
-            console.error(`Failed to enroll admin user "admin": ${error}`);
+            console.error(`Failed to enroll admin user ${username}: ${error}`);
             process.exit(1);
         }
     }

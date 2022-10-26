@@ -6,7 +6,7 @@
 
 'use strict';
 
-const FabCar = require('./lib/fabcar');
+const MyFiLedgerContract = require('./lib/fabcar');
 
-module.exports.FabCar = FabCar;
-module.exports.contracts = [ FabCar ];
+module.exports.MyFiLedgerContract = MyFiLedgerContract;
+module.exports.contracts = [ MyFiLedgerContract ];

@@ -6,8 +6,8 @@ const app = express();
 const session = require('express-session')
 //todo comment out later:
 // const nano = require('nano')('http://administrator:qF3ChYhp@127.0.0.1:5984/');
-const nano = require('nano')('http://admin:mysecretpassword@127.0.0.1:5984/');
-// const nano = require('nano')('http://root:root@127.0.0.1:5984/');
+// const nano = require('nano')('http://admin:mysecretpassword@127.0.0.1:5984/');
+const nano = require('nano')('http://root:root@127.0.0.1:5984/');
 // const nano = require('nano')('http://admin:pw123@127.0.0.1:5984/');
 
 
@@ -27,7 +27,8 @@ app.use(function(req, res, next){
 })
 
 //the rest
-app.use(bodyParser.urlencoded({extended: true}));
+// app.use(bodyParser.urlencoded({extended: true}));
+app.use(express.urlencoded({extended:true}))
 app.use(express.static('public'))
 
 app.set('view engine', 'ejs');

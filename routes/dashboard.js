@@ -5,9 +5,9 @@ const path = require('path')
 
 // databases
 // const nano = require('nano')('http://administrator:qF3ChYhp@127.0.0.1:5984/');
-const nano = require('nano')('http://admin:mysecretpassword@127.0.0.1:5984/');
+// const nano = require('nano')('http://admin:mysecretpassword@127.0.0.1:5984/');
 // const nano = require('nano')('http://admin:pw123@127.0.0.1:5984/');
-// const nano = require('nano')('http://root:root@127.0.0.1:5984/');
+const nano = require('nano')('http://root:root@127.0.0.1:5984/');
 const docsDB = nano.db.use('documents');
 // const docsDB = nano.db.use('testesdb');
 const docViews = "/_design/all_users/_view/all";
@@ -35,11 +35,22 @@ router.get("/pending-docs",(req,res)=>{
 const multer  = require('multer')
 //todo maybe prevent zip file upload?
 //Specs: 1 file per upload, 1gb, any filetype
-const upload = multer({
-    dest: 'uploads/', //todo change destination? or delete afterwards
-    limits:{ //no limit on filetype as specified on paper
-        fileSize: 1073741824, //1gb?
+var storage = multer.diskStorage({
+    destination:'uploads/',
+    filename: (req,file,cb)=>{
+        cb(null,file.originalname)
     },
+    limits:{
+        fileSize: 1073741824
+    }
+})
+const upload = multer({
+    // dest: 'uploads/', //todo change destination? or delete afterwards
+    // limits:{ //no limit on filetype as specified on paper
+    //     fileSize: 1073741824, //1gb?
+    // },
+
+    storage:storage
 })
 
 //todo: change path?; plus redirection to current page; plus popup (#?)
@@ -158,8 +169,10 @@ router.post('/upload',  upload.single('uploadDoc'),
                 function (err, response){
                     if(!err){
                         console.log("it worked")
+                        res.redirect("/dashboard?fail=false")
                     }else {
                         console.log("failed")
+                        res.redirect("/dashboard/?fail=true")
                     }
                 }
             )

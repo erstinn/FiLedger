@@ -54,3 +54,15 @@ tagInput.addEventListener("keyup",(e)=>{
         })
     }
 })
+
+const urlParams = new URLSearchParams(window.location.search);
+window.addEventListener('load', function () {
+    if(urlParams.has("fail")){
+        if(urlParams.get('fail') == "false"){
+            alert("Upload Successful!")
+        }else{
+            alert("Upload Unsuccessful :(")
+        }
+    }
+})
+

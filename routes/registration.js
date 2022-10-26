@@ -6,7 +6,7 @@
 // const router = express.Router()
 // //databases
 // const nano = require('nano')('http://administrator:qF3ChYhp@127.0.0.1:5984/');
-// // const nano = require('nano')('http://root:root@127.0.0.1:5984/');
+// const nano = require('nano')('http://root:root@127.0.0.1:5984/');
 // const userDB = nano.db.use('users');
 // const userViews = "/_design/all_users/_view/all";
 // const departments = ["Sales","Marketing", "Human Resources", "Accounting"] //to remove when dynamic addition. of dept.s implemented
@@ -84,7 +84,9 @@ const { enc } = require('crypto-js');
 const router = express.Router()
 //databases TODO delete test code later
 // const nano = require('nano')('http://administrator:qF3ChYhp@127.0.0.1:5984/');
-const nano = require('nano')('http://admin:mysecretpassword@127.0.0.1:5984/');
+// const nano = require('nano')('http://admin:mysecretpassword@127.0.0.1:5984/');
+const nano = require('nano')('http://root:root@127.0.0.1:5984/');
+
 const userDB = nano.db.use('users');
 
 
@@ -134,7 +136,7 @@ router.post("/status", async function (req, res){
         lastname: lastName,
         email: email,
         username: username,
-        password: passw,
+        password: SHA1(password).toString(enc.Hex),
         department: dept,
         add_doc: add_doc,
         admin: admin

@@ -1,3 +1,4 @@
+// i think we should insert the code here in front end part
 'use strict';
 
 const { Contract } = require('fabric-contract-api');
@@ -11,17 +12,17 @@ class MyFiLedgerContract extends Contract {
     }
     //uploadDoc
     //metadata from couchdb
-    async createDoc(ctx, MyDocId, value) {
-        //checks if assetID exists
-        const exists = await this.myDocExists(ctx, MyDocId);
-        if (exists) {
-            throw new Error(`The my document ${MyDocId} already exists`);
-        }
-        const document = { value };
-        //if it doesn't exists, create new assetID
-        const buffer = Buffer.from(JSON.stringify(document));
-        await ctx.stub.putState(MyDocId, buffer);
-    }
+    // async createDoc(ctx, MyDocId, value) {
+    //     //checks if assetID exists
+    //     const exists = await this.myDocExists(ctx, MyDocId);
+    //     if (exists) {
+    //         throw new Error(`The my document ${MyDocId} already exists`);
+    //     }
+    //     const document = { value };
+    //     //if it doesn't exists, create new assetID
+    //     const buffer = Buffer.from(JSON.stringify(document));
+    //     await ctx.stub.putState(MyDocId, buffer);
+    // }
     //read version control (query all versions)
     async readDoc(ctx, MyDocId) {
         const exists = await this.myDocExists(ctx, MyDocId);
@@ -32,16 +33,16 @@ class MyFiLedgerContract extends Contract {
         const document = JSON.parse(buffer.toString());
         return document;
     }
-    //updateVer
-    async updateDoc(ctx, MyDocId, newValue) {
-        const exists = await this.myDocExists(ctx, MyDocId);
-        if (!exists) {
-            throw new Error(`The my document ${MyDocId} does not exist`);
-        }
-        const document = { value: newValue };
-        const buffer = Buffer.from(JSON.stringify(document));
-        await ctx.stub.putState(MyDocId, buffer);
-    }
+    // //updateVer
+    // async updateDoc(ctx, MyDocId, newValue) {
+    //     const exists = await this.myDocExists(ctx, MyDocId);
+    //     if (!exists) {
+    //         throw new Error(`The my document ${MyDocId} does not exist`);
+    //     }
+    //     const document = { value: newValue };
+    //     const buffer = Buffer.from(JSON.stringify(document));
+    //     await ctx.stub.putState(MyDocId, buffer);
+    // }
     //deleteDoc
     async deleteDoc(ctx, MyDocId) {
         const exists = await this.myDocExists(ctx, MyDocId);

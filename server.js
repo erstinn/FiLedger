@@ -1,4 +1,5 @@
 const express = require('express');
+const { Contract } = require('fabric-contract-api');
 const bodyParser = require('body-parser');
 const { generateFromEmail } = require("unique-username-generator");
 const generator = require('generate-password');
@@ -90,7 +91,8 @@ app.listen(process.env.PORT || 3000, function (){
 const loginRouter = require("./routes/login")
 const logoutRouter = require("./routes/logout")
 const regRouter = require("./routes/registration")
-const dashboardRouter = require("./routes/dashboard")
+// const dashboardRouter = require("./routes/dashboard")
+const dashboardRouter = require("./network/chaincode/fabcar/javascript/lib/createDoc");
 const documentsRouter = require("./routes/documents")
 const allDocumentsRouter = require("./routes/all-documents")
 const adminRouter = require("./routes/administration")

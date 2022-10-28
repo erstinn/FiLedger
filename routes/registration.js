@@ -83,8 +83,8 @@ const SHA1  = require('crypto-js/sha1');
 const { enc } = require('crypto-js');
 const router = express.Router()
 //databases TODO delete test code later
-// const nano = require('nano')('http://administrator:qF3ChYhp@127.0.0.1:5984/');
-const nano = require('nano')('http://admin:mysecretpassword@127.0.0.1:5984/');
+const nano = require('nano')('http://administrator:qF3ChYhp@127.0.0.1:5984/');
+// const nano = require('nano')('http://admin:mysecretpassword@127.0.0.1:5984/');
 const userDB = nano.db.use('users');
 
 
@@ -154,7 +154,7 @@ router.post("/status", async function (req, res){
         try {
             // load the network configuration
             //todo uncomment later sry mizi
-            const ccpPath = path.resolve("./network/","connection-org.yaml");
+            const ccpPath = path.resolve("./network/try-k8/","connection-org.yaml");
             // const ccpPath = path.resolve("./trial-net/client/nodejs","connection-org.yaml");
             if (ccpPath.includes(".yaml")){
                 ccp = yaml.load(fs.readFileSync(ccpPath,'utf-8'));

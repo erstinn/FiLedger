@@ -6,7 +6,8 @@ const yaml = require("js-yaml");
 const fs = require('fs');
 const path = require('path');
 const mspId = "Org1MSP";
-const CC_NAME = "fabcar";
+const CC_NAME1 = "fabcar";
+const CC_NAME2= "createDoc"
 const CHANNEL = "mychannel";
 let ccp = null;
 
@@ -27,7 +28,7 @@ async function invoke(user) {
         
         // Create a new file system based wallet for managing identities.
         const walletPath = path.join(process.cwd(), 'wallet', mspId);
-        const wallet = await Wallets.newFileSystemWallet(walletPath);
+        const wallet = await Wallets.newCouchDBWallet('http://administrator:qF3ChYhp@127.0.0.1:5984/',"users");
         console.log(`Wallet path: ${walletPath}`);
 
         // Check to see if we've already enrolled the user.
@@ -50,12 +51,13 @@ async function invoke(user) {
         const network = await gateway.getNetwork(CHANNEL);
 
         // Get the contract from the network.
-        const contract = network.getContract(CC_NAME);
+        const contract = network.getContract(CC_NAME1, CC_NAME2);
 
         // Submit the specified transaction.
         // createCar transaction - requires 5 argument, ex: ('createCar', 'CAR12', 'Honda', 'Accord', 'Black', 'Tom')
         // changeCarOwner transaction - requires 2 args , ex: ('changeCarOwner', 'CAR12', 'Dave')
-        await contract.submitTransaction('createCar', 'CAR12', 'Honda', 'Accord', 'Black', 'Tom');
+        await contract.submitTransaction('createDocs', 'id', 'fileName', 'fileVersion', 'fileSize', 'lol',
+            'idk', 'haha', 'hehe', 'mewmwme');
         console.log('Transaction has been submitted');
 
         // Disconnect from the gateway.

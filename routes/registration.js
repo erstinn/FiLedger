@@ -85,8 +85,8 @@ const router = express.Router()
 //databases TODO delete test code later
 const nano = require('nano')('http://administrator:qF3ChYhp@127.0.0.1:5984/');
 // const nano = require('nano')('http://admin:mysecretpassword@127.0.0.1:5984/');
-const userDB = nano.db.use('users');
-
+const adminDB = nano.db.use('admins');
+// const walletDB = nano.db.use('wallet');
 
 const userViews = "/_design/all_users/_view/all";
 const departments = ["Sales","Marketing", "Human Resources", "Accounting"] //to remove when dynamic addition. of dept.s implemented
@@ -110,12 +110,17 @@ router.post("/status", async function (req, res){
     let uuid = await nano.uuids(1);
     let id = uuid.uuids[0];
 
-    //generate username
-    const username = generateFromEmail(
+    //generate for enrolled admin username
+    const usernameAdmin = generateFromEmail(
         email,
         3
     );
 
+    //generate for registered user
+    const username = generateFromEmail(
+        email,
+        3
+    );
     //generate default password
     const passw = SHA1 (generator.generate({
         length: 10,
@@ -128,81 +133,155 @@ router.post("/status", async function (req, res){
     const caURL = "org1-ca.fabric";
     let ccp;
 
-    await userDB.insert({
-        _id: id,
-        firstname: firstName,
-        lastname: lastName,
-        email: email,
-        username: username,
-        password: SHA1(password).toString(enc.Hex),
-        department: dept,
-        add_doc: add_doc,
-        admin: admin
-    })
-
-    if(res.statusCode === 200){
-        res.render('success-reg');
-    }
-    else{
-        //not sure if need
-        res.render('failure-reg');
-    }
-
+    //stores username for admin
+    const admin_username = usernameAdmin;
+    // if(res.statusCode === 200){
+    //     res.render('success-reg');
+    // }
+    // else{
+    //     //not sure if need
+    //     res.render('failure-reg');
+    // }
     // console.log(dept, lname, fname, email, password, un, admin, add_doc);
 
-    async function enroll() {
-        try {
-            // load the network configuration
-            //todo uncomment later sry mizi
-            const ccpPath = path.resolve("./network/try-k8/","connection-org.yaml");
-            // const ccpPath = path.resolve("./trial-net/client/nodejs","connection-org.yaml");
-            if (ccpPath.includes(".yaml")){
-                ccp = yaml.load(fs.readFileSync(ccpPath,'utf-8'));
-            } else {
-                ccp = JSON.parse(fs.readFileSync(ccpPath, 'utf8'));
+    // load the network configuration
+    //todo uncomment later sry mizi
+    const ccpPath = path.resolve("./network/try-k8/", "connection-org.yaml");
+    // const ccpPath = path.resolve("./trial-net/client/nodejs","connection-org.yaml");
+    if (ccpPath.includes(".yaml")) {
+        ccp = yaml.load(fs.readFileSync(ccpPath, 'utf-8'));
+    } else {
+        ccp = JSON.parse(fs.readFileSync(ccpPath, 'utf8'));
+    }
+    //if admin is checked, enroll admin
+    if(admin==='on') {
+
+        async function enroll() {
+            try {
+                // Create a new CA client for interacting with the CA.
+                const caInfo = ccp.certificateAuthorities[caURL];
+                const caTLSCACerts = caInfo.tlsCACerts.pem;
+                const ca = new FabricCAServices(caInfo.url, {trustedRoots: caTLSCACerts, verify: false}, caInfo.caName);
+
+                // Create a new file system based wallet for managing identities.
+                //TODO test bagin
+                const walletPath = path.join(process.cwd(), 'wallet', mspId);
+                // const wallet = await Wallets.newFileSystemWallet(walletPath);
+                const wallet_admin = await Wallets.newCouchDBWallet('http://administrator:qF3ChYhp@127.0.0.1:5984/', "wallet");
+                //TODO test end
+                console.log(`Wallet path: ${walletPath}`); //dno if irrelevant if couchdb code
+
+                // Check to see if we've already enrolled the admin user.
+                const identity = await wallet_admin.get(adminid);
+                if (identity) {
+                    console.log(`An identity for the admin user '${admin_username}' already exists in the wallet`);
+                    return;
+                }
+
+                // Enroll the admin user, and import the new identity into the wallet.
+                const enrollment = await ca.enroll({enrollmentID: adminid, enrollmentSecret: adminpw});
+                const x509Identity = {
+                    credentials: {
+                        certificate: enrollment.certificate,
+                        privateKey: enrollment.key.toBytes(),
+                    },
+                    mspId: mspId,
+                    type: 'X.509',
+                };
+                await wallet_admin.put(adminid, x509Identity);
+                await adminDB.insert({
+                    _id: id,
+                    firstname: firstName,
+                    lastname: lastName,
+                    email: email,
+                    username: admin_username,
+                    password: SHA1(password).toString(enc.Hex),
+                    department: dept,
+                    add_doc: add_doc,
+                    admin: admin
+                })
+                console.log(`Successfully enrolled admin user '${admin_username}'and imported it into the wallet`);
+                res.render('success-reg');
+                console.log(admin);
+            } catch (error) {
+                console.error(`Failed to enroll admin user ${admin_username}: ${error}`);
+                process.exit(1);
+                res.render('failure-reg');
+
             }
-
-            // Create a new CA client for interacting with the CA.
-            const caInfo = ccp.certificateAuthorities[caURL];
-            const caTLSCACerts = caInfo.tlsCACerts.pem;
-            const ca = new FabricCAServices(caInfo.url, { trustedRoots: caTLSCACerts, verify: false }, caInfo.caName);
-
-            // Create a new file system based wallet for managing identities.
-            //TODO test bagin
-            const walletPath = path.join(process.cwd(), 'wallet', mspId);
-            // const wallet = await Wallets.newFileSystemWallet(walletPath);
-            const wallet = await Wallets.newCouchDBWallet('http://administrator:qF3ChYhp@127.0.0.1:5984/',"users");
-            //TODO test end
-            console.log(`Wallet path: ${walletPath}`); //dno if irrelevant if couchdb code
-
-            // Check to see if we've already enrolled the admin user.
-            const identity = await wallet.get(adminid);
-            if (identity) {
-                console.log(`An identity for the admin user '${username}' already exists in the wallet`);
-                return;
-            }
-
-            // Enroll the admin user, and import the new identity into the wallet.
-            const enrollment = await ca.enroll({ enrollmentID: adminid, enrollmentSecret: adminpw });
-            const x509Identity = {
-                credentials: {
-                    certificate: enrollment.certificate,
-                    privateKey: enrollment.key.toBytes(),
-                },
-                mspId: mspId,
-                type: 'X.509',
-            };
-            await wallet.put(username, x509Identity);
-            console.log(`Successfully enrolled admin user '${username}'and imported it into the wallet`);
-
-        } catch (error) {
-            console.error(`Failed to enroll admin user ${username}: ${error}`);
-            process.exit(1);
         }
+
+        await enroll();
+
+    }else {
+        //register user
+        async function register() {
+
+            try {
+                // Create a new file system based wallet for managing identities.
+                const walletPath = path.join(process.cwd(), 'wallet', mspId);
+                const wallet_admin = await Wallets.newCouchDBWallet('http://administrator:qF3ChYhp@127.0.0.1:5984/', "wallet");
+                const wallet_users = await Wallets.newCouchDBWallet('http://administrator:qF3ChYhp@127.0.0.1:5984/', "wallet_users");
+                console.log(`Wallet path: ${walletPath}`);
+
+
+                // Create a new CA client for interacting with the CA.
+                const caInfo = ccp.certificateAuthorities[caURL];
+                const caTLSCACerts = caInfo.tlsCACerts.pem;
+                const ca = new FabricCAServices(caInfo.url, { trustedRoots: caTLSCACerts, verify: false }, caInfo.caName);
+
+                // Check to see if we've already enrolled the user.
+                const userIdentity = await wallet_users.get(username);
+                if (userIdentity) {
+                    console.log(`An identity for the user ${username} already exists in the wallet`);
+                    return;
+                }
+
+                // Check to see if we've already enrolled the admin user.
+                // //TODO: need icheck if sinong admin or kaninong account yung nag-reregister ng user (idk if need pa to)
+                const adminIdentity = await wallet_admin.get(adminid);
+                if (!adminIdentity) {
+                    console.log(`An identity for the admin user ${adminid} does not exist in the wallet`);
+                    console.log('Run the enrollAdmin.js application before retrying');
+                    return;
+                }
+
+                // build a user object for authenticating with the CA
+                const provider = wallet_admin.getProviderRegistry().getProvider(adminIdentity.type);
+                const adminUser = await provider.getUserContext(adminIdentity, admin_username);
+
+                // Register the user, enroll the user, and import the new identity into the wallet.
+                const secret = await ca.register({
+                    // affiliation: 'org1.'+dept,
+                    enrollmentID: username,
+                    role: 'client'
+                }, adminUser);
+                const enrollment = await ca.enroll({
+                    enrollmentID: username,
+                    enrollmentSecret: secret
+                });
+                const x509Identity = {
+                    credentials: {
+                        certificate: enrollment.certificate,
+                        privateKey: enrollment.key.toBytes(),
+                    },
+                    mspId: 'Org1MSP',
+                    type: 'X.509',
+                };
+                await wallet_users.put(username, x509Identity);
+                console.log(`Successfully registered and enrolled admin user ${username} and imported it into the wallet`);
+                res.render('success-reg');
+            }catch (error) {
+                    console.error(`Failed to register user ${username}: ${error}`);
+                    process.exit(1);
+                    res.render('failure-reg');
+                }
+        }
+        await register();
     }
 
-    await enroll();
 
 })
+
 
 module.exports = router

@@ -3,13 +3,15 @@ const router = express.Router()
 const session = require('express-session')
 const SHA1  = require('crypto-js/sha1');
 const { enc } = require('crypto-js');
+const path = require("path");
+const {Wallets} = require("fabric-network");
+const FabricCAServices = require("fabric-ca-client");
+const yaml = require("js-yaml");
+const fs = require("fs");
 // databases
 const nano = require('nano')('http://administrator:qF3ChYhp@127.0.0.1:5984/');
-//const nano = require('nano')('http://admin:mysecretpassword@127.0.0.1:5984/');
-// const nano = require('nano')('http://admin:pw123@127.0.0.1:5984/');
-// const nano = require('nano')('http://root:root@127.0.0.1:5984/');
 const userDB = nano.db.use('users');
-// const userViews = "/_design/all_users/_view/all";
+const adminDB = nano.db.use('admins');
 const departments = ["Sales","Marketing", "Human Resources", "Accounting"] //to remove when dynamic addition. of dept.s implemented
 
 // session var
@@ -20,7 +22,6 @@ router.use(session({
     resave: false
 }))
 
-//the rest
 router.get('/', function (req, res){
     res.render("login", {dep: departments});
 })
@@ -32,17 +33,30 @@ router.post('/', async function (req, res) {
     const dept = req.body.dept;
     let logErr = '';
 
-    //created an index since mas advisable ata pag nag-qquery and nawawala yung warning :>
-    // not sure if index is used by ill keep it here nalang muna -dana
+    //todo hello
+    // load the network configuration
+    let mspId = "Org1MSP";
+    const caURL = "org1-ca.fabric";
+    const ccpPath = path.resolve("./network/try-k8/", "connection-org.yaml");
+    if (ccpPath.includes(".yaml")) {
+        ccp = yaml.load(fs.readFileSync(ccpPath, 'utf-8'));
+    } else {
+        ccp = JSON.parse(fs.readFileSync(ccpPath, 'utf8'));
+    }
+    const caInfo = ccp.certificateAuthorities[caURL];
+    const caTLSCACerts = caInfo.tlsCACerts.pem;
+    const ca = new FabricCAServices(caInfo.url, {trustedRoots: caTLSCACerts, verify: false}, caInfo.caName);
+    const walletPath = path.join(process.cwd(), 'wallet', mspId);
+    const wallet_admin = await Wallets.newCouchDBWallet('http://administrator:qF3ChYhp@127.0.0.1:5984/', "wallet");
+    const wallet_user = await Wallets.newCouchDBWallet('http://administrator:qF3ChYhp@127.0.0.1:5984/', "wallet_users");
+    console.log(`Wallet path: ${walletPath}`); //dno if irrelevant if couchdb code
+    //todo network/wallet connection end
+
     const indexDef = {
         index: { fields: ["email", "password", "department"]},
         type: "json",
         name: "trial-index"
     }
-
-    //needed lang para mawala warning but not sure di naman ata super need?
-    const index = await userDB.createIndex(indexDef);
-
     const q = {
         selector: {
             "email": varemail,
@@ -50,17 +64,12 @@ router.post('/', async function (req, res) {
             "department": dept
         }
     };
-
-    const response = await userDB.find(q)
-
-    // console.log(response)
+    const responseUserDB = await userDB.find(q)
+    const responseAdminDB = await adminDB.find(q)
     //need double equal lang para gumana (di maka-access pag wrong pass)
-    if(response.docs == '' || dept === undefined){
-        logErr = 'Incorrect Login Credentials. Please try again...';
-        //sends login error to login.ejs
-        res.render('login', {dep:departments, logErr:logErr})//placeholder
+    if(responseUserDB.docs == '' && responseAdminDB.docs == '' || dept === undefined ){
+        loginError(responseUserDB, responseAdminDB);
     }else{
-        //this is SOOO inefficient, placeholder lng and will change it soon pag na resolve q na how 2-dana
         const q1 = {
             selector: {
                 "email": varemail,
@@ -69,24 +78,51 @@ router.post('/', async function (req, res) {
             }
         };
 
-        const adminRes = await userDB.find(q1)
-        if(adminRes.bookmark !== 'nil' && adminRes.docs[0].admin === 'on'){
-            req.session.admin = true;
-            console.log('ADMIN LOGGED IN')
+        const adminRes = await adminDB.find(q1)
+        const userRes = await userDB.find(q1)
+        console.log("hello")
+        if(adminRes.bookmark !== 'nil'){
+            const adminIdentity = await wallet_admin.get("enroll");
+            if (adminIdentity) {
+                console.log(`An identity for the user ${adminRes.docs[0].username} already exists in the wallet`);
+                req.session.admin = true;
+                console.log('ADMIN LOGGED IN');
+                req.session.username = adminRes.docs[0].username;
+                req.session.user = varemail;
+                res.redirect('/dashboard');
+            }else{
+                loginError(responseAdminDB);
+            }
         }
+        console.log('usre meow');
         req.session.user = varemail;
-        req.session.username = adminRes.docs[0].username;
-        console.log(adminRes)
-        // console.log(adminRes); //for testing
-        res.redirect('/dashboard')
+        req.session.username = userRes.docs[0].username;
+        const userIdentity = await wallet_user.get(req.session.username);
+        if (userIdentity) {
+            console.log(`An identity for the user ${adminRes.docs[0].username} already exists in the wallet`); //todo remove
+            req.session.admin = true;
+            console.log('ADMIN LOGGED IN');
+            req.session.username = adminRes.docs[0].username;
+            req.session.user = varemail;
+            res.redirect('/dashboard');
+        }else{
+            loginError(responseUserDB);
+        }
+
     }
 
-    // console.log(index);
 })
 
 router.get('/logout', function(req, res){
     req.session.destroy();
     res.redirect('/')
-}) //DITO MUNA FOR NOW, WILL BE MOVING TO SEPARATE FILE SOON
+})
 
+
+function loginError(responseUserDB, responseAdminDB){
+    console.log(responseUserDB.docs); //todo remove?
+    console.log(responseAdminDB.docs); //todo remove?
+    logErr = 'Incorrect Login Credentials. Please try again...';
+    res.render('login', {dep:departments, logErr:logErr})//placeholder
+}
 module.exports = router

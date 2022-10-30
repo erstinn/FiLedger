@@ -66,17 +66,17 @@ router.post('/', async function (req, res) {
                 "email": varemail,
                 "password": passw,
                 "department": dept,
-                "admin": "on"
             }
         };
 
         const adminRes = await userDB.find(q1)
-        if(adminRes.bookmark !== 'nil'){
+        if(adminRes.bookmark !== 'nil' && adminRes.docs[0].admin === 'on'){
             req.session.admin = true;
             console.log('ADMIN LOGGED IN')
         }
         req.session.user = varemail;
         req.session.username = adminRes.docs[0].username;
+        console.log(adminRes)
         // console.log(adminRes); //for testing
         res.redirect('/dashboard')
     }

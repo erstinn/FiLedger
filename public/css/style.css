@@ -48,7 +48,7 @@ html{
 .head-buttons{
     display: flex;
     align-items: center;
-    margin-left: 20%;
+    margin-left: 25%;
 }
 .button{
     border:none;

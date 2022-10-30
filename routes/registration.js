@@ -107,6 +107,7 @@ router.post("/status", async function (req, res){
     const admin = req.body.isAdmin;
     const add_doc = req.body.add_doc;
     const dept = req.body.dept; //this works now
+    const def_approver = req.body.def_approver
 
     //generate id
     let uuid = await nano.uuids(1);
@@ -138,8 +139,9 @@ router.post("/status", async function (req, res){
         username: username,
         password: SHA1(password).toString(enc.Hex),
         department: dept,
-        add_doc: add_doc,
-        admin: admin
+        add_doc: add_doc || "off",
+        admin: admin || "off",
+        def_approver:def_approver|| "off"
     })
 
     if(res.statusCode === 200){

@@ -97,7 +97,6 @@ const adminRouter = require("./routes/administration")
 const viewDocumentsRouter = require("./routes/view-documents")
 //Mount all routers
 app.use('/login', loginRouter)
-app.use('/registration', regRouter)
 app.use('/logout', logoutRouter)
 // added isAuthenticated function so that only authenticated sessions are able to access these pages
 app.use('/dashboard', isAuthenticated, dashboardRouter)
@@ -105,6 +104,8 @@ app.use('/documents', isAuthenticated, documentsRouter)
 app.use('/all-documents', isAuthenticated, allDocumentsRouter)
 app.use('/administration', isAuthenticated, isAdmin, adminRouter);
 app.use('/view-documents', isAuthenticated, viewDocumentsRouter)
+app.use('/registration',isAuthenticated,isAdmin,regRouter)
+
 
 
 

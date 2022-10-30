@@ -1,13 +1,14 @@
 const express = require('express');
+const { Contract } = require('fabric-contract-api');
 const bodyParser = require('body-parser');
 const { generateFromEmail } = require("unique-username-generator");
 const generator = require('generate-password');
 const app = express();
 const session = require('express-session')
 //todo comment out later:
-// const nano = require('nano')('http://administrator:qF3ChYhp@127.0.0.1:5984/');
-// const nano = require('nano')('http://admin:mysecretpassword@127.0.0.1:5984/');
-const nano = require('nano')('http://root:root@127.0.0.1:5984/');
+const nano = require('nano')('http://administrator:qF3ChYhp@127.0.0.1:5984/');
+//const nano = require('nano')('http://admin:mysecretpassword@127.0.0.1:5984/');
+// const nano = require('nano')('http://root:root@127.0.0.1:5984/');
 // const nano = require('nano')('http://admin:pw123@127.0.0.1:5984/');
 
 
@@ -91,6 +92,7 @@ const loginRouter = require("./routes/login")
 const logoutRouter = require("./routes/logout")
 const regRouter = require("./routes/registration")
 const dashboardRouter = require("./routes/dashboard")
+// const dashboardRouter = require("./network/chaincode/fabcar/javascript/lib/createDoc");
 const documentsRouter = require("./routes/documents")
 const allDocumentsRouter = require("./routes/all-documents")
 const adminRouter = require("./routes/administration")

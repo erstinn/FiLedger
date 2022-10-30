@@ -1,118 +1,64 @@
-/*
- * Copyright IBM Corp. All Rights Reserved.
- *
- * SPDX-License-Identifier: Apache-2.0
- */
-
+// i think we should insert the code here in front end part
 'use strict';
 
 const { Contract } = require('fabric-contract-api');
 
-class FabCar extends Contract {
-
-    async initLedger(ctx) {
-        console.info('============= START : Initialize Ledger ===========');
-        const cars = [
-            {
-                color: 'blue',
-                make: 'Toyota',
-                model: 'Prius',
-                owner: 'Tomoko',
-            },
-            {
-                color: 'red',
-                make: 'Ford',
-                model: 'Mustang',
-                owner: 'Brad',
-            },
-            {
-                color: 'green',
-                make: 'Hyundai',
-                model: 'Tucson',
-                owner: 'Jin Soo',
-            },
-            {
-                color: 'yellow',
-                make: 'Volkswagen',
-                model: 'Passat',
-                owner: 'Max',
-            },
-            {
-                color: 'black',
-                make: 'Tesla',
-                model: 'S',
-                owner: 'Adriana',
-            },
-            {
-                color: 'purple',
-                make: 'Peugeot',
-                model: '205',
-                owner: 'Michel',
-            },
-            {
-                color: 'white',
-                make: 'Chery',
-                model: 'S22L',
-                owner: 'Aarav',
-            },
-            {
-                color: 'violet',
-                make: 'Fiat',
-                model: 'Punto',
-                owner: 'Pari',
-            },
-            {
-                color: 'indigo',
-                make: 'Tata',
-                model: 'Nano',
-                owner: 'Valeria',
-            },
-            {
-                color: 'brown',
-                make: 'Holden',
-                model: 'Barina',
-                owner: 'Shotaro',
-            },
-        ];
-
-        for (let i = 0; i < cars.length; i++) {
-            cars[i].docType = 'car';
-            await ctx.stub.putState('CAR' + i, Buffer.from(JSON.stringify(cars[i])));
-            console.info('Added <--> ', cars[i]);
+class MyFiLedgerContract extends Contract {
+    //function to check if the assetID exists
+    //docID
+    async myDocExists(ctx, MyDocId) {
+        const buffer = await ctx.stub.getState(MyDocId);
+        return (!!buffer && buffer.length > 0);
+    }
+    //uploadDoc
+    //metadata from couchdb
+    // async createDoc(ctx, MyDocId, value) {
+    //     //checks if assetID exists
+    //     const exists = await this.myDocExists(ctx, MyDocId);
+    //     if (exists) {
+    //         throw new Error(`The my document ${MyDocId} already exists`);
+    //     }
+    //     const document = { value };
+    //     //if it doesn't exists, create new assetID
+    //     const buffer = Buffer.from(JSON.stringify(document));
+    //     await ctx.stub.putState(MyDocId, buffer);
+    // }
+    //read version control (query all versions)
+    async readDoc(ctx, MyDocId) {
+        const exists = await this.myDocExists(ctx, MyDocId);
+        if (!exists) {
+            throw new Error(`The my document ${MyDocId} does not exist`);
         }
-        console.info('============= END : Initialize Ledger ===========');
+        const buffer = await ctx.stub.getState(MyDocId);
+        const document = JSON.parse(buffer.toString());
+        return document;
     }
-
-    async queryCar(ctx, carNumber) {
-        const carAsBytes = await ctx.stub.getState(carNumber); // get the car from chaincode state
-        if (!carAsBytes || carAsBytes.length === 0) {
-            throw new Error(`${carNumber} does not exist`);
+    // //updateVer
+    // async updateDoc(ctx, MyDocId, newValue) {
+    //     const exists = await this.myDocExists(ctx, MyDocId);
+    //     if (!exists) {
+    //         throw new Error(`The my document ${MyDocId} does not exist`);
+    //     }
+    //     const document = { value: newValue };
+    //     const buffer = Buffer.from(JSON.stringify(document));
+    //     await ctx.stub.putState(MyDocId, buffer);
+    // }
+    //deleteDoc
+    async deleteDoc(ctx, MyDocId) {
+        const exists = await this.myDocExists(ctx, MyDocId);
+        if (!exists) {
+            throw new Error(`The my document ${MyDocId} does not exist`);
         }
-        console.log(carAsBytes.toString());
-        return carAsBytes.toString();
+        await ctx.stub.deleteState(MyDocId);
     }
 
-    async createCar(ctx, carNumber, make, model, color, owner) {
-        console.info('============= START : Create Car ===========');
-
-        const car = {
-            color,
-            docType: 'car',
-            make,
-            model,
-            owner,
-        };
-
-        await ctx.stub.putState(carNumber, Buffer.from(JSON.stringify(car)));
-        console.info('============= END : Create Car ===========');
-    }
-
-    async queryAllCars(ctx) {
-        const startKey = '';
-        const endKey = '';
+    async getAllDocs(ctx) {
         const allResults = [];
-        for await (const {key, value} of ctx.stub.getStateByRange(startKey, endKey)) {
-            const strValue = Buffer.from(value).toString('utf8');
+        // range query with empty string for startKey and endKey does an open-ended query of all assets in the chaincode namespace.
+        const iterator = await ctx.stub.getStateByRange('', '');
+        let result = await iterator.next();
+        while (!result.done) {
+            const strValue = Buffer.from(result.value.value.toString()).toString('utf8');
             let record;
             try {
                 record = JSON.parse(strValue);
@@ -120,26 +66,11 @@ class FabCar extends Contract {
                 console.log(err);
                 record = strValue;
             }
-            allResults.push({ Key: key, Record: record });
+            allResults.push({ Key: result.value.key, Record: record });
+            result = await iterator.next();
         }
-        console.info(allResults);
         return JSON.stringify(allResults);
     }
-
-    async changeCarOwner(ctx, carNumber, newOwner) {
-        console.info('============= START : changeCarOwner ===========');
-
-        const carAsBytes = await ctx.stub.getState(carNumber); // get the car from chaincode state
-        if (!carAsBytes || carAsBytes.length === 0) {
-            throw new Error(`${carNumber} does not exist`);
-        }
-        const car = JSON.parse(carAsBytes.toString());
-        car.owner = newOwner;
-
-        await ctx.stub.putState(carNumber, Buffer.from(JSON.stringify(car)));
-        console.info('============= END : changeCarOwner ===========');
-    }
-
 }
 
-module.exports = FabCar;
+module.exports = MyFiLedgerContract;

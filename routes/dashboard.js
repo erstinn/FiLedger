@@ -4,11 +4,11 @@ const fs = require("fs") //remove?
 const path = require('path')
 
 // databases
-// const nano = require('nano')('http://administrator:qF3ChYhp@127.0.0.1:5984/');
-// const nano = require('nano')('http://admin:mysecretpassword@127.0.0.1:5984/');
+const nano = require('nano')('http://administrator:qF3ChYhp@127.0.0.1:5984/');
+//const nano = require('nano')('http://admin:mysecretpassword@127.0.0.1:5984/');
 // const nano = require('nano')('http://admin:pw123@127.0.0.1:5984/');
-const nano = require('nano')('http://root:root@127.0.0.1:5984/');
-const docsDB = nano.db.use('documents');
+// const nano = require('nano')('http://root:root@127.0.0.1:5984/');
+const docsDB = nano.db.use('users');
 // const docsDB = nano.db.use('testesdb');
 const docViews = "/_design/all_users/_view/all";
 const departments = ["Sales","Marketing", "Human Resources", "Accounting"] //to remove when dynamic addition. of dept.s implemented

@@ -10,6 +10,7 @@
     "express": "^4.18.1",
     "express-session": "^1.17.3",
     "fabric-ca-client": "^2.2.15",
+    "fabric-contract-api": "^2.2.3",
     "fabric-network": "^2.2.15",
     "generate-password": "^1.7.0",
     "js-yaml": "^4.1.0",

@@ -1,74 +1,4 @@
-// const express = require('express')
-// const {generateFromEmail} = require("unique-username-generator");
-// const generator = require("generate-password");
-// const SHA1  = require('crypto-js/sha1');
-// const { enc } = require('crypto-js');
-// const router = express.Router()
-// //databases
-//const nano = require('nano')('http://administrator:qF3ChYhp@127.0.0.1:5984/');
-// // const nano = require('nano')('http://root:root@127.0.0.1:5984/');
-// const userDB = nano.db.use('users');
-// const userViews = "/_design/all_users/_view/all";
-// const departments = ["Sales","Marketing", "Human Resources", "Accounting"] //to remove when dynamic addition. of dept.s implemented
-//
-// router.get('/', function (req, res){
-//     res.render("registration", {dep: departments});
-// })
-//
-// router.post("/status", async function (req, res){
-//     const userName = req.body.username; //generated
-//     const lastName = req.body.lastname;
-//     const firstName = req.body.firstname;
-//     const email = req.body.email;
-//     const password = req.body.password; //generated
-//     const admin = req.body.isAdmin;
-//     const add_doc = req.body.add_doc;
-//     const dept = req.body.dept; //this works now
-//
-//     //generate id
-//     let uuid = await nano.uuids(1);
-//     let id = uuid.uuids[0];
-//
-//     //generate username
-//     const username = generateFromEmail(
-//         email,
-//         3
-//     );
-//
-//     //generate default password
-//     const passw = SHA1 (generator.generate({
-//         length: 10,
-//         numbers: true
-//     })).toString(enc.Hex)
-//
-//     await userDB.insert({
-//         _id: id,
-//         firstname: firstName,
-//         lastname: lastName,
-//         email: email,
-//         username: username,
-//         password: passw,
-//         department: dept,
-//         add_doc: add_doc,
-//         admin: admin
-//     })
-//
-//     if(res.statusCode === 200){
-//         res.render('success-reg');
-//     }
-//     else{
-//         //not sure if need
-//         res.render('failure-reg');
-//     }
-//
-//     // console.log(dept, lname, fname, email, password, un, admin, add_doc);
-//
-// })
-//
-// module.exports = router
-
 'use strict';
-//made some comments - missy
 const FabricCAServices = require('fabric-ca-client');
 const { Wallets } = require('fabric-network');
 const yaml = require("js-yaml");
@@ -82,9 +12,7 @@ const generator = require("generate-password");
 const SHA1  = require('crypto-js/sha1');
 const { enc } = require('crypto-js');
 const router = express.Router()
-//databases TODO delete test code later
 const nano = require('nano')('http://administrator:qF3ChYhp@127.0.0.1:5984/');
-// const nano = require('nano')('http://admin:mysecretpassword@127.0.0.1:5984/');
 const adminDB = nano.db.use('admins');
 // const walletDB = nano.db.use('wallet');
 
@@ -97,12 +25,10 @@ router.get('/', function (req, res){
 
 
 router.post("/status", async function (req, res){
-    const userName = req.body.username; //generated
     const lastName = req.body.lastname;
     const firstName = req.body.firstname;
     const email = req.body.email;
     const password = req.body.password; //generated
-    const admin = req.body.isAdmin;
     const add_doc = req.body.add_doc;
     const dept = req.body.dept; //this works now
     const def_approver = req.body.def_approver
@@ -134,19 +60,6 @@ router.post("/status", async function (req, res){
     const caURL = "org1-ca.fabric";
     let ccp;
 
-    await userDB.insert({
-        _id: id,
-        firstname: firstName,
-        lastname: lastName,
-        email: email,
-        username: username,
-        password: SHA1(password).toString(enc.Hex),
-        department: dept,
-        add_doc: add_doc || "off",
-        admin: admin || "off",
-        def_approver:def_approver|| "off"
-    })
-
     if(res.statusCode === 200){
         res.render('success-reg');
     }
@@ -155,29 +68,16 @@ router.post("/status", async function (req, res){
         res.render('failure-reg');
     }
 
-    //stores username for admin
     const admin_username = usernameAdmin;
-    // if(res.statusCode === 200){
-    //     res.render('success-reg');
-    // }
-    // else{
-    //     //not sure if need
-    //     res.render('failure-reg');
-    // }
-    // console.log(dept, lname, fname, email, password, un, admin, add_doc);
-
-    // load the network configuration
     //todo uncomment later sry mizi
     const ccpPath = path.resolve("./network/try-k8/", "connection-org.yaml");
-    // const ccpPath = path.resolve("./trial-net/client/nodejs","connection-org.yaml");
     if (ccpPath.includes(".yaml")) {
         ccp = yaml.load(fs.readFileSync(ccpPath, 'utf-8'));
     } else {
         ccp = JSON.parse(fs.readFileSync(ccpPath, 'utf8'));
     }
-    //if admin is checked, enroll admin
+    //TODO ENROLLMENT AS ADMIN
     if(admin==='on') {
-
         async function enroll() {
             try {
                 // Create a new CA client for interacting with the CA.
@@ -186,11 +86,8 @@ router.post("/status", async function (req, res){
                 const ca = new FabricCAServices(caInfo.url, {trustedRoots: caTLSCACerts, verify: false}, caInfo.caName);
 
                 // Create a new file system based wallet for managing identities.
-                //TODO test bagin
                 const walletPath = path.join(process.cwd(), 'wallet', mspId);
-                // const wallet = await Wallets.newFileSystemWallet(walletPath);
                 const wallet_admin = await Wallets.newCouchDBWallet('http://administrator:qF3ChYhp@127.0.0.1:5984/', "wallet");
-                //TODO test end
                 console.log(`Wallet path: ${walletPath}`); //dno if irrelevant if couchdb code
 
                 // Check to see if we've already enrolled the admin user.
@@ -234,18 +131,15 @@ router.post("/status", async function (req, res){
         }
 
         await enroll();
-
     }else {
-        //register user
+        //TODO REGISTER AND ENROLL USER
         async function register() {
-
             try {
                 // Create a new file system based wallet for managing identities.
                 const walletPath = path.join(process.cwd(), 'wallet', mspId);
                 const wallet_admin = await Wallets.newCouchDBWallet('http://administrator:qF3ChYhp@127.0.0.1:5984/', "wallet");
                 const wallet_users = await Wallets.newCouchDBWallet('http://administrator:qF3ChYhp@127.0.0.1:5984/', "wallet_users");
                 console.log(`Wallet path: ${walletPath}`);
-
 
                 // Create a new CA client for interacting with the CA.
                 const caInfo = ccp.certificateAuthorities[caURL];
@@ -260,7 +154,7 @@ router.post("/status", async function (req, res){
                 }
 
                 // Check to see if we've already enrolled the admin user.
-                // //TODO: need icheck if sinong admin or kaninong account yung nag-reregister ng user (idk if need pa to)
+                //TODO: need icheck if sinong admin or kaninong account yung nag-reregister ng user (idk if need pa to)
                 const adminIdentity = await wallet_admin.get(adminid);
                 if (!adminIdentity) {
                     console.log(`An identity for the admin user ${adminid} does not exist in the wallet`);
@@ -292,6 +186,17 @@ router.post("/status", async function (req, res){
                 };
                 await wallet_users.put(username, x509Identity);
                 console.log(`Successfully registered and enrolled admin user ${username} and imported it into the wallet`);
+                await userDB.insert({
+                    _id: id,
+                    firstname: firstName,
+                    lastname: lastName,
+                    email: email,
+                    username: username,
+                    password: SHA1(password).toString(enc.Hex),
+                    department: dept,
+                    add_doc: add_doc || "off",
+                    def_approver:def_approver|| "off"
+                })
                 res.render('success-reg');
             }catch (error) {
                     console.error(`Failed to register user ${username}: ${error}`);

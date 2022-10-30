@@ -14,6 +14,7 @@ const { enc } = require('crypto-js');
 const router = express.Router()
 const nano = require('nano')('http://administrator:qF3ChYhp@127.0.0.1:5984/');
 const adminDB = nano.db.use('admins');
+const userDB = nano.db.use('users');
 // const walletDB = nano.db.use('wallet');
 
 const userViews = "/_design/all_users/_view/all";
@@ -28,21 +29,20 @@ router.post("/status", async function (req, res){
     const lastName = req.body.lastname;
     const firstName = req.body.firstname;
     const email = req.body.email;
-    const password = req.body.password; //generated
+    const password = req.body.password;
     const add_doc = req.body.add_doc;
     const dept = req.body.dept; //this works now
-    const def_approver = req.body.def_approver
+    const def_approver = req.body.def_approver;
+    const admin = req.body.isAdmin;
 
     //generate id
     let uuid = await nano.uuids(1);
     let id = uuid.uuids[0];
-
     //generate for enrolled admin username
     const usernameAdmin = generateFromEmail(
         email,
         3
     );
-
     //generate for registered user
     const username = generateFromEmail(
         email,
@@ -79,6 +79,7 @@ router.post("/status", async function (req, res){
     //TODO ENROLLMENT AS ADMIN
     if(admin==='on') {
         async function enroll() {
+            console.log("admin enrollment ")
             try {
                 // Create a new CA client for interacting with the CA.
                 const caInfo = ccp.certificateAuthorities[caURL];
@@ -135,6 +136,7 @@ router.post("/status", async function (req, res){
         //TODO REGISTER AND ENROLL USER
         async function register() {
             try {
+                console.log("user enrollment ")
                 // Create a new file system based wallet for managing identities.
                 const walletPath = path.join(process.cwd(), 'wallet', mspId);
                 const wallet_admin = await Wallets.newCouchDBWallet('http://administrator:qF3ChYhp@127.0.0.1:5984/', "wallet");

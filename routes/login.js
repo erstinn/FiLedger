@@ -33,7 +33,6 @@ router.post('/', async function (req, res) {
     const dept = req.body.dept;
     let logErr = '';
 
-    //todo hello
     // load the network configuration
     let mspId = "Org1MSP";
     const caURL = "org1-ca.fabric";
@@ -68,7 +67,8 @@ router.post('/', async function (req, res) {
     const responseAdminDB = await adminDB.find(q)
     //need double equal lang para gumana (di maka-access pag wrong pass)
     if(responseUserDB.docs == '' && responseAdminDB.docs == '' || dept === undefined ){
-        loginError(responseUserDB, responseAdminDB);
+        logErr = 'Incorrect Login Credentials. Please try again...';
+        res.render('login', {dep:departments, logErr:logErr})//placeholder
     }else{
         const q1 = {
             selector: {
@@ -91,22 +91,22 @@ router.post('/', async function (req, res) {
                 req.session.user = varemail;
                 res.redirect('/dashboard');
             }else{
-                loginError(responseAdminDB);
+                logErr = 'Incorrect Login Credentials. Please try again...';
+                res.render('login', {dep:departments, logErr:logErr})//placeholder
             }
         }
-        console.log('usre meow');
         req.session.user = varemail;
         req.session.username = userRes.docs[0].username;
         const userIdentity = await wallet_user.get(req.session.username);
         if (userIdentity) {
-            console.log(`An identity for the user ${adminRes.docs[0].username} already exists in the wallet`); //todo remove
-            req.session.admin = true;
-            console.log('ADMIN LOGGED IN');
-            req.session.username = adminRes.docs[0].username;
+            // console.log(`An identity for the user ${userRes.docs[0].username} already exists in the wallet`); //todo remove
+            console.log('USER LOGGED IN');
+            req.session.username = userRes.docs[0].username;
             req.session.user = varemail;
             res.redirect('/dashboard');
         }else{
-            loginError(responseUserDB);
+            logErr = 'Incorrect Login Credentials. Please try again...';
+            res.render('login', {dep:departments, logErr:logErr})//placeholder
         }
 
     }
@@ -120,8 +120,6 @@ router.get('/logout', function(req, res){
 
 
 function loginError(responseUserDB, responseAdminDB){
-    console.log(responseUserDB.docs); //todo remove?
-    console.log(responseAdminDB.docs); //todo remove?
     logErr = 'Incorrect Login Credentials. Please try again...';
     res.render('login', {dep:departments, logErr:logErr})//placeholder
 }

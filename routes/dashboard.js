@@ -2,6 +2,8 @@ const express = require('express')
 const router = express.Router()
 const fs = require("fs") //remove?
 const path = require('path')
+// const invoke = require('./../network/chaincode/javascript/invoke')
+
 
 // databases
 const nano = require('nano')('http://administrator:qF3ChYhp@127.0.0.1:5984/');
@@ -33,6 +35,7 @@ router.get("/pending-docs",(req,res)=>{
 
 //======================================== UPLOAD FILE-RELATED CODES ================================================================
 const multer  = require('multer')
+const invoke = require("../network/chaincode/javascript/invoke");
 //todo maybe prevent zip file upload?
 //Specs: 1 file per upload, 1gb, any filetype
 var storage = multer.diskStorage({
@@ -169,6 +172,12 @@ router.post('/upload',  upload.single('uploadDoc'),
                 function (err, response){
                     if(!err){
                         console.log("it worked")
+                        var promiseInvoke = invoke.invokeTransaction();
+                        var promiseValue = async () => {
+                            const value = await promiseInvoke;
+                            console.log(value);
+                        };
+                        promiseValue();
                         res.redirect("/dashboard?fail=false")
                     }else {
                         console.log("failed")

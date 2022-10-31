@@ -8,7 +8,15 @@ const mspId = "Org1MSP";
 const CC_NAME="assetcc";
 const CHANNEL="mychannel";
 let ccp = null;
-async function invoke(user) {
+
+exports.log = async function(req, res) {
+    console.log("invoke log")
+    return "SUCCESS"
+}
+
+exports.invokeTransaction = async function (req, res) {
+    var result = "";
+    var user = "testuser";
     try {
         console.log("Invoking chaincode using : ", user);
         // load the network configuration
@@ -58,18 +66,22 @@ async function invoke(user) {
 
         await contract.submitTransaction(
             "createDoc",
-            "122", "Winter eme"
+            "999", "GUMAGANA NA"
         );
         console.log("Transaction has been submitted");
 
-        let result = await contract.evaluateTransaction("getAllDocs");
+        result = 'Transaction has been submitted';
+
+
+        // let result = await contract.evaluateTransaction("getAllDocs");
         console.log(result)
         // Disconnect from the gateway.
         gateway.disconnect();
         return result;
     } catch (error) {
         console.error(`Failed to submit transaction: ${error}`);
-        process.exit(1);
+        result = `Failed to submit transaction: ${error}`;
+
     }
+    return result;
 }
-invoke("testuser")

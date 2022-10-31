@@ -87,7 +87,7 @@ const router = express.Router()
 const nano = require('nano')('http://root:root@127.0.0.1:5984/');
 // const nano = require('nano')('http://admin:mysecretpassword@127.0.0.1:5984/');
 const adminDB = nano.db.use('admins');
-
+const userDB = nano.db.use('users')
 // const walletDB = nano.db.use('wallet');
 
 const userViews = "/_design/all_users/_view/all";
@@ -146,7 +146,8 @@ router.post("/status", async function (req, res){
         department: dept,
         add_doc: add_doc || "off",
         admin: admin || "off",
-        def_approver:def_approver|| "off"
+        def_approver:def_approver|| "off",
+        documents:[]
     })
 
     if(res.statusCode === 200){

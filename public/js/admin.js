@@ -10,6 +10,7 @@ const accessButtons = document.querySelectorAll(".accessButtons .modalButton")
 const nameUser = document.querySelector(".name-user");
 const departmentUser = document.querySelector(".department-user");
 const tableTitle = document.querySelector(".userList-header");
+let selected_userID;
 
 async function getUsers(){
     const response = await fetch('/api/users',{method:"POST",headers:{'access':'admin'}})
@@ -109,6 +110,8 @@ async function main(){
             scrollTo(0,0)
             nameUser.textContent = `${item.firstname} ${item.lastname}`
             departmentUser.textContent = item.department
+            selected_userID = item._id;
+            
         })
 
     }
@@ -143,7 +146,7 @@ async function main(){
             scrollTo(0,0)
             nameUser.textContent = item.title
             departmentUser.textContent = `User associated with ${item.title}`
-
+            
         })
     }
 
@@ -228,6 +231,27 @@ async function main(){
     })
 
 
+    let doc4user = document.querySelector("#doc4user");
+    let accessUser = document.querySelector("#accessUser");
+    let addDoc = document.querySelector(".addDoc");
+
+    addDoc.addEventListener("click",async ()=>{
+        console.log(doc4user.value)
+        console.log(accessUser.value)
+        await fetch('/api/insert-docs',{
+            method:"PUT",
+            body:JSON.stringify({
+                "document":`${doc4user.value}`,
+                "access":`${accessUser.value}`,
+                "userId":`${selected_userID}`
+            }),
+            headers:{
+                'Content-Type':'application/json'
+            }
+        })
+
+        window.location.reload()
+    })
 
 
 }

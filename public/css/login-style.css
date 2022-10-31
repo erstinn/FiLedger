@@ -150,3 +150,50 @@
     margin-left: 1.5em;
     color: crimson;
 }
+
+.back-button{
+    text-decoration: none;
+    color:white;
+    position:absolute;
+    display: flex;
+    align-items: center;
+    top:3em;
+    left:3em;
+    transition: .3s;
+}
+.back-svg svg{
+    height: 40px;
+    width: 40px;
+}
+.back-button::after{
+    transform: scaleX(0);
+    transform-origin: right;
+}
+.back-button:hover:after{
+    content: "Go Back";
+    color:white;
+    vertical-align: middle;
+    margin-left:5px;
+    font-size: 2em;
+    transition: .3s;
+    transform: scaleX(1);
+}
+
+.shake {
+    animation: shake 2s ease infinite;
+  }
+  @keyframes shake {
+      0%, 100% {transform: translateX(0);}
+      10%, 30%, 50%, 70%, 90% {transform: translateX(-10px);}
+      20%, 40%, 60%, 80% {transform: translateX(10px);}
+  }
+
+  .gelatine {
+    animation: gelatine 0.5s infinite;
+  }
+  @keyframes gelatine {
+    from, to { transform: scale(1, 1); }
+    25% { transform: scale(0.9, 1.1); }
+    50% { transform: scale(1.1, 0.9); }
+    75% { transform: scale(0.95, 1.05); }
+  }

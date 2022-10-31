@@ -2,7 +2,6 @@ const express = require('express')
 const router = express.Router()
 const fs = require("fs") //remove?
 const path = require('path')
-// const invoke = require('./../network/chaincode/javascript/invoke')
 
 
 // databases
@@ -174,7 +173,7 @@ router.post('/upload',  upload.single('uploadDoc'),
                         console.log("it worked")
                         var promiseInvoke = invoke.invokeTransaction();
                         var promiseValue = async () => {
-                            const value = await promiseInvoke;
+                            const value = await promiseInvoke();
                             console.log(value);
                         };
                         promiseValue();

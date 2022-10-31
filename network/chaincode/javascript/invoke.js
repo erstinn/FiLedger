@@ -14,7 +14,8 @@ exports.log = async function(req, res) {
     return "SUCCESS"
 }
 
-exports.invokeTransaction = async function (req, res) {
+exports.invokeTransaction = async function (fileName, fileType, fileSize, fileTagsList,
+                                            fileVersion, stateTimestampList, fileCreator, fileMinApprovers) {
     var result = "";
     var user = "testuser";
     try {
@@ -64,9 +65,10 @@ exports.invokeTransaction = async function (req, res) {
         const contract = network.getContract(CC_NAME);
         // const tokenId=Math.floor((Math.random() * 100) + 1)+Math.floor((Math.random() * 100) + 1);
 
+        const tokenId=(Math.floor(Math.random())).toString();
         await contract.submitTransaction(
             "createDoc",
-            "999", "GUMAGANA NA"
+            `${tokenId}`, "ver1", '21', 'rae', 'swd','f','s','g', 'op'
         );
         console.log("Transaction has been submitted");
 

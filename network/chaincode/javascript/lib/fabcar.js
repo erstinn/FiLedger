@@ -12,7 +12,7 @@ class MyFiLedgerContract extends Contract {
     }
     //uploadDoc
     //metadata from couchdb
-    async createDocs(ctx, id, fileName, fileType, fileSize, fileTagsList,
+    async createDoc(ctx, id, fileName, fileType, fileSize, fileTagsList,
                      fileVersion, stateTimestampList, fileCreator, fileMinApprovers) {
 
         //checks if assetID exists

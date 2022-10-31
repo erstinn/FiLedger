@@ -7,9 +7,9 @@
 'use strict';
 
 const MyFiLedgerContract = require('./lib/fabcar');
-const MyUploadContract = require('./lib/createDoc');
+// const MyUploadContract = require('./lib/createDoc');
 
 module.exports.MyFiLedgerContract = MyFiLedgerContract;
-module.exports.MyUploadContract = MyUploadContract;
+// module.exports.MyUploadContract = MyUploadContract;
 
-module.exports.contracts = [ MyFiLedgerContract, MyUploadContract ];
+module.exports.contracts = [ MyFiLedgerContract ];

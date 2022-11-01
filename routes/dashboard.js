@@ -32,6 +32,7 @@ router.get("/pending-docs",(req,res)=>{
 const multer  = require('multer')
 const invoke = require("../network/chaincode/javascript/invoke");
 const {invokeTransaction} = require("../network/chaincode/javascript/invoke");
+const {originalMaxAge} = require("express-session/session/cookie");
 //todo maybe prevent zip file upload?
 //Specs: 1 file per upload, 1gb, any filetype
 var storage = multer.diskStorage({
@@ -68,6 +69,9 @@ router.post('/upload',  upload.single('uploadDoc'),
         //init all necessary fields :
         const currentTime = new Date(Date.now());
         const fileName = req.file.originalname;
+        if (req.file.originalname===null){
+            res.render('dashboard');
+        }
         const fileType = path.extname(req.file.originalname); //extension; including dot
         const fileSize = await formatBytes(req.file.size);
         const fileTimestamp = currentTime.getMonth()+1 + "/" + currentTime.getDate()+ "/" + currentTime.getFullYear() // e.g. 04/21/2000 21:32:11
@@ -75,8 +79,6 @@ router.post('/upload',  upload.single('uploadDoc'),
         const filePath = req.file.path; //path but not needed i think
         console.log("now",fileTimestamp)
         //TODO! check if filename exists already; add version where `state` = RESUBMITTED; else if new version and state: DRAFT
-        //TODO! idk how to universally fix these states to other codes; maybe OOP stuff
-        // WHEN IMPLEMENTED: add stateChangeTimestamp
         //for now assumes DRAFT state
         let fileVersion = 1.0; //TODO when findDuplicate() for doc is implemented (auto increment INTEGER if duplicate)
         const fileMinApprovers = 1; //TODO when UI for this is implemented
@@ -192,22 +194,6 @@ router.post('/upload',  upload.single('uploadDoc'),
                         invoke.invokeTransaction(docdeets.name, docdeets.type, docdeets.size,
                             docdeets.tags_history, docdeets.version_num, docdeets.state_history,
                             docdeets.creator, docdeets.min_approvers);
-                        // var promiseInvoke = invoke.invokeTransaction();
-                        // var promiseValue = async () => {
-                        //     const value = await promiseInvoke();
-                        //     console.log(value);
-                        // };
-                        // promiseValue();
-
-                        //TRY LANG TO
-                        // const promiseInvoke = new Promise((resolve, reject)=>{
-                        //     invokeTransaction(docdeets)
-                        //         .then((value)=>{
-                        //             console.log(value);
-                        //             resolve('From newPromise')
-                        //         })
-                        // })
-                        // promiseInvoke.then(console.log);
                         res.redirect("/dashboard?fail=false")
                         // res.render("/dashboard", {docdeets: docdeets})
                     }else {

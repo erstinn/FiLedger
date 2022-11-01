@@ -15,6 +15,7 @@ const router = express.Router()
 const nano = require('nano')('http://administrator:qF3ChYhp@127.0.0.1:5984/');
 const adminDB = nano.db.use('admins');
 const userDB = nano.db.use('users');
+const approverDB = nano.db.use('approvers');
 // const walletDB = nano.db.use('wallet');
 
 const userViews = "/_design/all_users/_view/all";
@@ -181,17 +182,30 @@ router.post("/status", async function (req, res){
                 };
                 await wallet_users.put(username, x509Identity);
                 console.log(`Successfully registered and enrolled admin user ${username} and imported it into the wallet`);
-                await userDB.insert({
-                    _id: id,
-                    firstname: firstName,
-                    lastname: lastName,
-                    email: email,
-                    username: username,
-                    password: SHA1(password).toString(enc.Hex),
-                    department: dept,
-                    add_doc: add_doc || "off",
-                    def_approver:def_approver|| "off"
-                })
+                if(def_approver=='on'){
+                    await approverDB.insert({
+                        _id: id,
+                        firstname: firstName,
+                        lastname: lastName,
+                        email: email,
+                        username: username,
+                        password: SHA1(password).toString(enc.Hex),
+                        department: dept,
+                        add_doc: add_doc || "off",
+                        def_approver:def_approver|| "off"
+                    })
+                }else {
+                    await userDB.insert({
+                        _id: id,
+                        firstname: firstName,
+                        lastname: lastName,
+                        email: email,
+                        username: username,
+                        password: SHA1(password).toString(enc.Hex),
+                        department: dept,
+                        add_doc: add_doc || "off",
+                    })
+                }
                 res.render('success-reg');
             }catch (error) {
                     console.error(`Failed to register user ${username}: ${error}`);

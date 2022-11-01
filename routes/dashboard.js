@@ -5,7 +5,7 @@ const path = require('path')
 
 
 // databases
-const nano = require('nano')('http://administrator:qF3ChYhp@127.0.0.1:5984/');
+// const nano = require('nano')('http://administrator:qF3ChYhp@127.0.0.1:5984/');
 //const nano = require('nano')('http://admin:mysecretpassword@127.0.0.1:5984/');
 // const nano = require('nano')('http://admin:pw123@127.0.0.1:5984/');
 // const nano = require('nano')('http://root:root@127.0.0.1:5984/');
@@ -47,13 +47,14 @@ var storage = multer.diskStorage({
         fileSize: 1073741824
     }
 })
+var memStorage = multer.memoryStorage()
 const upload = multer({
     // dest: 'uploads/', //todo change destination? or delete afterwards
     // limits:{ //no limit on filetype as specified on paper
     //     fileSize: 1073741824, //1gb?
     // },
 
-    storage:storage
+    storage:memStorage
 })
 
 //todo: change path?; plus redirection to current page; plus popup (#?)
@@ -75,14 +76,14 @@ router.post('/upload',  upload.single('uploadDoc'),
         // console.log(req.file) //testing purposes
 
         //init all necessary fields :
-        const currentTime = new Date();
+        const currentTime = new Date(Date.now());
         const fileName = req.file.originalname;
         const fileType = path.extname(req.file.originalname); //extension; including dot
         const fileSize = await formatBytes(req.file.size);
-        const fileTimestamp = currentTime.getMonth() + "/" + currentTime.getDay()+ "/" + currentTime.getFullYear() // e.g. 04/21/2000 21:32:11
+        const fileTimestamp = currentTime.getMonth()+1 + "/" + currentTime.getDate()+ "/" + currentTime.getFullYear() // e.g. 04/21/2000 21:32:11
             + " " + currentTime.getHours()+ ":" + currentTime.getMinutes()+ ":" + currentTime.getSeconds();
         const filePath = req.file.path; //path but not needed i think
-
+        console.log("now",fileTimestamp)
         //TODO! check if filename exists already; add version where `state` = RESUBMITTED; else if new version and state: DRAFT
         //TODO! idk how to universally fix these states to other codes; maybe OOP stuff
         // WHEN IMPLEMENTED: add stateChangeTimestamp
@@ -91,7 +92,8 @@ router.post('/upload',  upload.single('uploadDoc'),
         const fileMinApprovers = 1; //TODO when UI for this is implemented
         const state = "Draft"; //TODO when UI is implemented
         const stateTimestamp = state + " @ " + fileTimestamp ; // @ to separate values later
-        const fileCreator = "Erin Cordero"; //TODO implement once sessions
+        const qName = await userDB.find({selector:{"username":req.session.username}})
+        const fileCreator = `${await qName.docs[0].firstname} ${await qName.docs[0].lastname}`; //TODO implement once sessions
         let fileTagsList = []
         let stateTimestampList = []
         let fileTags = `${fileName}|${req.body.tags.substring(0,req.body.tags.length-1)}|@ ${fileTimestamp} V${parseFloat(fileVersion).toFixed(2)}`
@@ -122,6 +124,7 @@ router.post('/upload',  upload.single('uploadDoc'),
             console.log('inserting')
             let uuid = await nano.uuids(1);
             let id = uuid.uuids[0];
+            fs.writeFileSync(path.resolve(__dirname,`./../uploads/${fileName}`),req.file.buffer)
             await docsDB.insert({
                 name: fileName,
                 type: fileType,
@@ -134,7 +137,15 @@ router.post('/upload',  upload.single('uploadDoc'),
                 min_approvers: fileMinApprovers,
                 last_activity:"Upload",
                 status:"Pending",
-            }, id)
+            }, id,function (err, response){
+                if(!err){
+                    console.log("it worked")
+                    res.redirect("/dashboard?fail=false")
+                }else {
+                    console.log("failed")
+                    res.redirect("/dashboard/?fail=true")
+                }
+            })
         }else{
             console.log("updating")
             const findRev = await docQuery(fileName, fileCreator);
@@ -143,15 +154,18 @@ router.post('/upload',  upload.single('uploadDoc'),
             let fileVer = findRev[0].version_num;
             let tags = findRev[0].tags_history
             let stateTimestamps = findRev[0].state_history
-            if(fileTags.split("|")[1] == ""){
-                fileVer++;
-                fileTags = `${fileName}|${tags[tags.length-1].split("|")[1]}|@ ${currentTime} V${parseFloat(fileVer).toFixed(2)}`
-            }else if(fileTags.split("|")[1] == tags[tags.length-1].split("|")[1]){
-                fileVer++;
-                fileTags = `${fileName}|${tags[tags.length-1].split("|")[1]}|@ ${currentTime} V${parseFloat(fileVer).toFixed(2)}`
-            }else if(fileTags.split("|")[1] != tags[tags.length-1].split("|")[1]){
-                fileVer+=0.1;
-                fileTags = `${fileName}|${req.body.tags.substring(0,req.body.tags.length-1)}|@ ${currentTime} V${parseFloat(fileVer).toFixed(2)}`
+            var file = fs.readFileSync(path.resolve(__dirname,`./../uploads/${fileName}`))
+            if(!file.equals(req.file.buffer)){
+                if(fileTags.split("|")[1] == ""){
+                    fileVer++;
+                    fileTags = `${fileName}|${tags[tags.length-1].split("|")[1]}|@ ${currentTime} V${parseFloat(fileVer).toFixed(2)}`
+                }else if(fileTags.split("|")[1] == tags[tags.length-1].split("|")[1]){
+                    fileVer++;
+                    fileTags = `${fileName}|${tags[tags.length-1].split("|")[1]}|@ ${currentTime} V${parseFloat(fileVer).toFixed(2)}`
+                }else if(fileTags.split("|")[1] != tags[tags.length-1].split("|")[1]){
+                    fileVer+=0.1;
+                    fileTags = `${fileName}|${req.body.tags.substring(0,req.body.tags.length-1)}|@ ${currentTime} V${parseFloat(fileVer).toFixed(2)}`
+                }
             }
             tags.push(fileTags)
             stateTimestamps.push(stateTimestamp)

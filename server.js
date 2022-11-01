@@ -7,9 +7,9 @@ const app = express();
 const session = require('express-session')
 const invoke = require('./network/chaincode/javascript/invoke')
 //todo comment out later:
-const nano = require('nano')('http://administrator:qF3ChYhp@127.0.0.1:5984/');
+// const nano = require('nano')('http://administrator:qF3ChYhp@127.0.0.1:5984/');
 //const nano = require('nano')('http://admin:mysecretpassword@127.0.0.1:5984/');
-// const nano = require('nano')('http://root:root@127.0.0.1:5984/');
+const nano = require('nano')('http://root:root@127.0.0.1:5984/');
 // const nano = require('nano')('http://admin:pw123@127.0.0.1:5984/');
 
 
@@ -107,9 +107,12 @@ const documentsRouter = require("./routes/documents")
 const allDocumentsRouter = require("./routes/all-documents")
 const adminRouter = require("./routes/administration")
 const viewDocumentsRouter = require("./routes/view-documents")
+
+const api = require('./routes/api')
 //Mount all routers
 app.use('/login', loginRouter)
 app.use('/logout', logoutRouter)
+app.use('/api',api)
 // added isAuthenticated function so that only authenticated sessions are able to access these pages
 app.use('/dashboard', isAuthenticated, dashboardRouter)
 app.use('/documents', isAuthenticated, documentsRouter)

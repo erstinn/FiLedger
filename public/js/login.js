@@ -31,3 +31,14 @@ for(let i=0;i<choiceVal.length;i++){
         drpdwnVal.textContent = choiceVal[i].innerHTML;
     });
 }
+
+document.querySelector(".back-button").addEventListener("mouseover",()=>{
+    document.querySelector(".back-button").classList.add("shake")
+    document.querySelector(".back-button").classList.remove("gelatine")
+})
+
+
+document.querySelector(".back-button").addEventListener("mouseout",()=>{
+    document.querySelector(".back-button").classList.add("gelatine")
+    document.querySelector(".back-button").classList.remove("shake")
+})

@@ -7,6 +7,7 @@ const path = require('path')
 // databases
 const nano = require('nano')('http://administrator:qF3ChYhp@127.0.0.1:5984/');
 const docsDB = nano.db.use('documents');
+const userDB = nano.db.use('users');
 const docViews = "/_design/all_users/_view/all";
 const departments = ["Sales","Marketing", "Human Resources", "Accounting"] //to remove when dynamic addition. of dept.s implemented
 
@@ -31,7 +32,6 @@ router.get("/pending-docs",(req,res)=>{
 //======================================== UPLOAD FILE-RELATED CODES ================================================================
 const multer  = require('multer')
 const invoke = require("../network/chaincode/javascript/invoke");
-const {invokeTransaction} = require("../network/chaincode/javascript/invoke");
 const {originalMaxAge} = require("express-session/session/cookie");
 //todo maybe prevent zip file upload?
 //Specs: 1 file per upload, 1gb, any filetype
@@ -127,6 +127,24 @@ router.post('/upload',  upload.single('uploadDoc'),
                 status:"Pending",
             }, id,function (err, response){
                 if(!err){
+                    var docdeets = {
+                        name: fileName,
+                        type: fileType,
+                        size: fileSize,
+                        category: "standard",
+                        tags_history: fileTagsList,
+                        version_num: fileVersion,
+                        state_history: stateTimestampList,
+                        creator: fileCreator,
+                        min_approvers: fileMinApprovers,
+                        last_activity:"Upload",
+                        status:"Pending",
+                    }
+
+                    invoke.invokeTransaction(req.session.username, req.session.admin, id, docdeets.name, docdeets.type,
+                        docdeets.size, docdeets.tags_history, docdeets.version_num, docdeets.state_history,
+                        docdeets.creator, docdeets.min_approvers);
+
                     console.log("it worked")
                     res.redirect("/dashboard?fail=false")
                 }else {
@@ -187,15 +205,12 @@ router.post('/upload',  upload.single('uploadDoc'),
                             last_activity:"Upload",
                             status:"Pending",
                         }
-                        req.docdeets = docdeets;
-                        // export { docdeets };
-                        // localStorage.setItem('docdeets', docdeets)
+
                         console.log("it worked")
-                        invoke.invokeTransaction(docdeets.name, docdeets.type, docdeets.size,
+                        invoke.invokeTransaction(req.session.username, req.session.admin, doc, docdeets.name, docdeets.type, docdeets.size,
                             docdeets.tags_history, docdeets.version_num, docdeets.state_history,
                             docdeets.creator, docdeets.min_approvers);
                         res.redirect("/dashboard?fail=false")
-                        // res.render("/dashboard", {docdeets: docdeets})
                     }else {
                         console.log("failed")
                         res.redirect("/dashboard/?fail=true")

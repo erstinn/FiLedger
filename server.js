@@ -8,10 +8,7 @@ const session = require('express-session')
 const invoke = require('./network/chaincode/javascript/invoke')
 //todo comment out later:
 const nano = require('nano')('http://administrator:qF3ChYhp@127.0.0.1:5984/');
-//const nano = require('nano')('http://admin:mysecretpassword@127.0.0.1:5984/');
 // const nano = require('nano')('http://root:root@127.0.0.1:5984/');
-// const nano = require('nano')('http://admin:pw123@127.0.0.1:5984/');
-
 
 // session var init
 app.use(session({
@@ -23,13 +20,19 @@ app.use(session({
 
 // function to access sessions on all views
 app.use(function(req, res, next){
-    // res.locals = req.session;
-    res.locals.admin = req.session.admin
+    res.locals.admin = req.session.admin;
     next();
 })
 
-//the rest
-// app.use(bodyParser.urlencoded({extended: true}));
+app.use(function(req, res, next){
+    res.locals.user = req.session.user;
+    next();
+})
+app.use(function(req, res, next){
+    res.locals.approver = req.session.approver;
+    next();
+})
+
 app.use(express.urlencoded({extended:true}))
 app.use(express.static('public'))
 
@@ -51,7 +54,7 @@ const userViews = "/_design/all_users/_view/all";
 function isAuthenticated (req, res, next){
     if(req.session.user){
         next();
-        console.log('There is a session') //will delete, to check lang to
+        console.log('There is a session')
     }
     else{
         console.log("NO SESSION");
@@ -63,11 +66,33 @@ function isAuthenticated (req, res, next){
 function isAdmin (req, res, next){
     if(req.session.admin === true){
         next();
-        console.log('This is an admin') //will delete, to check lang to
+        console.log('This is an admin')
     }
     else{
         console.log("not an admin or a session");
-        res.render('no-access') //will change to unauthorized access page soon lolxz
+        res.render('no-access')
+    }
+}
+
+function isUser (req, res, next){
+    if(req.session.user === true){
+        next();
+        console.log('user login')
+    }
+    else{
+        console.log("not user or a session");
+        res.render('no-access')
+    }
+}
+
+function isApprover (req, res, next){
+    if(req.session.approver === true){
+        next();
+        console.log('approver login')
+    }
+    else{
+        console.log("not an approver or a session");
+        res.render('no-access')
     }
 }
 
@@ -107,11 +132,11 @@ app.use('/logout', logoutRouter)
 app.use('/api',api)
 // added isAuthenticated function so that only authenticated sessions are able to access these pages
 app.use('/dashboard', isAuthenticated, dashboardRouter)
-app.use('/documents', isAuthenticated, documentsRouter)
-app.use('/all-documents', isAuthenticated, allDocumentsRouter)
+app.use('/documents', isAuthenticated, isApprover, isUser, documentsRouter)
+app.use('/all-documents', isAuthenticated, isAdmin, isApprover, isUser,allDocumentsRouter)
 app.use('/administration', isAuthenticated, isAdmin, adminRouter);
-app.use('/view-documents', isAuthenticated, viewDocumentsRouter)
-app.use('/registration',isAuthenticated,isAdmin,regRouter)
+app.use('/view-documents', isAuthenticated, isApprover, isUser,  viewDocumentsRouter)
+app.use('/registration',isAuthenticated,isAdmin, isApprover, isUser, regRouter)
 
 
 //FOR DEVELOPMENT WITH NO AUTHENTICATION DO NOT REMOVE

@@ -114,20 +114,18 @@ app.use('/login', loginRouter)
 app.use('/logout', logoutRouter)
 app.use('/api',api)
 // added isAuthenticated function so that only authenticated sessions are able to access these pages
-// app.use('/dashboard', isAuthenticated, dashboardRouter)
-// app.use('/documents', isAuthenticated, documentsRouter)
-// app.use('/all-documents', isAuthenticated, allDocumentsRouter)
-// app.use('/administration', isAuthenticated, isAdmin, adminRouter);
-// app.use('/view-documents', isAuthenticated, viewDocumentsRouter)
-// app.use('/registration',isAuthenticated,isAdmin,regRouter)
-
-
+app.use('/dashboard', isAuthenticated, dashboardRouter)
+app.use('/documents', isAuthenticated, documentsRouter)
+app.use('/all-documents', isAuthenticated, allDocumentsRouter)
+app.use('/administration', isAuthenticated, isAdmin, adminRouter);
+app.use('/view-documents', isAuthenticated, viewDocumentsRouter)
+app.use('/registration',isAuthenticated,isAdmin,regRouter)
 
 
 //FOR DEVELOPMENT WITH NO AUTHENTICATION DO NOT REMOVE
-app.use('/dashboard', dashboardRouter)
-app.use('/documents', documentsRouter)
-app.use('/all-documents', allDocumentsRouter)
-app.use('/administration', adminRouter);
-app.use('/view-documents', viewDocumentsRouter)
+// app.use('/dashboard', dashboardRouter)
+// app.use('/documents', documentsRouter)
+// app.use('/all-documents', allDocumentsRouter)
+// app.use('/administration', adminRouter);
+// app.use('/view-documents', viewDocumentsRouter)
 

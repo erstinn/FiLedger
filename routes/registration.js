@@ -31,9 +31,9 @@ router.post("/status", async function (req, res){
     const firstName = req.body.firstname;
     const email = req.body.email;
     const password = req.body.password;
-    const add_doc = req.body.add_doc;
+    const uploader = req.body.isUploader;
     const dept = req.body.dept; //this works now
-    const def_approver = req.body.def_approver;
+    const approver = req.body.isApprover;
     const admin = req.body.isAdmin;
 
     //generate id
@@ -111,7 +111,7 @@ router.post("/status", async function (req, res){
                     username: admin_username,
                     password: SHA1(password).toString(enc.Hex),
                     department: dept,
-                    add_doc: add_doc,
+                    add_doc: uploader,
                     admin: admin
                 })
                 console.log(`Successfully enrolled admin user '${admin_username}'and imported it into the wallet`);
@@ -182,7 +182,7 @@ router.post("/status", async function (req, res){
                 };
                 await wallet_users.put(username, x509Identity);
                 console.log(`Successfully registered and enrolled admin user ${username} and imported it into the wallet`);
-                if(def_approver=='on'){
+                if(approver=='on'){
                     await approverDB.insert({
                         _id: id,
                         firstname: firstName,
@@ -191,8 +191,7 @@ router.post("/status", async function (req, res){
                         username: username,
                         password: SHA1(password).toString(enc.Hex),
                         department: dept,
-                        add_doc: add_doc || "off",
-                        def_approver:def_approver|| "off"
+                        def_approver:approver|| "off"
                     })
                 }else {
                     await userDB.insert({
@@ -203,7 +202,7 @@ router.post("/status", async function (req, res){
                         username: username,
                         password: SHA1(password).toString(enc.Hex),
                         department: dept,
-                        add_doc: add_doc || "off",
+                        add_doc: uploader || "off",
                     })
                 }
                 res.render('success-reg');

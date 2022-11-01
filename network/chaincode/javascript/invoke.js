@@ -14,40 +14,28 @@ exports.log = async function(req, res) {
     return "SUCCESS"
 }
 
-async function invokeTransaction (fileName, fileType, fileSize, fileTagsList,
+async function invokeTransaction (user, isAdmin, id, fileName, fileType, fileSize, fileTagsList,
                                   fileVersion, stateTimestampList, fileCreator, fileMinApprovers) {
 
     var result = "";
-    var user = "testuser";
-    // var docdeets = '';
-    // var docdeets = localStorage.getItem('docdeets');
-    // app.get('/dashboard/upload',(req,res)=>{
-    //     // console.log(req.docdeets);
-    //     res.docdeets = req.docdeets;
-    // })
-    console.log('ANG LAMAN NG DOCDEETS AY: ');
+    var wallet = '';
+        if (isAdmin === true){
+            wallet = await Wallets.newCouchDBWallet('http://administrator:qF3ChYhp@127.0.0.1:5984/',"wallet");
+        }else{
+            wallet = await Wallets.newCouchDBWallet('http://administrator:qF3ChYhp@127.0.0.1:5984/',"wallet_users");
+        }
 
     try {
-        console.log("Invoking chaincode using : ", user);
+        console.log("Invoking chaincode using :", user);
         // load the network configuration
-        const ccpPath = path.resolve(
-            __dirname,
-            "connection-org.yaml"
-        );
+        const ccpPath = path.resolve("./network/try-k8", "connection-org.yaml");
         if (ccpPath.includes(".yaml")) {
             ccp = yaml.load(fs.readFileSync(ccpPath, "utf8"));
         } else {
             ccp = JSON.parse(fs.readFileSync(ccpPath, "utf8"));
         }
 
-        // Create a new file system based wallet for managing identities.
-        // const walletPath = path.join(process.cwd(), 'wallet', mspId);
-        // const wallet = await Wallets.newCouchDBWallet('http://administrator:qF3ChYhp@127.0.0.1:5984/',"wallet");
-        // console.log(`Wallet path: ${walletPath}`);
 
-        const walletPath = "/Users/danafayehuang/Desktop/College Thingz/Thesis Code Repo/FiLedger/network/wallet";
-        const wallet = await Wallets.newFileSystemWallet(walletPath);
-        console.log(`Wallet path: ${walletPath}`);
 
         // Check to see if we've already enrolled the user.
         const identity = await wallet.get(user);
@@ -74,10 +62,10 @@ async function invokeTransaction (fileName, fileType, fileSize, fileTagsList,
         const contract = network.getContract(CC_NAME);
         // const tokenId=Math.floor((Math.random() * 100) + 1)+Math.floor((Math.random() * 100) + 1);
 
-        const tokenId=(Math.floor(Math.random()));
+        // const tokenId=(Math.floor(Math.random()));
         await contract.submitTransaction(
             "createDoc",
-            `123213`, fileName, fileType, fileSize, fileTagsList,
+            id, fileName, fileType, fileSize, fileTagsList,
             fileVersion, stateTimestampList, fileCreator, fileMinApprovers,
         );
         console.log("Transaction has been submitted");

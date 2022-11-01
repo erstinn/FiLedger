@@ -16,6 +16,7 @@ const nano = require('nano')('http://administrator:qF3ChYhp@127.0.0.1:5984/');
 // const nano = require('nano')('http://root:root@127.0.0.1:5984/');
 const adminDB = nano.db.use('admins');
 const userDB = nano.db.use('users');
+const approverDB = nano.db.use('approvers');
 // const walletDB = nano.db.use('wallet');
 
 const userViews = "/_design/all_users/_view/all";
@@ -31,9 +32,9 @@ router.post("/status", async function (req, res){
     const firstName = req.body.firstname;
     const email = req.body.email;
     const password = req.body.password;
-    const add_doc = req.body.add_doc;
+    const uploader = req.body.isUploader;
     const dept = req.body.dept; //this works now
-    const def_approver = req.body.def_approver;
+    const approver = req.body.isApprover;
     const admin = req.body.isAdmin;
 
     //generate id
@@ -61,27 +62,6 @@ router.post("/status", async function (req, res){
     const caURL = "org1-ca.fabric";
     let ccp;
 
-    await userDB.insert({
-        _id: id,
-        firstname: firstName,
-        lastname: lastName,
-        email: email,
-        username: username,
-        password: SHA1(password).toString(enc.Hex),
-        department: dept,
-        add_doc: add_doc || "off",
-        admin: admin || "off",
-        def_approver:def_approver|| "off",
-        documents:[]
-    })
-
-    if(res.statusCode === 200){
-        res.render('success-reg');
-    }
-    else{
-        //not sure if need
-        res.render('failure-reg');
-    }
 
     const admin_username = usernameAdmin;
     //todo uncomment later sry mizi
@@ -132,7 +112,7 @@ router.post("/status", async function (req, res){
                     username: admin_username,
                     password: SHA1(password).toString(enc.Hex),
                     department: dept,
-                    add_doc: add_doc,
+                    add_doc: uploader,
                     admin: admin
                 })
                 console.log(`Successfully enrolled admin user '${admin_username}'and imported it into the wallet`);
@@ -203,17 +183,29 @@ router.post("/status", async function (req, res){
                 };
                 await wallet_users.put(username, x509Identity);
                 console.log(`Successfully registered and enrolled admin user ${username} and imported it into the wallet`);
-                await userDB.insert({
-                    _id: id,
-                    firstname: firstName,
-                    lastname: lastName,
-                    email: email,
-                    username: username,
-                    password: SHA1(password).toString(enc.Hex),
-                    department: dept,
-                    add_doc: add_doc || "off",
-                    def_approver:def_approver|| "off"
-                })
+                if(approver=='on'){
+                    await approverDB.insert({
+                        _id: id,
+                        firstname: firstName,
+                        lastname: lastName,
+                        email: email,
+                        username: username,
+                        password: SHA1(password).toString(enc.Hex),
+                        department: dept,
+                        def_approver:approver|| "off"
+                    })
+                }else {
+                    await userDB.insert({
+                        _id: id,
+                        firstname: firstName,
+                        lastname: lastName,
+                        email: email,
+                        username: username,
+                        password: SHA1(password).toString(enc.Hex),
+                        department: dept,
+                        add_doc: uploader || "off",
+                    })
+                }
                 res.render('success-reg');
             }catch (error) {
                     console.error(`Failed to register user ${username}: ${error}`);

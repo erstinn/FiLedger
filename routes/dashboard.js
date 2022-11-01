@@ -6,11 +6,7 @@ const path = require('path')
 
 // databases
 const nano = require('nano')('http://administrator:qF3ChYhp@127.0.0.1:5984/');
-//const nano = require('nano')('http://admin:mysecretpassword@127.0.0.1:5984/');
-// const nano = require('nano')('http://admin:pw123@127.0.0.1:5984/');
-// const nano = require('nano')('http://root:root@127.0.0.1:5984/');
 const docsDB = nano.db.use('documents');
-// const docsDB = nano.db.use('testesdb');
 const docViews = "/_design/all_users/_view/all";
 const departments = ["Sales","Marketing", "Human Resources", "Accounting"] //to remove when dynamic addition. of dept.s implemented
 
@@ -67,13 +63,7 @@ router.post('/upload',  upload.single('uploadDoc'),
         // - tags(array), state (always DRAFT state here), path (not sure),
         // - state_change_timestamp (always set right after first upload)
         // - auto-append ver control? if the file already exists
-        // -
         // WHEN DONE: REMOVE "for testing purposes"
-        //console.log(req.file.destination) //path field but not needed?
-
-
-        // console.log("ahjiru") //testing purposes
-        // console.log(req.file) //testing purposes
 
         //init all necessary fields :
         const currentTime = new Date(Date.now());
@@ -115,11 +105,7 @@ router.post('/upload',  upload.single('uploadDoc'),
             }
         };
         const rev = await docsDB.find(q);
-        //testing purposes
-        // console.log(rev.docs)
-        // console.log(rev)
 
-        //finally worked lol but di pa natry for attachments maybe tom
         if(rev.docs == ''){
             console.log('inserting')
             let uuid = await nano.uuids(1);
@@ -158,13 +144,13 @@ router.post('/upload',  upload.single('uploadDoc'),
             if(!file.equals(req.file.buffer)){
                 if(fileTags.split("|")[1] == ""){
                     fileVer++;
-                    fileTags = `${fileName}|${tags[tags.length-1].split("|")[1]}|@ ${currentTime} V${parseFloat(fileVer).toFixed(2)}`
+                    fileTags = `${fileName}|${tags[tags.length-1].split("|")[1]}|@ ${fileTimestamp} V${parseFloat(fileVer).toFixed(2)}`
                 }else if(fileTags.split("|")[1] == tags[tags.length-1].split("|")[1]){
                     fileVer++;
-                    fileTags = `${fileName}|${tags[tags.length-1].split("|")[1]}|@ ${currentTime} V${parseFloat(fileVer).toFixed(2)}`
+                    fileTags = `${fileName}|${tags[tags.length-1].split("|")[1]}|@ ${fileTimestamp} V${parseFloat(fileVer).toFixed(2)}`
                 }else if(fileTags.split("|")[1] != tags[tags.length-1].split("|")[1]){
                     fileVer+=0.1;
-                    fileTags = `${fileName}|${req.body.tags.substring(0,req.body.tags.length-1)}|@ ${currentTime} V${parseFloat(fileVer).toFixed(2)}`
+                    fileTags = `${fileName}|${req.body.tags.substring(0,req.body.tags.length-1)}|@ ${fileTimestamp} V${parseFloat(fileVer).toFixed(2)}`
                 }
             }
             tags.push(fileTags)
@@ -231,51 +217,12 @@ router.post('/upload',  upload.single('uploadDoc'),
                 }
             )
         }
-        // var promiseInvoke = invoke.invokeTransaction();
-        // var promiseValue = async () => {
-        //     const value = await promiseInvoke();
-        //     console.log(value);
-        // };
-        // promiseValue();
-
-        //ORIGINAL CODE
-        // await docsDB.insert({
-        //     name: fileName,
-        //     type: fileType,
-        //     size: fileSize,
-        //     category: "standard",
-        //     tags: [fileName, "random"],
-        //     version_num: fileVersion,
-        //     state_history: [stateTimestamp],
-        //     creator: fileCreator,
-        //     min_approvers: fileMinApprovers,
-        //     // _rev: rev
-        // }, id)
-        //
-        //
-        // const findRev = await docQuery(id, fileName, fileCreator);
-        // const rev = findRev[0]._rev;
-
-
-        // fs.readFile(filePath, async (err, data) => { //dno if async
-        //     if (!err) {
-        //         await docsDB.attachment.insert(
-        //             id,
-        //             fileName,
-        //             data,
-        //             req.file.mimetype,
-        //             {rev: rev}
-        //         )
-        //     }
-        // });
-
 
     })
 
 
 
 //======================================== MIDDLEWARES ================================================================
-//QUERY MIDDLEWARE?
 async function docQuery(fileName, creator){
     const indexDef = { //copied cod lol
         index: { fields: ["name", "creator"]},
@@ -311,11 +258,6 @@ async function formatBytes(bytes, decimals = 2) { //dno if need to async
 }
 
 //======================================== X CODES ================================================================
-//======================================== X CODES ================================================================
 
 module.exports = router
 
-/**
- * 
- * 
- */

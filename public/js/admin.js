@@ -119,16 +119,10 @@ async function main(){
         let newNumDocs = document.createElement("td")
         newNumDocs.classList.add("numDocs");
         newNumDocs.innerHTML = 100;
-        let newKebab = document.createElement("td")
-        newKebab.classList.add("kebeb")
-        newKebab.innerHTML =    `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-three-dots-vertical" viewBox="0 0 16 16">
-                                                                                <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/>
-                                                                            </svg>`
 
         newData.appendChild(newUserName);
         newData.appendChild(newDept);
         newData.appendChild(newNumDocs);
-        newData.appendChild(newKebab)
         usersList.appendChild(newData)
 
     newData.addEventListener("click",()=>{
@@ -152,15 +146,9 @@ async function main(){
     newNumUsers.classList.add("numUser");
     newNumUsers.innerHTML = item.numUser;
 
-    let newKebab = document.createElement("td")
-    newKebab.classList.add("kebab");
-    newKebab.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-three-dots-vertical" viewBox="0 0 16 16">
-                            <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/>
-                        </svg>`
 
     newData.appendChild(newTitle);
     newData.appendChild(newNumUsers);
-    newData.appendChild(newKebab);
 
         documentList.appendChild(newData);
 

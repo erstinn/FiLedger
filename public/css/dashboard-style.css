@@ -261,3 +261,12 @@
     display: flex;
     gap:2vw;
 }
+
+.docType{
+    height: 100%;
+    padding:.45vw;
+    margin-left: 30.7%;
+    width: 45%;
+    background-color: transparent;
+    border:1px solid black
+}

@@ -11,6 +11,7 @@ const nano = require('nano')('http://administrator:qF3ChYhp@127.0.0.1:5984/');
 // const nano = require('nano')('http://root:root@127.0.0.1:5984/');
 const docsDB = nano.db.use('documents');
 // const docsDB = nano.db.use('testesdb');
+const userDB = nano.db.use('users');
 const docViews = "/_design/all_users/_view/all";
 const departments = ["Sales","Marketing", "Human Resources", "Accounting"] //to remove when dynamic addition. of dept.s implemented
 
@@ -139,7 +140,24 @@ router.post('/upload',  upload.single('uploadDoc'),
                 status:"Pending",
             }, id,function (err, response){
                 if(!err){
+                    var docdeets = {
+                        name: fileName,
+                        type: fileType,
+                        size: fileSize,
+                        category: "standard",
+                        tags_history: fileTagsList,
+                        version_num: fileVersion,
+                        state_history: stateTimestampList,
+                        creator: fileCreator,
+                        min_approvers: fileMinApprovers,
+                        last_activity:"Upload",
+                        status:"Pending",
+                    }
                     console.log("it worked")
+                    invoke.invokeTransaction(req.session.username, req.session.admin, id, docdeets.name, docdeets.type, docdeets.size,
+                        docdeets.tags_history, docdeets.version_num, docdeets.state_history,
+                        docdeets.creator, docdeets.min_approvers);
+
                     res.redirect("/dashboard?fail=false")
                 }else {
                     console.log("failed")
@@ -199,29 +217,14 @@ router.post('/upload',  upload.single('uploadDoc'),
                             last_activity:"Upload",
                             status:"Pending",
                         }
-                        req.docdeets = docdeets;
+                        //TODO: check upload new file if it invokes the chaincode
                         // export { docdeets };
                         // localStorage.setItem('docdeets', docdeets)
                         console.log("it worked")
-                        invoke.invokeTransaction(docdeets.name, docdeets.type, docdeets.size,
+                        invoke.invokeTransaction(req.session.username, req.session.admin, doc,docdeets.name, docdeets.type, docdeets.size,
                             docdeets.tags_history, docdeets.version_num, docdeets.state_history,
                             docdeets.creator, docdeets.min_approvers);
-                        // var promiseInvoke = invoke.invokeTransaction();
-                        // var promiseValue = async () => {
-                        //     const value = await promiseInvoke();
-                        //     console.log(value);
-                        // };
-                        // promiseValue();
 
-                        //TRY LANG TO
-                        // const promiseInvoke = new Promise((resolve, reject)=>{
-                        //     invokeTransaction(docdeets)
-                        //         .then((value)=>{
-                        //             console.log(value);
-                        //             resolve('From newPromise')
-                        //         })
-                        // })
-                        // promiseInvoke.then(console.log);
                         res.redirect("/dashboard?fail=false")
                         // res.render("/dashboard", {docdeets: docdeets})
                     }else {
@@ -231,43 +234,6 @@ router.post('/upload',  upload.single('uploadDoc'),
                 }
             )
         }
-        // var promiseInvoke = invoke.invokeTransaction();
-        // var promiseValue = async () => {
-        //     const value = await promiseInvoke();
-        //     console.log(value);
-        // };
-        // promiseValue();
-
-        //ORIGINAL CODE
-        // await docsDB.insert({
-        //     name: fileName,
-        //     type: fileType,
-        //     size: fileSize,
-        //     category: "standard",
-        //     tags: [fileName, "random"],
-        //     version_num: fileVersion,
-        //     state_history: [stateTimestamp],
-        //     creator: fileCreator,
-        //     min_approvers: fileMinApprovers,
-        //     // _rev: rev
-        // }, id)
-        //
-        //
-        // const findRev = await docQuery(id, fileName, fileCreator);
-        // const rev = findRev[0]._rev;
-
-
-        // fs.readFile(filePath, async (err, data) => { //dno if async
-        //     if (!err) {
-        //         await docsDB.attachment.insert(
-        //             id,
-        //             fileName,
-        //             data,
-        //             req.file.mimetype,
-        //             {rev: rev}
-        //         )
-        //     }
-        // });
 
 
     })

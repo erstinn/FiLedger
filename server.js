@@ -83,15 +83,7 @@ app.get('/', function (req, res){
     res.render("index");
 })
 
-// app.get('/upload', function(req, res){
-//     var promiseInvoke = invoke.invokeTransaction();
-//     var promiseValue = async () => {
-//         const value = await promiseInvoke;
-//         console.log(value);
-//         res.render("dashboard", {data: value});
-//     };
-//     promiseValue();
-// });
+
 
 app.listen(process.env.PORT || 3000, function (){
     console.log("Server started on port 3000")

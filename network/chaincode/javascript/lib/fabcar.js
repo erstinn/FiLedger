@@ -54,7 +54,7 @@ class MyFiLedgerContract extends Contract {
     }
     // //updateVer
     async updateDocs(ctx, id, fileName, fileType, fileSize, fileTagsList,
-                     fileVersion, fileCreator, fileMinApprovers, stateTimestamps, tags, revi) {
+                     fileVersion, fileCreator, fileMinApprovers, stateTimestamps) {
         // const exists = await this.myDocExists(ctx, id);
         // if (!exists) {
         //     throw new Error(`The my document ${MyDocId} does not exist`);
@@ -66,12 +66,12 @@ class MyFiLedgerContract extends Contract {
             type: fileType,
             size: fileSize,
             category: "standard",
-            tags_history: tags,
-            version_num: parseFloat(fileVer).toFixed(2), //finally updates
+            tags_history: fileTagsList,
+            version_num: parseFloat(fileVersion).toFixed(2), //finally updates
             state_history: stateTimestamps,
             creator: fileCreator,
             min_approvers: fileMinApprovers,
-            _rev: revi,
+            // revision: revi, hindi sya pede iinsert sa db
             last_activity:"Upload",
             status:"Pending",
         };
@@ -79,10 +79,8 @@ class MyFiLedgerContract extends Contract {
         const worked = await ctx.stub.putState(id, buffer);
         if(worked){
             console.log("it worked");
-            res.redirect("/dashboard?fail=false");
         }else {
             console.log("failed");
-            res.redirect("/dashboard/?fail=true")
         }
     }
     //deleteDoc

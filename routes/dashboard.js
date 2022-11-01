@@ -78,14 +78,20 @@ router.post('/upload',  upload.single('uploadDoc'),
             + " " + currentTime.getHours()+ ":" + currentTime.getMinutes()+ ":" + currentTime.getSeconds();
         const filePath = req.file.path; //path but not needed i think
         console.log("now",fileTimestamp)
+        let user = req.session.username
+        if(req.session.admin === true){
+            user = 'enroll'
+            console.log('ADMIN DITO STAN NCT POTA')
+        }
         //TODO! check if filename exists already; add version where `state` = RESUBMITTED; else if new version and state: DRAFT
         //for now assumes DRAFT state
         let fileVersion = 1.0; //TODO when findDuplicate() for doc is implemented (auto increment INTEGER if duplicate)
         const fileMinApprovers = 1; //TODO when UI for this is implemented
         const state = "Draft"; //TODO when UI is implemented
         const stateTimestamp = state + " @ " + fileTimestamp ; // @ to separate values later
-        const qName = await userDB.find({selector:{"username":req.session.username}})
-        const fileCreator = `${await qName.docs[0].firstname} ${await qName.docs[0].lastname}`; //TODO implement once sessions
+        // const qName = await userDB.find({selector:{"username":req.session.username}})
+        // const fileCreator = `${await qName.docs[0].firstname} ${await qName.docs[0].lastname}`; //TODO implement once sessions
+        const fileCreator = `${req.session.userfname} ${req.session.userlname}`;
         let fileTagsList = []
         let stateTimestampList = []
         let fileTags = `${fileName}|${req.body.tags.substring(0,req.body.tags.length-1)}|@ ${fileTimestamp} V${parseFloat(fileVersion).toFixed(2)}`
@@ -141,7 +147,7 @@ router.post('/upload',  upload.single('uploadDoc'),
                         status:"Pending",
                     }
 
-                    invoke.invokeTransaction(req.session.username, req.session.admin, id, docdeets.name, docdeets.type,
+                    invoke.invokeTransaction(user, req.session.admin, id, docdeets.name, docdeets.type,
                         docdeets.size, docdeets.tags_history, docdeets.version_num, docdeets.state_history,
                         docdeets.creator, docdeets.min_approvers);
 
@@ -153,6 +159,7 @@ router.post('/upload',  upload.single('uploadDoc'),
                 }
             })
         }else{
+            //TODO: CHANGE CC FUNCTION TO UPDATEDOCS INSTEAD
             console.log("updating")
             const findRev = await docQuery(fileName, fileCreator);
             const revi = findRev[0]._rev;
@@ -208,9 +215,10 @@ router.post('/upload',  upload.single('uploadDoc'),
                         }
 
                         console.log("it worked")
-                        invoke.invokeTransaction(req.session.username, req.session.admin, doc, docdeets.name, docdeets.type, docdeets.size,
-                            docdeets.tags_history, docdeets.version_num, docdeets.state_history,
-                            docdeets.creator, docdeets.min_approvers);
+                        invoke.updateTransaction(user, req.session.admin, doc, docdeets.name, docdeets.type, docdeets.size,
+                            docdeets.tags_history, docdeets.version_num, docdeets.creator,
+                            docdeets.min_approvers, docdeets.state_history );
+
                         res.redirect("/dashboard?fail=false")
                     }else {
                         console.log("failed")

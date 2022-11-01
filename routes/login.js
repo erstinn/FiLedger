@@ -32,6 +32,8 @@ router.post('/', async function (req, res) {
     const varemail = req.body.email;
     const passw = SHA1(req.body.password).toString(enc.Hex);
     const dept = req.body.dept;
+    const fname = req.body.fname;
+    const lname = req.body.lname;
     let logErr = '';
 
     // load the network configuration
@@ -76,6 +78,8 @@ router.post('/', async function (req, res) {
                 "email": varemail,
                 "password": passw,
                 "department": dept,
+                "firstname": fname,
+                "lastname": lname,
             }
         };
 
@@ -90,12 +94,15 @@ router.post('/', async function (req, res) {
                 console.log('ADMIN LOGGED IN');
                 req.session.username = adminRes.docs[0].username;
                 req.session.user = varemail;
+                req.session.userfname = adminRes.docs[0].firstname;
+                req.session.userlname = adminRes.docs[0].lastname;
                 res.redirect('/dashboard');
             }else{
                 logErr = 'Incorrect Login Credentials. Please try again...';
                 res.render('login', {dep:departments, logErr:logErr})//placeholder
             }
         }
+
         req.session.user = varemail;
         req.session.username = userRes.docs[0].username;
         // console.log(userRes.docs[0])

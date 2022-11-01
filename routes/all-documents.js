@@ -8,13 +8,13 @@ const docsDB = nano.db.use('documents');
 
 
 
-router.get('/:num',async(req,res)=>{
+router.get('/',async(req,res)=>{
     const documents = await docsDB.find({selector:{
         _id:{
             "$gt":null
         }
     }})
-    res.render("all-documents",{docs:documents,username : req.session.username,page:req.params.num})
+    res.render("all-documents",{docs:documents,username : req.session.username})
 })
 
 

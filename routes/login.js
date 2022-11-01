@@ -13,6 +13,7 @@ const nano = require('nano')('http://administrator:qF3ChYhp@127.0.0.1:5984/');
 // const nano = require('nano')('http://root:root@127.0.0.1:5984/');
 const userDB = nano.db.use('users');
 const adminDB = nano.db.use('admins');
+const approverDB = nano.db.use('approvers');
 const departments = ["Sales","Marketing", "Human Resources", "Accounting"] //to remove when dynamic addition. of dept.s implemented
 
 // session var
@@ -51,6 +52,7 @@ router.post('/', async function (req, res) {
     const walletPath = path.join(process.cwd(), 'wallet', mspId);
     const wallet_admin = await Wallets.newCouchDBWallet('http://administrator:qF3ChYhp@127.0.0.1:5984/', "wallet");
     const wallet_user = await Wallets.newCouchDBWallet('http://administrator:qF3ChYhp@127.0.0.1:5984/', "wallet_users");
+    const wallet_approver = await Wallets.newCouchDBWallet('http://administrator:qF3ChYhp@127.0.0.1:5984/', "wallet_approvers");
     console.log(`Wallet path: ${walletPath}`); //dno if irrelevant if couchdb code
     //todo network/wallet connection end
 
@@ -85,7 +87,16 @@ router.post('/', async function (req, res) {
 
         const adminRes = await adminDB.find(q1)
         const userRes = await userDB.find(q1)
+        const approverRes = await approverDB.find(q1)
         console.log("hello")
+        if(adminRes.bookmark !== 'nil')
+            console.log('admin not')
+        if(approverRes.bookmark !== 'nil')
+            console.log('approver not')
+        if(userRes.bookmark !== 'nil')
+            console.log('user not')
+
+            //if it is an admin:
         if(adminRes.bookmark !== 'nil'){
             const adminIdentity = await wallet_admin.get("enroll");
             if (adminIdentity) {
@@ -97,27 +108,44 @@ router.post('/', async function (req, res) {
                 req.session.userfname = adminRes.docs[0].firstname;
                 req.session.userlname = adminRes.docs[0].lastname;
                 res.redirect('/dashboard');
-            }else{
-                logErr = 'Incorrect Login Credentials. Please try again...';
-                res.render('login', {dep:departments, logErr:logErr})//placeholder
             }
         }
-
-        req.session.user = varemail;
-        req.session.username = userRes.docs[0].username;
-        // console.log(userRes.docs[0])
-        const userIdentity = await wallet_user.get(req.session.username);
-        if (userIdentity) {
-            // console.log(`An identity for the user ${userRes.docs[0].username} already exists in the wallet`); //todo remove
-            console.log('USER LOGGED IN');
-            req.session.username = userRes.docs[0].username;
+        //check if approver:
+        else if(approverRes.bookmark !== 'nil') {
             req.session.user = varemail;
-            res.redirect('/dashboard');
-        }else{
-            logErr = 'Incorrect Login Credentials. Please try again...';
-            res.render('login', {dep:departments, logErr:logErr})//placeholder
+            req.session.username = approverRes.docs[0].username;
+            const approverIdentity = await wallet_approver.get(req.session.username);
+            if (approverIdentity) {
+                console.log('APPROVER LOGGED IN');
+                req.session.username = approverRes.docs[0].username;
+                req.session.user = varemail;
+                req.session.approver = true;
+                res.redirect('/dashboard');
+            } else {
+                logErr = 'Incorrect Login Credentials. Please try again...';
+                res.render('login', {dep: departments, logErr: logErr})//placeholder
+            }
         }
-
+        //else if it is a user
+        else if(userRes.bookmark !== 'nil') {
+            req.session.user = varemail;
+            req.session.username = userRes.docs[0].username;
+            const userIdentity = await wallet_user.get(req.session.username);
+            if (userIdentity) {
+                // console.log(`An identity for the user ${userRes.docs[0].username} already exists in the wallet`); //todo remove
+                console.log('USER LOGGED IN');
+                req.session.username = userRes.docs[0].username;
+                req.session.user = varemail;
+                req.session.user = true;
+                res.redirect('/dashboard');
+            } else {
+                logErr = 'Incorrect Login Credentials. Please try again...';
+                res.render('login', {dep: departments, logErr: logErr})//placeholder
+            }
+        }else{ //ELSE IF NOT ENROLLED
+        logErr = 'Incorrect Login Credentials. Please try again...';
+        res.render('login', {dep:departments, logErr:logErr})//placeholder
+        }
     }
 
 })

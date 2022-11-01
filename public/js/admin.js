@@ -10,22 +10,49 @@ const accessButtons = document.querySelectorAll(".accessButtons .modalButton")
 const nameUser = document.querySelector(".name-user");
 const departmentUser = document.querySelector(".department-user");
 const tableTitle = document.querySelector(".userList-header");
-let selected_userID;
 
-async function getUsers(){
-    const response = await fetch('/api/users',{method:"POST",headers:{'access':'admin'}})
-    let users = await response.json()
-    users = JSON.stringify(users);
-    users = JSON.parse(users);
-    return users;
-}
-async function getDocs(){
-    const response = await fetch('/api/docs',{method:"POST",headers:{'access':'admin'}})
-    let docs = await response.json()
-    docs = JSON.stringify(docs);
-    docs = JSON.parse(docs);
-    return docs;
-}
+const users = [
+    {
+        name:"Mark",
+        department:"CS",
+        document:1
+    },
+    {
+        name:"Dav",
+        department:"CS",
+        document:999
+    },
+    {
+        name:"Thor",
+        department:"MMA",
+        document:0
+    },
+    {
+        name:"Berbaderg",
+        department:"MMA",
+        document:1200
+    },
+    {
+        name:"TamTam",
+        department:"Engineering",
+        document:10000
+    },
+]
+
+const documents = [
+    {
+        title:"Document 1",
+        numUser:5
+    },
+    {
+        title:"Document 2",
+        numUser:9
+    },
+    {
+        title:"Document 3",
+        numUser:10
+    }
+]
 
 async function main(){
     let users = await getUsers();
@@ -43,11 +70,11 @@ async function main(){
             const activeData = document.querySelector(".clicked-data")
             modal.classList.add("inactive")
             document.querySelector("body").style.overflowY = "auto"
-        
+
             if(activeData!=undefined){
                 activeData.classList.remove("clicked-data")
             }
-        
+
             accessButtons.forEach(button=>{
                 button.disabled = true;
             })
@@ -104,60 +131,49 @@ async function main(){
         newData.appendChild(newKebab)
         usersList.appendChild(newData)
 
-        newData.addEventListener("click",()=>{
-            modal.classList.remove("inactive")
-            document.querySelector("body").style.overflowY = "hidden"
-            scrollTo(0,0)
-            nameUser.textContent = `${item.firstname} ${item.lastname}`
-            departmentUser.textContent = item.department
-            selected_userID = item._id;
-            
-        })
+    newData.addEventListener("click",()=>{
+        modal.classList.remove("inactive")
+        document.querySelector("body").style.overflowY = "hidden"
+        scrollTo(0,0)
+        nameUser.textContent = item.name
+        departmentUser.textContent = item.department
+    })
 
     }
     function generateDocsTable(item){
         let newData = document.createElement("tr");
         newData.classList.add('docData');
-        
+
         let newTitle = document.createElement("td");
         newTitle.classList.add("docTitle");
         newTitle.innerHTML = item.name
 
-        let newNumUsers = document.createElement("td");
-        newNumUsers.classList.add("numUser");
-        newNumUsers.innerHTML = 100;
+    let newNumUsers = document.createElement("td");
+    newNumUsers.classList.add("numUser");
+    newNumUsers.innerHTML = item.numUser;
 
-        let newDocType = document.createElement('td');
-        newDocType.classList.add("docType")
-        newDocType.innerHTML = item.category
+    let newKebab = document.createElement("td")
+    newKebab.classList.add("kebab");
+    newKebab.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-three-dots-vertical" viewBox="0 0 16 16">
+                            <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/>
+                        </svg>`
 
-        let newKebab = document.createElement("td")
-        newKebab.classList.add("kebab");
-        newKebab.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-three-dots-vertical" viewBox="0 0 16 16">
-                                <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/>
-                            </svg>`
-        let newNumApp = document.createElement("td");
-        newNumApp.classList.add('numApp');
-        newNumApp.innerHTML = item.min_approvers;
-
-        newData.appendChild(newTitle);
-        newData.appendChild(newDocType)
-        newData.appendChild(newNumApp)
-        newData.appendChild(newNumUsers);
-        newData.appendChild(newKebab);
+    newData.appendChild(newTitle);
+    newData.appendChild(newNumUsers);
+    newData.appendChild(newKebab);
 
         documentList.appendChild(newData);
 
 
-        newData.addEventListener("click",()=>{
-            modal.classList.remove("inactive")
-            document.querySelector("body").style.overflowY = "hidden"
-            scrollTo(0,0)
-            nameUser.textContent = item.title
-            departmentUser.textContent = `User associated with ${item.name}`
-            
-        })
-    }
+    newData.addEventListener("click",()=>{
+        modal.classList.remove("inactive")
+        document.querySelector("body").style.overflowY = "hidden"
+        scrollTo(0,0)
+        nameUser.textContent = item.title
+        departmentUser.textContent = `User associated with ${item.title}`
+
+    })
+}
 
     users.forEach(generateUsersTable)
     documents.forEach(generateDocsTable)
@@ -176,7 +192,7 @@ async function main(){
                     matchedObject.push(item)
                 }
             })
-        
+
             matchedObject.forEach(generateUsersTable)
         }
 
@@ -186,13 +202,13 @@ async function main(){
                     matchedObject.push(item)
                 }
             })
-        
+
             matchedObject.forEach(generateDocsTable)
         }
     })
 
     function clearTable(){
-        
+
         if(currentActive == 0){
             data = document.querySelectorAll(".userData");
             data.forEach(item=>{
@@ -204,8 +220,8 @@ async function main(){
                 documentList.removeChild(item)
             })
         }
-        
-        
+
+
     }
 
     exitModal.addEventListener("click",()=>{
@@ -262,6 +278,9 @@ async function main(){
         window.location.reload()
     })
 
+
+}
+main()
 
 }
 main()

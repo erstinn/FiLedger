@@ -19,9 +19,9 @@
 .acceptedDocs-table td,
 th,
 tr {
-    border: 1px solid black;
-    padding: 0.5vw;
+    padding: .7vw;
     border-spacing: 0px;
+    text-align: center;
 }
 .table-title {
     background-color: #61c6c6;
@@ -35,6 +35,9 @@ tr {
     font-size: 2vw;
     border-radius: 5px 5px 0px 0px;
 }
+.data:nth-child(odd){
+    background-color:#61c6c654
+}
 .data td:first-child {
     text-align: center;
 }
@@ -45,7 +48,6 @@ tr {
 .accept {
     background-color: rgb(122, 215, 88);
     padding: 0.5vw;
-    margin-left: 0.5vw;
     border: none;
     color: white;
     cursor: pointer;

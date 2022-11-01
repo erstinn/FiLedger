@@ -226,7 +226,13 @@ body{
     padding:.9vw;
     vertical-align: middle;
     border-radius: 10px;
+    cursor: pointer!important;
 }
+
+.viewsMode:hover{
+    background-color: rgb(128, 174, 211);
+}
+
 .viewsMode.inactive{
     background-color: #449595;
     display: block!important;

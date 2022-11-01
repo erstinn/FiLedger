@@ -24,10 +24,11 @@
 .pendingDocs-table td,
 th,
 tr {
-    border: 1px solid black;
     padding: 0.5vw;
     border-spacing: 0px;
+    text-align: center;
 }
+
 .table-title {
     background-color: #61c6c6;
     padding: 0.2vw;
@@ -43,12 +44,17 @@ tr {
 .data td:first-child {
     text-align: center;
 }
+.data:nth-child(odd){
+    background-color:#61c6c654
+}
 .table-headers th:nth-child(2) {
     width: 30%;
 }
 
-.toApprove {
+.toApprove{
+    background-color:#61c6c654;
     text-align: center;
+    font-weight: 500;
 }
 
 .pendingDocs-table button {
@@ -133,3 +139,4 @@ tr {
     padding: 5px;
     width: 100%;
 }
+

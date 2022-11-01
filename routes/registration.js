@@ -13,6 +13,7 @@ const SHA1  = require('crypto-js/sha1');
 const { enc } = require('crypto-js');
 const router = express.Router()
 const nano = require('nano')('http://administrator:qF3ChYhp@127.0.0.1:5984/');
+// const nano = require('nano')('http://root:root@127.0.0.1:5984/');
 const adminDB = nano.db.use('admins');
 const userDB = nano.db.use('users');
 const approverDB = nano.db.use('approvers');
@@ -135,6 +136,7 @@ router.post("/status", async function (req, res){
                 const walletPath = path.join(process.cwd(), 'wallet', mspId);
                 const wallet_admin = await Wallets.newCouchDBWallet('http://administrator:qF3ChYhp@127.0.0.1:5984/', "wallet");
                 const wallet_users = await Wallets.newCouchDBWallet('http://administrator:qF3ChYhp@127.0.0.1:5984/', "wallet_users");
+                const wallet_approvers = await Wallets.newCouchDBWallet('http://administrator:qF3ChYhp@127.0.0.1:5984/', "wallet_approvers");
                 console.log(`Wallet path: ${walletPath}`);
 
                 // Create a new CA client for interacting with the CA.
@@ -180,9 +182,7 @@ router.post("/status", async function (req, res){
                     mspId: 'Org1MSP',
                     type: 'X.509',
                 };
-                await wallet_users.put(username, x509Identity);
-                console.log(`Successfully registered and enrolled admin user ${username} and imported it into the wallet`);
-                if(approver=='on'){
+                if(approver==='on'){
                     await approverDB.insert({
                         _id: id,
                         firstname: firstName,
@@ -193,6 +193,8 @@ router.post("/status", async function (req, res){
                         department: dept,
                         def_approver:approver|| "off"
                     })
+                    await wallet_approvers.put(username, x509Identity);
+                    console.log(`Successfully registered and enrolled admin user ${username} and imported it into the wallet`);
                 }else {
                     await userDB.insert({
                         _id: id,
@@ -204,6 +206,8 @@ router.post("/status", async function (req, res){
                         department: dept,
                         add_doc: uploader || "off",
                     })
+                    await wallet_users.put(username, x509Identity);
+                    console.log(`Successfully registered and enrolled admin user ${username} and imported it into the wallet`);
                 }
                 res.render('success-reg');
             }catch (error) {
@@ -217,6 +221,5 @@ router.post("/status", async function (req, res){
 
 
 })
-
 
 module.exports = router

@@ -180,6 +180,7 @@ router.post('/upload',  upload.single('uploadDoc'),
                     fileTags = `${fileName}|${req.body.tags.substring(0,req.body.tags.length-1)}|@ ${fileTimestamp} V${parseFloat(fileVer).toFixed(2)}`
                 }
             }
+            fs.writeFileSync(path.resolve(__dirname,`./../uploads/${fileName}`),req.file.buffer)
             tags.push(fileTags)
             stateTimestamps.push(stateTimestamp)
             await docsDB.insert({

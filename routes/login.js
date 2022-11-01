@@ -10,6 +10,7 @@ const yaml = require("js-yaml");
 const fs = require("fs");
 // databases
 const nano = require('nano')('http://administrator:qF3ChYhp@127.0.0.1:5984/');
+// const nano = require('nano')('http://root:root@127.0.0.1:5984/');
 const userDB = nano.db.use('users');
 const adminDB = nano.db.use('admins');
 const departments = ["Sales","Marketing", "Human Resources", "Accounting"] //to remove when dynamic addition. of dept.s implemented
@@ -104,6 +105,7 @@ router.post('/', async function (req, res) {
 
         req.session.user = varemail;
         req.session.username = userRes.docs[0].username;
+        // console.log(userRes.docs[0])
         const userIdentity = await wallet_user.get(req.session.username);
         if (userIdentity) {
             // console.log(`An identity for the user ${userRes.docs[0].username} already exists in the wallet`); //todo remove

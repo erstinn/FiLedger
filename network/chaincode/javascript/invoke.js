@@ -14,10 +14,19 @@ exports.log = async function(req, res) {
     return "SUCCESS"
 }
 
-exports.invokeTransaction = async function (fileName, fileType, fileSize, fileTagsList,
-                                            fileVersion, stateTimestampList, fileCreator, fileMinApprovers) {
+async function invokeTransaction (fileName, fileType, fileSize, fileTagsList,
+                                  fileVersion, stateTimestampList, fileCreator, fileMinApprovers) {
+
     var result = "";
     var user = "testuser";
+    // var docdeets = '';
+    // var docdeets = localStorage.getItem('docdeets');
+    // app.get('/dashboard/upload',(req,res)=>{
+    //     // console.log(req.docdeets);
+    //     res.docdeets = req.docdeets;
+    // })
+    console.log('ANG LAMAN NG DOCDEETS AY: ');
+
     try {
         console.log("Invoking chaincode using : ", user);
         // load the network configuration
@@ -65,10 +74,11 @@ exports.invokeTransaction = async function (fileName, fileType, fileSize, fileTa
         const contract = network.getContract(CC_NAME);
         // const tokenId=Math.floor((Math.random() * 100) + 1)+Math.floor((Math.random() * 100) + 1);
 
-        const tokenId=(Math.floor(Math.random())).toString();
+        const tokenId=(Math.floor(Math.random()));
         await contract.submitTransaction(
             "createDoc",
-            `${tokenId}`, "ver1", '21', 'rae', 'swd','f','s','g', 'op'
+            `123213`, fileName, fileType, fileSize, fileTagsList,
+            fileVersion, stateTimestampList, fileCreator, fileMinApprovers,
         );
         console.log("Transaction has been submitted");
 
@@ -77,6 +87,7 @@ exports.invokeTransaction = async function (fileName, fileType, fileSize, fileTa
 
         // let result = await contract.evaluateTransaction("getAllDocs");
         console.log(result)
+        // localStorage.removeItem('docdeets');
         // Disconnect from the gateway.
         gateway.disconnect();
         return result;
@@ -85,5 +96,7 @@ exports.invokeTransaction = async function (fileName, fileType, fileSize, fileTa
         result = `Failed to submit transaction: ${error}`;
 
     }
-    return result;
+    // return result;
 }
+module.exports = {invokeTransaction};
+

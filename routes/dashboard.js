@@ -9,7 +9,7 @@ const nano = require('nano')('http://administrator:qF3ChYhp@127.0.0.1:5984/');
 //const nano = require('nano')('http://admin:mysecretpassword@127.0.0.1:5984/');
 // const nano = require('nano')('http://admin:pw123@127.0.0.1:5984/');
 // const nano = require('nano')('http://root:root@127.0.0.1:5984/');
-const docsDB = nano.db.use('users');
+const docsDB = nano.db.use('documents');
 // const docsDB = nano.db.use('testesdb');
 const docViews = "/_design/all_users/_view/all";
 const departments = ["Sales","Marketing", "Human Resources", "Accounting"] //to remove when dynamic addition. of dept.s implemented
@@ -35,6 +35,7 @@ router.get("/pending-docs",(req,res)=>{
 //======================================== UPLOAD FILE-RELATED CODES ================================================================
 const multer  = require('multer')
 const invoke = require("../network/chaincode/javascript/invoke");
+const {invokeTransaction} = require("../network/chaincode/javascript/invoke");
 //todo maybe prevent zip file upload?
 //Specs: 1 file per upload, 1gb, any filetype
 var storage = multer.diskStorage({
@@ -113,8 +114,8 @@ router.post('/upload',  upload.single('uploadDoc'),
         };
         const rev = await docsDB.find(q);
         //testing purposes
-        console.log(rev.docs)
-        console.log(rev)
+        // console.log(rev.docs)
+        // console.log(rev)
 
         //finally worked lol but di pa natry for attachments maybe tom
         if(rev.docs == ''){
@@ -170,14 +171,45 @@ router.post('/upload',  upload.single('uploadDoc'),
                 },doc,
                 function (err, response){
                     if(!err){
+                        var docdeets = {
+                            name: fileName,
+                            type: fileType,
+                            size: fileSize,
+                            category: "standard",
+                            tags_history: tags,
+                            version_num: parseFloat(fileVer).toFixed(2), //finally updates
+                            state_history: stateTimestamps,
+                            creator: fileCreator,
+                            min_approvers: fileMinApprovers,
+                            _rev: revi,
+                            last_activity:"Upload",
+                            status:"Pending",
+                        }
+                        req.docdeets = docdeets;
+                        // export { docdeets };
+                        // localStorage.setItem('docdeets', docdeets)
                         console.log("it worked")
-                        var promiseInvoke = invoke.invokeTransaction();
-                        var promiseValue = async () => {
-                            const value = await promiseInvoke();
-                            console.log(value);
-                        };
-                        promiseValue();
+                        invoke.invokeTransaction(docdeets.name, docdeets.type, docdeets.size,
+                            docdeets.tags_history, docdeets.version_num, docdeets.state_history,
+                            docdeets.creator, docdeets.min_approvers);
+                        // var promiseInvoke = invoke.invokeTransaction();
+                        // var promiseValue = async () => {
+                        //     const value = await promiseInvoke();
+                        //     console.log(value);
+                        // };
+                        // promiseValue();
+
+                        //TRY LANG TO
+                        // const promiseInvoke = new Promise((resolve, reject)=>{
+                        //     invokeTransaction(docdeets)
+                        //         .then((value)=>{
+                        //             console.log(value);
+                        //             resolve('From newPromise')
+                        //         })
+                        // })
+                        // promiseInvoke.then(console.log);
                         res.redirect("/dashboard?fail=false")
+                        // res.render("/dashboard", {docdeets: docdeets})
                     }else {
                         console.log("failed")
                         res.redirect("/dashboard/?fail=true")
@@ -185,6 +217,12 @@ router.post('/upload',  upload.single('uploadDoc'),
                 }
             )
         }
+        // var promiseInvoke = invoke.invokeTransaction();
+        // var promiseValue = async () => {
+        //     const value = await promiseInvoke();
+        //     console.log(value);
+        // };
+        // promiseValue();
 
         //ORIGINAL CODE
         // await docsDB.insert({

@@ -60,27 +60,6 @@ router.post("/status", async function (req, res){
     const caURL = "org1-ca.fabric";
     let ccp;
 
-    await userDB.insert({
-        _id: id,
-        firstname: firstName,
-        lastname: lastName,
-        email: email,
-        username: username,
-        password: SHA1(password).toString(enc.Hex),
-        department: dept,
-        add_doc: add_doc || "off",
-        admin: admin || "off",
-        def_approver:def_approver|| "off",
-        documents:[]
-    })
-
-    if(res.statusCode === 200){
-        res.render('success-reg');
-    }
-    else{
-        //not sure if need
-        res.render('failure-reg');
-    }
 
     const admin_username = usernameAdmin;
     //todo uncomment later sry mizi

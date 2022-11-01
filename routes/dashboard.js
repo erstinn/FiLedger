@@ -6,12 +6,7 @@ const path = require('path')
 
 // databases
 const nano = require('nano')('http://administrator:qF3ChYhp@127.0.0.1:5984/');
-//const nano = require('nano')('http://admin:mysecretpassword@127.0.0.1:5984/');
-// const nano = require('nano')('http://admin:pw123@127.0.0.1:5984/');
-// const nano = require('nano')('http://root:root@127.0.0.1:5984/');
 const docsDB = nano.db.use('documents');
-// const docsDB = nano.db.use('testesdb');
-const userDB = nano.db.use('users');
 const docViews = "/_design/all_users/_view/all";
 const departments = ["Sales","Marketing", "Human Resources", "Accounting"] //to remove when dynamic addition. of dept.s implemented
 
@@ -37,6 +32,7 @@ router.get("/pending-docs",(req,res)=>{
 const multer  = require('multer')
 const invoke = require("../network/chaincode/javascript/invoke");
 const {invokeTransaction} = require("../network/chaincode/javascript/invoke");
+const {originalMaxAge} = require("express-session/session/cookie");
 //todo maybe prevent zip file upload?
 //Specs: 1 file per upload, 1gb, any filetype
 var storage = multer.diskStorage({
@@ -68,17 +64,14 @@ router.post('/upload',  upload.single('uploadDoc'),
         // - tags(array), state (always DRAFT state here), path (not sure),
         // - state_change_timestamp (always set right after first upload)
         // - auto-append ver control? if the file already exists
-        // -
         // WHEN DONE: REMOVE "for testing purposes"
-        //console.log(req.file.destination) //path field but not needed?
-
-
-        // console.log("ahjiru") //testing purposes
-        // console.log(req.file) //testing purposes
 
         //init all necessary fields :
         const currentTime = new Date(Date.now());
         const fileName = req.file.originalname;
+        if (req.file.originalname===null){
+            res.render('dashboard');
+        }
         const fileType = path.extname(req.file.originalname); //extension; including dot
         const fileSize = await formatBytes(req.file.size);
         const fileTimestamp = currentTime.getMonth()+1 + "/" + currentTime.getDate()+ "/" + currentTime.getFullYear() // e.g. 04/21/2000 21:32:11
@@ -86,8 +79,6 @@ router.post('/upload',  upload.single('uploadDoc'),
         const filePath = req.file.path; //path but not needed i think
         console.log("now",fileTimestamp)
         //TODO! check if filename exists already; add version where `state` = RESUBMITTED; else if new version and state: DRAFT
-        //TODO! idk how to universally fix these states to other codes; maybe OOP stuff
-        // WHEN IMPLEMENTED: add stateChangeTimestamp
         //for now assumes DRAFT state
         let fileVersion = 1.0; //TODO when findDuplicate() for doc is implemented (auto increment INTEGER if duplicate)
         const fileMinApprovers = 1; //TODO when UI for this is implemented
@@ -116,11 +107,7 @@ router.post('/upload',  upload.single('uploadDoc'),
             }
         };
         const rev = await docsDB.find(q);
-        //testing purposes
-        // console.log(rev.docs)
-        // console.log(rev)
 
-        //finally worked lol but di pa natry for attachments maybe tom
         if(rev.docs == ''){
             console.log('inserting')
             let uuid = await nano.uuids(1);
@@ -140,24 +127,7 @@ router.post('/upload',  upload.single('uploadDoc'),
                 status:"Pending",
             }, id,function (err, response){
                 if(!err){
-                    var docdeets = {
-                        name: fileName,
-                        type: fileType,
-                        size: fileSize,
-                        category: "standard",
-                        tags_history: fileTagsList,
-                        version_num: fileVersion,
-                        state_history: stateTimestampList,
-                        creator: fileCreator,
-                        min_approvers: fileMinApprovers,
-                        last_activity:"Upload",
-                        status:"Pending",
-                    }
                     console.log("it worked")
-                    invoke.invokeTransaction(req.session.username, req.session.admin, id, docdeets.name, docdeets.type, docdeets.size,
-                        docdeets.tags_history, docdeets.version_num, docdeets.state_history,
-                        docdeets.creator, docdeets.min_approvers);
-
                     res.redirect("/dashboard?fail=false")
                 }else {
                     console.log("failed")
@@ -176,13 +146,13 @@ router.post('/upload',  upload.single('uploadDoc'),
             if(!file.equals(req.file.buffer)){
                 if(fileTags.split("|")[1] == ""){
                     fileVer++;
-                    fileTags = `${fileName}|${tags[tags.length-1].split("|")[1]}|@ ${currentTime} V${parseFloat(fileVer).toFixed(2)}`
+                    fileTags = `${fileName}|${tags[tags.length-1].split("|")[1]}|@ ${fileTimestamp} V${parseFloat(fileVer).toFixed(2)}`
                 }else if(fileTags.split("|")[1] == tags[tags.length-1].split("|")[1]){
                     fileVer++;
-                    fileTags = `${fileName}|${tags[tags.length-1].split("|")[1]}|@ ${currentTime} V${parseFloat(fileVer).toFixed(2)}`
+                    fileTags = `${fileName}|${tags[tags.length-1].split("|")[1]}|@ ${fileTimestamp} V${parseFloat(fileVer).toFixed(2)}`
                 }else if(fileTags.split("|")[1] != tags[tags.length-1].split("|")[1]){
                     fileVer+=0.1;
-                    fileTags = `${fileName}|${req.body.tags.substring(0,req.body.tags.length-1)}|@ ${currentTime} V${parseFloat(fileVer).toFixed(2)}`
+                    fileTags = `${fileName}|${req.body.tags.substring(0,req.body.tags.length-1)}|@ ${fileTimestamp} V${parseFloat(fileVer).toFixed(2)}`
                 }
             }
             tags.push(fileTags)
@@ -217,14 +187,13 @@ router.post('/upload',  upload.single('uploadDoc'),
                             last_activity:"Upload",
                             status:"Pending",
                         }
-                        //TODO: check upload new file if it invokes the chaincode
+                        req.docdeets = docdeets;
                         // export { docdeets };
                         // localStorage.setItem('docdeets', docdeets)
                         console.log("it worked")
-                        invoke.invokeTransaction(req.session.username, req.session.admin, doc,docdeets.name, docdeets.type, docdeets.size,
+                        invoke.invokeTransaction(docdeets.name, docdeets.type, docdeets.size,
                             docdeets.tags_history, docdeets.version_num, docdeets.state_history,
                             docdeets.creator, docdeets.min_approvers);
-
                         res.redirect("/dashboard?fail=false")
                         // res.render("/dashboard", {docdeets: docdeets})
                     }else {
@@ -235,13 +204,11 @@ router.post('/upload',  upload.single('uploadDoc'),
             )
         }
 
-
     })
 
 
 
 //======================================== MIDDLEWARES ================================================================
-//QUERY MIDDLEWARE?
 async function docQuery(fileName, creator){
     const indexDef = { //copied cod lol
         index: { fields: ["name", "creator"]},
@@ -277,11 +244,6 @@ async function formatBytes(bytes, decimals = 2) { //dno if need to async
 }
 
 //======================================== X CODES ================================================================
-//======================================== X CODES ================================================================
 
 module.exports = router
 
-/**
- * 
- * 
- */

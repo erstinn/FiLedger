@@ -119,7 +119,7 @@ router.post('/', async function (req, res) {
                 console.log('APPROVER LOGGED IN');
                 req.session.username = approverRes.docs[0].username;
                 req.session.user = varemail;
-                req.session.user = true;
+                req.session.approver = true;
                 res.redirect('/dashboard');
             } else {
                 logErr = 'Incorrect Login Credentials. Please try again...';

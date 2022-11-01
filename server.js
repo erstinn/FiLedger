@@ -6,7 +6,6 @@ const generator = require('generate-password');
 const app = express();
 const session = require('express-session')
 const invoke = require('./network/chaincode/javascript/invoke')
-//todo comment out later:
 const nano = require('nano')('http://administrator:qF3ChYhp@127.0.0.1:5984/');
 // const nano = require('nano')('http://root:root@127.0.0.1:5984/');
 
@@ -39,18 +38,11 @@ app.use(express.static('public'))
 app.set('view engine', 'ejs');
 
 
-//todo commented out db
 const dbList = nano.db.list();
-// show list of databases
 dbList.then(function (dbs){
     console.log(dbs)
 })
-// databases
-const userDB = nano.db.use('users');
-const userViews = "/_design/all_users/_view/all";
-//end comment out
 
-//function for checking sign-in
 function isAuthenticated (req, res, next){
     if(req.session.user){
         next();
@@ -130,13 +122,12 @@ const api = require('./routes/api')
 app.use('/login', loginRouter)
 app.use('/logout', logoutRouter)
 app.use('/api',api)
-// added isAuthenticated function so that only authenticated sessions are able to access these pages
-app.use('/dashboard', isAuthenticated, dashboardRouter)
-app.use('/documents', isAuthenticated, isApprover, isUser, documentsRouter)
-app.use('/all-documents', isAuthenticated, isAdmin, isApprover, isUser,allDocumentsRouter)
+app.use('/dashboard', isAuthenticated, dashboardRouter);
+app.use('/documents', isAuthenticated, isApprover, isUser, documentsRouter); //TODO CONSIDERING REMOVAL
+app.use('/all-documents', isAuthenticated, allDocumentsRouter);
 app.use('/administration', isAuthenticated, isAdmin, adminRouter);
-app.use('/view-documents', isAuthenticated, isApprover, isUser,  viewDocumentsRouter)
-app.use('/registration',isAuthenticated,isAdmin, isApprover, isUser, regRouter)
+app.use('/view-documents', isAuthenticated, isApprover, isUser,  viewDocumentsRouter) //TODO CONSIDERING REMOVAL
+app.use('/registration',isAuthenticated,isAdmin, regRouter);
 
 
 //FOR DEVELOPMENT WITH NO AUTHENTICATION DO NOT REMOVE

@@ -119,21 +119,20 @@ const viewDocumentsRouter = require("./routes/view-documents")
 
 const api = require('./routes/api')
 //Mount all routers
-// app.use('/login', loginRouter)
-// app.use('/logout', logoutRouter)
-// app.use('/api',api)
-// app.use('/dashboard', isAuthenticated, dashboardRouter);
-// app.use('/documents', isAuthenticated, isApprover, isUser, documentsRouter); //TODO CONSIDERING REMOVAL
-// app.use('/all-documents', isAuthenticated, allDocumentsRouter);
-// app.use('/administration', isAuthenticated, isAdmin, adminRouter);
-// app.use('/view-documents', isAuthenticated, isApprover, isUser,  viewDocumentsRouter) //TODO CONSIDERING REMOVAL
-// app.use('/registration',isAuthenticated,isAdmin, regRouter);
-
+app.use('/login', loginRouter)
+app.use('/logout', logoutRouter)
+app.use('/api',api)
+app.use('/dashboard', isAuthenticated, dashboardRouter);
+app.use('/documents', isAuthenticated, isApprover, isUser, documentsRouter); //TODO CONSIDERING REMOVAL
+app.use('/all-documents', isAuthenticated, allDocumentsRouter);
+app.use('/administration', isAuthenticated, isAdmin, adminRouter);
+app.use('/view-documents', isAuthenticated, isApprover, isUser,  viewDocumentsRouter) //TODO CONSIDERING REMOVAL
+app.use('/registration',isAuthenticated,isAdmin, regRouter);
 
 //FOR DEVELOPMENT WITH NO AUTHENTICATION DO NOT REMOVE
-app.use('/dashboard', dashboardRouter)
-app.use('/documents', documentsRouter)
-app.use('/all-documents', allDocumentsRouter)
-app.use('/administration', adminRouter);
-app.use('/view-documents', viewDocumentsRouter)
+// app.use('/dashboard', dashboardRouter)
+// app.use('/documents', documentsRouter)
+// app.use('/all-documents', allDocumentsRouter)
+// app.use('/administration', adminRouter);
+// app.use('/view-documents', viewDocumentsRouter)
 

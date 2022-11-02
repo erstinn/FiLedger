@@ -19,28 +19,67 @@ router.get('/', function (req, res){
     res.render("dashboard", {username : req.session.username}); //after session, username
 })
 
-router.get("/accepted-docs",(req,res)=>{
-    res.render("accepted-docs",{username : req.session.username})
-})
+// router.get("/accepted-docs",(req,res)=>{
+//     res.render("accepted-docs",{username : req.session.username})
+// })
 router.get("/rejected-docs",(req,res)=>{
     res.render("rejected-docs",{username : req.session.username})
 })
+
 router.get("/pending-docs",async(req,res)=>{
-    let accepted = req.body.accept;
+    //query for fetching all docs in documents DB
     const docz = await docsDB.find({selector:{
+            _id:{
+                "$gt":null
+            }
+        }})
+
+    for(let i = 0; i<docz.docs.length;i++){
+
+    }
+    const accepted = req.body.accept;
+    const user = req.session.user;
+    const admin = req.session.admin;
+    const approver = req.session.approver;
+    const fileName = docz.docs.name;
+    const fileType = docz.docs.type;
+    const fileSize = docz.docs.size;
+    const category = docz.docs.category;
+    const tags_history = docz.docs.tags_history;
+    const version_num = docz.docs.version_num;
+    const state_history = docz.docs.state_history;
+    const creator = docz.docs.creator;
+    const min_approvers = docz.docs.min_approvers;
+    const last_activity = docz.docs.last_activity;
+    let status = docz.docs.status;
+    const rev = docz.docs._rev;
+
+
+
+    //query for updating the status in each json doc
+    const state = await docsDB.find({selector:{
         _id:{
             "$gt":null
-        }
+        },
+        "status": "Pending",
+        "name": fileName
+        // "department":
     }})
+
+
 
     if(accepted==='on'){
         console.log('not clicked');
     }else{
-        console.log("clicked")
         //TODO: if clicked, change status to accepted and
         // move the specific file to accepted page
-    }
+        // if admin and approver, may accept and reject button
+        console.log("clicked")
+        if(admin === true || approver === true){
+            status = "Accepted"
 
+        }
+    }
     // console.log(docz)
     res.render("pending-docs",{d : docz, username : req.session.username})
 })

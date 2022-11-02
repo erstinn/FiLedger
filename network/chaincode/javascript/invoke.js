@@ -69,7 +69,6 @@ async function invokeTransaction (user, isAdmin, id, fileName, fileType, fileSiz
 
 
         // let result = await contract.evaluateTransaction("getAllDocs");
-        console.log(result)
         // localStorage.removeItem('docdeets');
         // Disconnect from the gateway.
         gateway.disconnect();
@@ -145,5 +144,4 @@ async function updateTransaction(user, isAdmin, id, fileName, fileType, fileSize
     // return result;
 }
 
-module.exports = {invokeTransaction};
-module.exports = {updateTransaction};
+module.exports = {invokeTransaction, updateTransaction};

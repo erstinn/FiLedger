@@ -9,6 +9,9 @@ const userDB = nano.db.use('users');
 
 
 router.get('/',async(req,res)=>{
+    console.log(req.session.approver);
+    console.log(req.session.admin);
+    console.log(req.session.user);
     if (req.session.admin===true) {
         const documents = await docsDB.find({
             selector: {
@@ -22,19 +25,16 @@ router.get('/',async(req,res)=>{
         //TODO console.log(documents.docs[0].state_history[9]); code to access some array lol
         console.log('fk u asdklashd')
     }else if (req.session.approver===true){
-        const approver = await approverDB.find({
-            selector:{
+        //simply to make sure it's an approver, probably not needed
+        console.log(req.session.department)
+        console.log("appotasetihjrit");
+
+        const documents = await docsDB.find({
+            selector: {
                 "department": req.session.department
             }
         })
-        const responseApproverDB = await approverDB.find(approver);
-        const documents = await docsDB.find({
-            selector: {
-                "department": responseApproverDB.docs[0].department
-            }
-        })
         res.render("all-documents",{docs:documents,username : req.session.username})
-        console.log('paprover')
         console.log(documents);
     }else{
         //TODO uncomment pseudocode soon

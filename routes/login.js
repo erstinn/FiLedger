@@ -31,12 +31,11 @@ router.get('/', function (req, res){
 //Gets the data obtained from Login Form
 router.post('/', async function (req, res) {
     const varemail = req.body.email;
+    console.log(req.body.email)
+    console.log(req.body.dept)
     const passw = SHA1(req.body.password).toString(enc.Hex);
     const dept = req.body.dept;
-    const fname = req.body.fname;
-    const lname = req.body.lname;
     let logErr = '';
-
     // load the network configuration
     let mspId = "Org1MSP";
     const caURL = "org1-ca.fabric";
@@ -53,7 +52,6 @@ router.post('/', async function (req, res) {
     const wallet_admin = await Wallets.newCouchDBWallet('http://administrator:qF3ChYhp@127.0.0.1:5984/', "wallet");
     const wallet_user = await Wallets.newCouchDBWallet('http://administrator:qF3ChYhp@127.0.0.1:5984/', "wallet_users");
     const wallet_approver = await Wallets.newCouchDBWallet('http://administrator:qF3ChYhp@127.0.0.1:5984/', "wallet_approvers");
-    console.log(`Wallet path: ${walletPath}`); //dno if irrelevant if couchdb code
     //todo network/wallet connection end
 
     const indexDef = {
@@ -70,57 +68,44 @@ router.post('/', async function (req, res) {
     };
     const responseUserDB = await userDB.find(q)
     const responseAdminDB = await adminDB.find(q)
+    const responseApproverDB = await approverDB.find(q)
+        // console.log("hello")
+        // if(responseAdminDB.bookmark === 'nil')
+        //     console.log('admin not')
+        // if(responseApproverDB.bookmark === 'nil')
+        //     console.log('approver not')
+        // if(responseUserDB.bookmark === 'nil')
+        //     console.log('user not')
     //need double equal lang para gumana (di maka-access pag wrong pass)
-    if(responseUserDB.docs == '' && responseAdminDB.docs == '' || dept === undefined ){
+    if(responseUserDB.docs == '' && responseAdminDB.docs == '' && responseApproverDB.docs == '' || dept === undefined ){
         logErr = 'Incorrect Login Credentials. Please try again...';
         res.render('login', {dep:departments, logErr:logErr})//placeholder
     }else{
-        const q1 = {
-            selector: {
-                "email": varemail,
-                "password": passw,
-                "department": dept,
-                "firstname": fname,
-                "lastname": lname,
-            }
-        };
-
-        const adminRes = await adminDB.find(q1)
-        const userRes = await userDB.find(q1)
-        const approverRes = await approverDB.find(q1)
-        console.log("hello")
-        if(adminRes.bookmark !== 'nil')
-            console.log('admin not')
-        if(approverRes.bookmark !== 'nil')
-            console.log('approver not')
-        if(userRes.bookmark !== 'nil')
-            console.log('user not')
-
             //if it is an admin:
-        if(adminRes.bookmark !== 'nil'){
+        if(responseAdminDB.bookmark !== 'nil'){
             const adminIdentity = await wallet_admin.get("enroll");
             if (adminIdentity) {
-                console.log(`An identity for the user ${adminRes.docs[0].username} already exists in the wallet`);
+                console.log(`An identity for the user ${responseAdminDB.docs[0].username} already exists in the wallet`);
                 req.session.admin = true;
                 console.log('ADMIN LOGGED IN');
-                req.session.username = adminRes.docs[0].username;
+                req.session.username = responseAdminDB.docs[0].username;
                 req.session.user = varemail;
-                req.session.firstname = adminRes.docs[0].firstname;
-                req.session.lastname = adminRes.docs[0].lastname;
+                req.session.firstname = responseAdminDB.docs[0].firstname;
+                req.session.lastname = responseAdminDB.docs[0].lastname;
                 res.redirect('/dashboard');
             }
         }
         //check if approver:
-        else if(approverRes.bookmark !== 'nil') {
+        else if(responseApproverDB.bookmark !== 'nil') {
             req.session.user = varemail;
-            req.session.username = approverRes.docs[0].username;
+            req.session.username = responseApproverDB.docs[0].username;
             const approverIdentity = await wallet_approver.get(req.session.username);
             if (approverIdentity) {
                 console.log('APPROVER LOGGED IN');
-                req.session.username = approverRes.docs[0].username;
-                req.session.department = approverRes.docs[0].department;
-                req.session.firstname = approverRes.docs[0].firstname;
-                req.session.lastname = approverRes.docs[0].lastname;
+                req.session.username = responseApproverDB.docs[0].username;
+                req.session.department = responseApproverDB.docs[0].department;
+                req.session.firstname = responseApproverDB.docs[0].firstname;
+                req.session.lastname = responseApproverDB.docs[0].lastname;
                 req.session.user = varemail;
                 req.session.approver = true;
                 res.redirect('/dashboard');
@@ -130,17 +115,17 @@ router.post('/', async function (req, res) {
             }
         }
         //else if it is a user
-        else if(userRes.bookmark !== 'nil') {
+        else if(responseUserDB.bookmark !== 'nil') {
             req.session.user = varemail;
-            req.session.username = userRes.docs[0].username;
+            req.session.username = responseUserDB.docs[0].username;
             const userIdentity = await wallet_user.get(req.session.username);
             if (userIdentity) {
                 // console.log(`An identity for the user ${userRes.docs[0].username} already exists in the wallet`); //todo remove
                 console.log('USER LOGGED IN');
-                req.session.username = userRes.docs[0].username;
-                req.session.department = userRes.docs[0].department;
-                req.session.firstname = userRes.docs[0].firstname;
-                req.session.lastname = userRes.docs[0].lastname;
+                req.session.username = responseUserDB.docs[0].username;
+                req.session.department = responseUserDB.docs[0].department;
+                req.session.firstname = responseUserDB.docs[0].firstname;
+                req.session.lastname = responseUserDB.docs[0].lastname;
                 req.session.user = varemail;
                 req.session.user = true;
                 res.redirect('/dashboard');

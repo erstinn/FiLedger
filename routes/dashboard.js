@@ -62,11 +62,6 @@ var storage = multer.diskStorage({
 })
 var memStorage = multer.memoryStorage()
 const upload = multer({
-    // dest: 'uploads/', //todo change destination? or delete afterwards
-    // limits:{ //no limit on filetype as specified on paper
-    //     fileSize: 1073741824, //1gb?
-    // },
-
     storage:memStorage
 })
 
@@ -134,7 +129,7 @@ router.post('/upload',  upload.single('uploadDoc'),
             console.log('inserting')
             let uuid = await nano.uuids(1);
             let id = uuid.uuids[0];
-            fs.writeFileSync(path.resolve(__dirname, `./../uploads/${fileName}`), req.file.buffer)
+            fs.writeFileSync(path.resolve(__dirname, `/uploads/${fileName}`), req.file.buffer)
             await docsDB.insert({
                 name: fileName,
                 type: fileType,
@@ -148,40 +143,40 @@ router.post('/upload',  upload.single('uploadDoc'),
                 last_activity: "Upload",
                 status: "Pending",
             }, id)
-            fs.readFile(filePath, async (err, data) => { //dno if async
-                if (!err) {
-                    await docsDB.attachment.insert(
-                        id,
-                        fileName,
-                        data,
-                        req.file.mimetype,
-                        {rev: rev}
-                    )
-                    var docdeets = {
-                        name: fileName,
-                        type: fileType,
-                        size: fileSize,
-                        category: "standard",
-                        tags_history: fileTagsList,
-                        version_num: fileVersion,
-                        state_history: stateTimestampList,
-                        creator: fileCreator,
-                        min_approvers: fileMinApprovers,
-                        last_activity: "Upload",
-                        status: "Pending",
-                    }
-
-                    invoke.invokeTransaction(user, req.session.admin, id, docdeets.name, docdeets.type,
-                        docdeets.size, docdeets.tags_history, docdeets.version_num, docdeets.state_history,
-                        docdeets.creator, docdeets.min_approvers);
-
-                    console.log("it worked")
-                    res.redirect("/dashboard?fail=false")
-                } else {
-                    console.log("failed")
-                    res.redirect("/dashboard/?fail=true")
+            const file = fs.readFileSync(path.resolve(__dirname, `/uploads/${fileName}`));
+            // fs.readFile(filePath, async (err, data) => { //dno if async
+            if (!err) {
+                await docsDB.attachment.insert(
+                    id,
+                    fileName,
+                    data,
+                    req.file.mimetype,
+                    {rev: rev}
+                )
+                var docdeets = {
+                    name: fileName,
+                    type: fileType,
+                    size: fileSize,
+                    category: "standard",
+                    tags_history: fileTagsList,
+                    version_num: fileVersion,
+                    state_history: stateTimestampList,
+                    creator: fileCreator,
+                    min_approvers: fileMinApprovers,
+                    last_activity: "Upload",
+                    status: "Pending",
                 }
-            });
+
+                invoke.invokeTransaction(user, req.session.admin, id, docdeets.name, docdeets.type,
+                    docdeets.size, docdeets.tags_history, docdeets.version_num, docdeets.state_history,
+                    docdeets.creator, docdeets.min_approvers);
+
+                console.log("it worked")
+                res.redirect("/dashboard?fail=false")
+            } else {
+                console.log("failed")
+                res.redirect("/dashboard/?fail=true")
+            }
         } else { //TODO ======================================= UPDATING =================================================
             //TODO: CHANGE CC FUNCTION TO UPDATEDOCS INSTEAD
             console.log("updating")
@@ -189,21 +184,11 @@ router.post('/upload',  upload.single('uploadDoc'),
             const revi = findRev[0]._rev;
             const doc = findRev[0]._id;
             let fileVer = findRev[0].version_num;
-            let tags = findRev[0].tags_history
-            let stateTimestamps = findRev[0].state_history
-            var file = fs.readFileSync(path.resolve(__dirname, `./../uploads/${fileName}`))
-            if (!file.equals(req.file.buffer)) { //check if hashed
-                if (fileTags.split("|")[1] == "") {
-                    fileVer++;
-                    fileTags = `${fileName}|${tags[tags.length - 1].split("|")[1]}|@ ${fileTimestamp} V${parseFloat(fileVer).toFixed(2)}`
-                } else if (fileTags.split("|")[1] == tags[tags.length - 1].split("|")[1]) {
-                    fileVer++;
-                    fileTags = `${fileName}|${tags[tags.length - 1].split("|")[1]}|@ ${fileTimestamp} V${parseFloat(fileVer).toFixed(2)}`
-                } else if (fileTags.split("|")[1] != tags[tags.length - 1].split("|")[1]) {
-                    fileVer += 0.1;
-                    fileTags = `${fileName}|${req.body.tags.substring(0, req.body.tags.length - 1)}|@ ${fileTimestamp} V${parseFloat(fileVer).toFixed(2)}`
-                }
-            }
+            let tags = findRev[0].tags_history;
+            let stateTimestamps = findRev[0].state_history;
+            var file = fs.readFileSync(path.resolve(__dirname, `/uploads/${fileName}`));
+            console.log(file) //todo remove
+            checkFileChanges(file);
             fs.writeFileSync(path.resolve(__dirname, `./../uploads/${fileName}`), req.file.buffer);
             tags.push(fileTags);
             stateTimestamps.push(stateTimestamp);
@@ -283,6 +268,21 @@ async function docQuery(fileName, creator){
     };
     const rev = await docsDB.find(q);
     return rev.docs;
+}
+
+async function checkFileChanges(file){
+    if (!file.equals(req.file.buffer)) { //checking if same file
+        if (fileTags.split("|")[1] == "") {
+            fileVer++;
+            fileTags = `${fileName}|${tags[tags.length - 1].split("|")[1]}|@ ${fileTimestamp} V${parseFloat(fileVer).toFixed(2)}`
+        } else if (fileTags.split("|")[1] == tags[tags.length - 1].split("|")[1]) {
+            fileVer++;
+            fileTags = `${fileName}|${tags[tags.length - 1].split("|")[1]}|@ ${fileTimestamp} V${parseFloat(fileVer).toFixed(2)}`
+        } else if (fileTags.split("|")[1] != tags[tags.length - 1].split("|")[1]) {
+            fileVer += 0.1;
+            fileTags = `${fileName}|${req.body.tags.substring(0, req.body.tags.length - 1)}|@ ${fileTimestamp} V${parseFloat(fileVer).toFixed(2)}`
+        }
+    }
 }
 
 

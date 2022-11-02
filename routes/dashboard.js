@@ -25,8 +25,24 @@ router.get("/accepted-docs",(req,res)=>{
 router.get("/rejected-docs",(req,res)=>{
     res.render("rejected-docs",{username : req.session.username})
 })
-router.get("/pending-docs",(req,res)=>{
-    res.render("pending-docs",{username : req.session.username})
+router.get("/pending-docs",async(req,res)=>{
+    let accepted = req.body.accept;
+    const docz = await docsDB.find({selector:{
+        _id:{
+            "$gt":null
+        }
+    }})
+
+    if(accepted==='on'){
+        console.log('not clicked');
+    }else{
+        console.log("clicked")
+        //TODO: if clicked, change status to accepted and
+        // move the specific file to accepted page
+    }
+
+    // console.log(docz)
+    res.render("pending-docs",{d : docz, username : req.session.username})
 })
 
 //======================================== UPLOAD FILE-RELATED CODES ================================================================

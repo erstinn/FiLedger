@@ -101,11 +101,6 @@ var storage = multer.diskStorage({
 })
 var memStorage = multer.memoryStorage()
 const upload = multer({
-    // dest: 'uploads/', //todo change destination? or delete afterwards
-    // limits:{ //no limit on filetype as specified on paper
-    //     fileSize: 1073741824, //1gb?
-    // },
-
     storage:memStorage
 })
 
@@ -113,7 +108,7 @@ const upload = multer({
 // popup to confirm certain info e.g. the
 //I FIX THIS WHEN OUR UI MASTER IS FINALLY HERE
 router.post('/upload',  upload.single('uploadDoc'),
-    async function (req, res, next){
+    async function (req, res, next) {
         //todo necessary user info here esp.: privilege (if !fileCreator/admin) ; they should have no upload button
         // - category, size, type, name,
         // - tags(array), state (always DRAFT state here), path (not sure),
@@ -124,17 +119,17 @@ router.post('/upload',  upload.single('uploadDoc'),
         //init all necessary fields :
         const currentTime = new Date(Date.now());
         const fileName = req.file.originalname;
-        if (req.file.originalname===null){
+        if (req.file.originalname === null) {
             res.render('dashboard');
         }
         const fileType = path.extname(req.file.originalname); //extension; including dot
         const fileSize = await formatBytes(req.file.size);
-        const fileTimestamp = currentTime.getMonth()+1 + "/" + currentTime.getDate()+ "/" + currentTime.getFullYear() // e.g. 04/21/2000 21:32:11
-            + " " + currentTime.getHours()+ ":" + currentTime.getMinutes()+ ":" + currentTime.getSeconds();
+        const fileTimestamp = currentTime.getMonth() + 1 + "/" + currentTime.getDate() + "/" + currentTime.getFullYear() // e.g. 04/21/2000 21:32:11
+            + " " + currentTime.getHours() + ":" + currentTime.getMinutes() + ":" + currentTime.getSeconds();
         const filePath = req.file.path; //path but not needed i think
-        console.log("now",fileTimestamp)
+        console.log("now", fileTimestamp)
         let user = req.session.username
-        if(req.session.admin === true){
+        if (req.session.admin === true) {
             user = 'enroll'
             console.log('ADMIN DITO STAN NCT POTA')
         }
@@ -143,19 +138,19 @@ router.post('/upload',  upload.single('uploadDoc'),
         let fileVersion = 1.0; //TODO when findDuplicate() for doc is implemented (auto increment INTEGER if duplicate)
         const fileMinApprovers = 1; //TODO when UI for this is implemented
         const state = "Draft"; //TODO when UI is implemented
-        const stateTimestamp = state + " @ " + fileTimestamp ; // @ to separate values later
+        const stateTimestamp = state + " @ " + fileTimestamp; // @ to separate values later
         // const qName = await userDB.find({selector:{"username":req.session.username}})
         // const fileCreator = `${await qName.docs[0].firstname} ${await qName.docs[0].lastname}`; //TODO implement once sessions
         const fileCreator = `${req.session.userfname} ${req.session.userlname}`;
         let fileTagsList = []
         let stateTimestampList = []
-        let fileTags = `${fileName}|${req.body.tags.substring(0,req.body.tags.length-1)}|@ ${fileTimestamp} V${parseFloat(fileVersion).toFixed(2)}`
+        let fileTags = `${fileName}|${req.body.tags.substring(0, req.body.tags.length - 1)}|@ ${fileTimestamp} V${parseFloat(fileVersion).toFixed(2)}`
         fileTagsList.push(fileTags)
         stateTimestampList.push(stateTimestamp)
 
         //created another index for querying if there is an existing file
         const indexDef = { //copied cod lol
-            index: { fields: ["name", "creator"]},
+            index: {fields: ["name", "creator"]},
             type: "json",
             name: "doc-rev-index"
         }
@@ -169,11 +164,11 @@ router.post('/upload',  upload.single('uploadDoc'),
         };
         const rev = await docsDB.find(q);
 
-        if(rev.docs == ''){
+        if (rev.docs == '') {
             console.log('inserting')
             let uuid = await nano.uuids(1);
             let id = uuid.uuids[0];
-            fs.writeFileSync(path.resolve(__dirname,`./../uploads/${fileName}`),req.file.buffer)
+            fs.writeFileSync(path.resolve(__dirname, `/uploads/${fileName}`), req.file.buffer)
             await docsDB.insert({
                 name: fileName,
                 type: fileType,
@@ -184,60 +179,58 @@ router.post('/upload',  upload.single('uploadDoc'),
                 state_history: stateTimestampList,
                 creator: fileCreator,
                 min_approvers: fileMinApprovers,
-                last_activity:"Upload",
-                status:"Pending",
-            }, id,function (err, response){
-                if(!err){
-                    var docdeets = {
-                        name: fileName,
-                        type: fileType,
-                        size: fileSize,
-                        category: "standard",
-                        tags_history: fileTagsList,
-                        version_num: fileVersion,
-                        state_history: stateTimestampList,
-                        creator: fileCreator,
-                        min_approvers: fileMinApprovers,
-                        last_activity:"Upload",
-                        status:"Pending",
-                    }
-
-                    invoke.invokeTransaction(user, req.session.admin, id, docdeets.name, docdeets.type,
-                        docdeets.size, docdeets.tags_history, docdeets.version_num, docdeets.state_history,
-                        docdeets.creator, docdeets.min_approvers);
-
-                    console.log("it worked")
-                    res.redirect("/dashboard?fail=false")
-                }else {
-                    console.log("failed")
-                    res.redirect("/dashboard/?fail=true")
+                last_activity: "Upload",
+                status: "Pending",
+            }, id)
+            const file = fs.readFileSync(path.resolve(__dirname, `/uploads/${fileName}`));
+            // fs.readFile(filePath, async (err, data) => { //dno if async
+            if (!err) {
+                await docsDB.attachment.insert(
+                    id,
+                    fileName,
+                    data,
+                    req.file.mimetype,
+                    {rev: rev}
+                )
+                var docdeets = {
+                    name: fileName,
+                    type: fileType,
+                    size: fileSize,
+                    category: "standard",
+                    tags_history: fileTagsList,
+                    version_num: fileVersion,
+                    state_history: stateTimestampList,
+                    creator: fileCreator,
+                    min_approvers: fileMinApprovers,
+                    last_activity: "Upload",
+                    status: "Pending",
                 }
-            })
-        }else{
+
+                invoke.invokeTransaction(user, req.session.admin, id, docdeets.name, docdeets.type,
+                    docdeets.size, docdeets.tags_history, docdeets.version_num, docdeets.state_history,
+                    docdeets.creator, docdeets.min_approvers);
+
+                console.log("it worked")
+                res.redirect("/dashboard?fail=false")
+            } else {
+                console.log("failed")
+                res.redirect("/dashboard/?fail=true")
+            }
+        } else { //TODO ======================================= UPDATING =================================================
             //TODO: CHANGE CC FUNCTION TO UPDATEDOCS INSTEAD
             console.log("updating")
             const findRev = await docQuery(fileName, fileCreator);
             const revi = findRev[0]._rev;
             const doc = findRev[0]._id;
             let fileVer = findRev[0].version_num;
-            let tags = findRev[0].tags_history
-            let stateTimestamps = findRev[0].state_history
-            var file = fs.readFileSync(path.resolve(__dirname,`./../uploads/${fileName}`))
-            if(!file.equals(req.file.buffer)){
-                if(fileTags.split("|")[1] == ""){
-                    fileVer++;
-                    fileTags = `${fileName}|${tags[tags.length-1].split("|")[1]}|@ ${fileTimestamp} V${parseFloat(fileVer).toFixed(2)}`
-                }else if(fileTags.split("|")[1] == tags[tags.length-1].split("|")[1]){
-                    fileVer++;
-                    fileTags = `${fileName}|${tags[tags.length-1].split("|")[1]}|@ ${fileTimestamp} V${parseFloat(fileVer).toFixed(2)}`
-                }else if(fileTags.split("|")[1] != tags[tags.length-1].split("|")[1]){
-                    fileVer+=0.1;
-                    fileTags = `${fileName}|${req.body.tags.substring(0,req.body.tags.length-1)}|@ ${fileTimestamp} V${parseFloat(fileVer).toFixed(2)}`
-                }
-            }
-            fs.writeFileSync(path.resolve(__dirname,`./../uploads/${fileName}`),req.file.buffer)
-            tags.push(fileTags)
-            stateTimestamps.push(stateTimestamp)
+            let tags = findRev[0].tags_history;
+            let stateTimestamps = findRev[0].state_history;
+            var file = fs.readFileSync(path.resolve(__dirname, `/uploads/${fileName}`));
+            console.log(file) //todo remove
+            checkFileChanges(file);
+            fs.writeFileSync(path.resolve(__dirname, `./../uploads/${fileName}`), req.file.buffer);
+            tags.push(fileTags);
+            stateTimestamps.push(stateTimestamp);
             await docsDB.insert({
                     name: fileName,
                     type: fileType,
@@ -249,11 +242,21 @@ router.post('/upload',  upload.single('uploadDoc'),
                     creator: fileCreator,
                     min_approvers: fileMinApprovers,
                     _rev: revi,
-                    last_activity:"Upload",
-                    status:"Pending",
-                },doc,
-                function (err, response){
-                    if(!err){
+                    last_activity: "Upload",
+                    status: "Pending",
+                }, doc,
+                function (err, response) {
+                    if (!err) { //todo dana idk if mappush literal file sa ledger, hopefully hndi
+                        fs.readFile(filePath, async (err, data) => { //dno if async
+                            await docsDB.attachment.insert(
+                                id,
+                                fileName,
+                                data,
+                                req.file.mimetype,
+                                {rev: rev}
+                            )
+                        });
+
                         var docdeets = {
                             name: fileName,
                             type: fileType,
@@ -265,24 +268,24 @@ router.post('/upload',  upload.single('uploadDoc'),
                             creator: fileCreator,
                             min_approvers: fileMinApprovers,
                             _rev: revi,
-                            last_activity:"Upload",
-                            status:"Pending",
+                            last_activity: "Upload",
+                            status: "Pending",
                         }
 
                         console.log("it worked")
                         invoke.updateTransaction(user, req.session.admin, doc, docdeets.name, docdeets.type, docdeets.size,
                             docdeets.tags_history, docdeets.version_num, docdeets.creator,
-                            docdeets.min_approvers, docdeets.state_history );
+                            docdeets.min_approvers, docdeets.state_history);
 
                         res.redirect("/dashboard?fail=false")
-                    }else {
+                    } else {
                         console.log("failed")
                         res.redirect("/dashboard/?fail=true")
                     }
                 }
             )
-        }
 
+        }
     })
 
 
@@ -306,9 +309,23 @@ async function docQuery(fileName, creator){
     return rev.docs;
 }
 
+async function checkFileChanges(file){
+    if (!file.equals(req.file.buffer)) { //checking if same file
+        if (fileTags.split("|")[1] == "") {
+            fileVer++;
+            fileTags = `${fileName}|${tags[tags.length - 1].split("|")[1]}|@ ${fileTimestamp} V${parseFloat(fileVer).toFixed(2)}`
+        } else if (fileTags.split("|")[1] == tags[tags.length - 1].split("|")[1]) {
+            fileVer++;
+            fileTags = `${fileName}|${tags[tags.length - 1].split("|")[1]}|@ ${fileTimestamp} V${parseFloat(fileVer).toFixed(2)}`
+        } else if (fileTags.split("|")[1] != tags[tags.length - 1].split("|")[1]) {
+            fileVer += 0.1;
+            fileTags = `${fileName}|${req.body.tags.substring(0, req.body.tags.length - 1)}|@ ${fileTimestamp} V${parseFloat(fileVer).toFixed(2)}`
+        }
+    }
+}
+
 
 //======================================== EXTRA FUNCS ================================================================
-
 //src: https://stackoverflow.com/questions/15900485/correct-way-to-convert-size-in-bytes-to-kb-mb-gb-in-javascript
 async function formatBytes(bytes, decimals = 2) { //dno if need to async
     if (bytes === 0) return '0 Bytes';
@@ -324,5 +341,5 @@ async function formatBytes(bytes, decimals = 2) { //dno if need to async
 
 //======================================== X CODES ================================================================
 
-module.exports = router
+module.exports = router;
 

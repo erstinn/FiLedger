@@ -105,8 +105,8 @@ router.post('/', async function (req, res) {
                 console.log('ADMIN LOGGED IN');
                 req.session.username = adminRes.docs[0].username;
                 req.session.user = varemail;
-                req.session.userfname = adminRes.docs[0].firstname;
-                req.session.userlname = adminRes.docs[0].lastname;
+                req.session.firstname = adminRes.docs[0].firstname;
+                req.session.lastname = adminRes.docs[0].lastname;
                 res.redirect('/dashboard');
             }
         }
@@ -118,6 +118,9 @@ router.post('/', async function (req, res) {
             if (approverIdentity) {
                 console.log('APPROVER LOGGED IN');
                 req.session.username = approverRes.docs[0].username;
+                req.session.department = approverRes.docs[0].department;
+                req.session.firstname = approverRes.docs[0].firstname;
+                req.session.lastname = approverRes.docs[0].lastname;
                 req.session.user = varemail;
                 req.session.approver = true;
                 res.redirect('/dashboard');
@@ -135,6 +138,9 @@ router.post('/', async function (req, res) {
                 // console.log(`An identity for the user ${userRes.docs[0].username} already exists in the wallet`); //todo remove
                 console.log('USER LOGGED IN');
                 req.session.username = userRes.docs[0].username;
+                req.session.department = userRes.docs[0].department;
+                req.session.firstname = userRes.docs[0].firstname;
+                req.session.lastname = userRes.docs[0].lastname;
                 req.session.user = varemail;
                 req.session.user = true;
                 res.redirect('/dashboard');

@@ -34,50 +34,77 @@ router.get("/pending-docs",async(req,res)=>{
             }
         }})
 
-    for(let i = 0; i<docz.docs.length;i++){
 
-    }
-    const accepted = req.body.accept;
     const user = req.session.user;
     const admin = req.session.admin;
     const approver = req.session.approver;
-    const fileName = docz.docs.name;
-    const fileType = docz.docs.type;
-    const fileSize = docz.docs.size;
-    const category = docz.docs.category;
-    const tags_history = docz.docs.tags_history;
-    const version_num = docz.docs.version_num;
-    const state_history = docz.docs.state_history;
-    const creator = docz.docs.creator;
-    const min_approvers = docz.docs.min_approvers;
-    const last_activity = docz.docs.last_activity;
-    let status = docz.docs.status;
-    const rev = docz.docs._rev;
-
-
 
     //query for updating the status in each json doc
     const state = await docsDB.find({selector:{
         _id:{
             "$gt":null
         },
-        "status": "Pending",
-        "name": fileName
+        "status": req.params.status,
+        "name": req.params.name
         // "department":
     }})
 
+    for(let i = 0; i<state.docs.length;i++) {
+        const accepted = req.body[i].accept;
+        const doc = state.docs[i]._id;
+        const fileCreator = state.docs[i].creator;
+        const fileName = state.docs[i].name;
+        const fileType = state.docs[i].type;
+        const fileSize = state.docs[i].size;
+        const category = state.docs[i].category;
+        const tags_history = state.docs[i].tags_history;
+        const version_num = state.docs[i].version_num;
+        const state_history = state.docs[i].state_history;
+        const min_approvers = state.docs[i].min_approvers;
+        const dept = state.docs[i].department; //to be added
+        const last_activity = state.docs[i].last_activity; //not sure if kasama pa
+        let status = state.docs[i].status;
+        const rev = state.docs[i]._rev;
 
+        console.log("fileName",fileName);
+        //dapat off muna
+        console.log("status for accepted", accepted);
 
-    if(accepted==='on'){
-        console.log('not clicked');
-    }else{
-        //TODO: if clicked, change status to accepted and
-        // move the specific file to accepted page
-        // if admin and approver, may accept and reject button
-        console.log("clicked")
-        if(admin === true || approver === true){
-            status = "Accepted"
+        //check only the content of status of the doc
+        console.log("status", status);
+        if (accepted === 'on') {
+            console.log('not clicked');
+        } else {
+            //TODO: if clicked, change status to accepted and
+            // move the specific file to accepted page
+            // if admin and approver, may accept and reject button
+            console.log("clicked")
+            if (admin === true || approver === true) {
+                console.log("status for accepted", accepted);
+                status = "Accepted";
+                await docsDB.insert({
+                    name: fileName,
+                    type: fileType,
+                    size: fileSize,
+                    category: category,
+                    tags_history: tags_history,
+                    version_num: version_num, //finally updates
+                    state_history: state_history,
+                    creator: fileCreator,
+                    min_approvers: min_approvers,
+                    department: dept,
+                    _rev: rev,
+                    // last_activity: "Upload", //TODO: if kaya (not prio)
+                    status: status,
+                }, doc, function (err) {
+                    if (!err) {
+                        console.log("success status update")
+                    } else {
+                        console.log(err)
+                    }
+                })
 
+            }
         }
     }
     // console.log(docz)

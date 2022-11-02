@@ -42,7 +42,7 @@
                             <td></td> <!--tags-->
                             <td></td> <!--  departments (to be added in DB structure)-->
                             <td><%=d.docs[i].size%></td>
-                            <td><button class="accept" name="accept" >Accept</button><button class="reject">Reject</button> </td>
+                            <td><button class="accept" name="accept" value="<%=d.docs[i].name%>">Accept</button><button class="reject">Reject</button> </td>
                         </tr>
                         <%}%>
                     </table>

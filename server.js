@@ -54,6 +54,18 @@ function isAuthenticated (req, res, next){
         res.render('no-access', {checkSession: checkSession});
     }
 }
+
+function isLoggedIn (req, res, next){
+    if(!req.session.user){
+        next();
+        console.log('no session')
+    }
+    else{
+        console.log("with session");
+        res.redirect('/dashboard');
+    }
+}
+
 //checking if admin. will change it soon tho
 function isAdmin (req, res, next){
     if(req.session.admin === true){
@@ -96,8 +108,13 @@ app.get('/header', function (req, res){
     res.render("header");
 })
 
-app.get('/', function (req, res){
-    res.render("index");
+app.get('/', function (req, res, next){
+    if(!req.session.user){
+        res.render("index");
+    }
+    else{
+        res.redirect('/dashboard');
+    }
 })
 
 
@@ -119,21 +136,21 @@ const viewDocumentsRouter = require("./routes/view-documents")
 
 const api = require('./routes/api')
 //Mount all routers
-// app.use('/login', loginRouter)
-// app.use('/logout', logoutRouter)
-// app.use('/api',api)
-// app.use('/dashboard', isAuthenticated, dashboardRouter);
-// app.use('/documents', isAuthenticated, isApprover, isUser, documentsRouter); //TODO CONSIDERING REMOVAL
-// app.use('/all-documents', isAuthenticated, allDocumentsRouter);
-// app.use('/administration', isAuthenticated, isAdmin, adminRouter);
-// app.use('/view-documents', isAuthenticated, isApprover, isUser,  viewDocumentsRouter) //TODO CONSIDERING REMOVAL
-// app.use('/registration',isAuthenticated,isAdmin, regRouter);
+app.use('/login',isLoggedIn , loginRouter)
+app.use('/logout', logoutRouter)
+app.use('/api',api)
+app.use('/dashboard', isAuthenticated, dashboardRouter);
+app.use('/documents', isAuthenticated, isApprover, isUser, documentsRouter); //TODO CONSIDERING REMOVAL
+app.use('/all-documents', isAuthenticated, allDocumentsRouter);
+app.use('/administration', isAuthenticated, isAdmin, adminRouter);
+app.use('/view-documents', isAuthenticated, isApprover, isUser,  viewDocumentsRouter) //TODO CONSIDERING REMOVAL
+app.use('/registration',isAuthenticated,isAdmin, regRouter);
 
 
 //FOR DEVELOPMENT WITH NO AUTHENTICATION DO NOT REMOVE
-app.use('/dashboard', dashboardRouter)
-app.use('/documents', documentsRouter)
-app.use('/all-documents', allDocumentsRouter)
-app.use('/administration', adminRouter);
-app.use('/view-documents', viewDocumentsRouter)
+// app.use('/dashboard', dashboardRouter)
+// app.use('/documents', documentsRouter)
+// app.use('/all-documents', allDocumentsRouter)
+// app.use('/administration', adminRouter);
+// app.use('/view-documents', viewDocumentsRouter)
 

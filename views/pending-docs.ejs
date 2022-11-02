@@ -5,6 +5,7 @@
     <link rel="stylesheet" href="/css/pending-docs.css">
     <link rel="stylesheet" href="/css/navbar.css">
     <!-- <script src="/js/dashboard.js" defer></script> -->
+    <script src="/js/pending-docs.js" defer></script>
     <script src="/js/navbar.js" defer></script>
 
     </head>
@@ -27,22 +28,6 @@
                             <th>File Size</th>
                         </tr>
                         <%for(var i=0;i<d.docs.length;i++){%>
-                        <tr class="data" onclick="viewDoc('<%=d.docs[i]._id%>')">
-                            <td>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                                    class="bi bi-files" viewBox="0 0 16 16">
-                                    <path
-                                        d="M13 0H6a2 2 0 0 0-2 2 2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2 2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm0 13V4a2 2 0 0 0-2-2H5a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1zM3 4a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4z" />
-                                </svg>
-                            </td>
-                            <td><%=d.docs[i].name%></td>
-                            <td> </td> todo: date when the doc was uploaded
-                            <td><%=d.docs[i].creator%></td>
-                            <td>&nbsp;</td>
-                            <td><%=d.docs[i].size%></td>
-                            <td><button class="accept">Accept</button><button class="reject">Reject</button> </td>
-                        </tr>
-                        <%}%>
                         <tr class="data">
                             <td>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
@@ -51,21 +36,25 @@
                                         d="M13 0H6a2 2 0 0 0-2 2 2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2 2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm0 13V4a2 2 0 0 0-2-2H5a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1zM3 4a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4z" />
                                 </svg>
                             </td>
-                            <td>Document 1</td>
-                            <td>07/17/2022 - 12:54</td>
-                            <td>Decano</td>
-                            <td>&nbsp;</td>
-                            <td>5 MB</td>
-                            <td><button class="accept">Accept</button><button class="reject">Reject</button> </td>
+                            <td><%=d.docs[i].name%></td>
+                            <td><%=d.docs[i].state_history[d.docs[i].state_history.length-1].slice()%> </td>
+                            <td><%=d.docs[i].creator%></td>
+                            <td></td> <!--tags-->
+                            <td><%=d.docs[i].size%></td>
+                            <td><button class="accept" name="accept" >Accept</button><button class="reject">Reject</button> </td>
                         </tr>
+                        <%}%>
                     </table>
+                    <%for(let i=1;i <= Math.round(d.docs.length/3);i++){%>
+                    <button><%=i%></button>
+                    <%}%>
             </div>
             </div>
     </body>
 
 
 
-
+<!--TODO: if not admin, show the table below-->
 
 
 

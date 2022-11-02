@@ -14,6 +14,7 @@ router.get('/',async(req,res)=>{
             "$gt":null
         }
     }})
+    console.log(documents)
     res.render("all-documents",{docs:documents,username : req.session.username})
 })
 

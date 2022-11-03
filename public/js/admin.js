@@ -11,48 +11,20 @@ const nameUser = document.querySelector(".name-user");
 const departmentUser = document.querySelector(".department-user");
 const tableTitle = document.querySelector(".userList-header");
 
-const users = [
-    {
-        name:"Mark",
-        department:"CS",
-        document:1
-    },
-    {
-        name:"Dav",
-        department:"CS",
-        document:999
-    },
-    {
-        name:"Thor",
-        department:"MMA",
-        document:0
-    },
-    {
-        name:"Berbaderg",
-        department:"MMA",
-        document:1200
-    },
-    {
-        name:"TamTam",
-        department:"Engineering",
-        document:10000
-    },
-]
-
-const documents = [
-    {
-        title:"Document 1",
-        numUser:5
-    },
-    {
-        title:"Document 2",
-        numUser:9
-    },
-    {
-        title:"Document 3",
-        numUser:10
-    }
-]
+async function getUsers(){
+    const response = await fetch('/api/users',{method:"POST",headers:{'access':'admin'}})
+    let users = await response.json()
+    users = JSON.stringify(users);
+    users = JSON.parse(users);
+    return users;
+}
+async function getDocs(){
+    const response = await fetch('/api/docs',{method:"POST",headers:{'access':'admin'}})
+    let docs = await response.json()
+    docs = JSON.stringify(docs);
+    docs = JSON.parse(docs);
+    return docs;
+}
 
 async function main(){
     let users = await getUsers();
@@ -137,18 +109,20 @@ async function main(){
     function generateDocsTable(item){
         let newData = document.createElement("tr");
         newData.classList.add('docData');
-
         let newTitle = document.createElement("td");
         newTitle.classList.add("docTitle");
         newTitle.innerHTML = item.name
+        let newDocType = document.createElement("td");
+        newDocType.classList.add("docType");
+        newDocType.innerHTML = item.category;
+        let newNumUsers = document.createElement("td");
+        newNumUsers.classList.add("numUser");
+        newNumUsers.innerHTML = 100;
 
-    let newNumUsers = document.createElement("td");
-    newNumUsers.classList.add("numUser");
-    newNumUsers.innerHTML = item.numUser;
 
-
-    newData.appendChild(newTitle);
-    newData.appendChild(newNumUsers);
+        newData.appendChild(newTitle);
+        newData.appendChild(newDocType)
+        newData.appendChild(newNumUsers);
 
         documentList.appendChild(newData);
 
@@ -157,8 +131,8 @@ async function main(){
         modal.classList.remove("inactive")
         document.querySelector("body").style.overflowY = "hidden"
         scrollTo(0,0)
-        nameUser.textContent = item.title
-        departmentUser.textContent = `User associated with ${item.title}`
+        nameUser.textContent = item.name
+        departmentUser.textContent = `User associated with ${item.name}`
 
     })
 }
@@ -270,5 +244,5 @@ async function main(){
 }
 main()
 
-}
-main()
+// }
+// main()

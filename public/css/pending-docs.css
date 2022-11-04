@@ -4,19 +4,20 @@
     box-sizing: border-box;
 }
 .main-cont {
-    padding-bottom: 10vw;
+    padding-bottom: .5vw;
 }
 .pendingDocs-list {
     width: 95vw;
     height: 80vh;
-    margin: 10vh auto;
+    margin: 5vh auto 2vh auto;
     display: flex;
     flex-direction: column;
+    border: 1px solid black;
+    border-radius: 5px 5px 0px 0px;
 }
 .pendingDocs-table {
     width: 100%;
     border-collapse: collapse;
-    border: 1px solid black;
 }
 .pendingDocs-table svg {
     vertical-align: middle;
@@ -32,14 +33,10 @@ tr {
 .table-title {
     background-color: #61c6c6;
     padding: 0.2vw;
-    border-top: 1px solid black;
-    border-left: 1px solid black;
-    border-right: 1px solid black;
     text-align: center;
     color: white;
     font-weight: 600;
     font-size: 1.5vw;
-    border-radius: 5px 5px 0px 0px;
 }
 .data td:first-child {
     text-align: center;
@@ -140,3 +137,23 @@ tr {
     width: 100%;
 }
 
+
+.pagesButton{
+    border: 1px solid rgb(134, 134, 134);
+    height: 2vw;
+    width: 2vw;
+    background-color: white;
+    cursor: pointer;
+    border-radius: 4px;
+}
+.pagesButton:hover{
+    background-color: #61C6C6;
+    border: none;
+    color:white
+}
+
+.pages{
+    display: flex;
+    justify-content: center;
+    gap: 1vw;
+}

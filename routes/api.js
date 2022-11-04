@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
-// const nano = require('nano')('http://root:root@127.0.0.1:5984/');
-const nano = require('nano')('http://administrator:qF3ChYhp@127.0.0.1:5984/');
+const nano = require('nano')('http://root:root@127.0.0.1:5984/');
+// const nano = require('nano')('http://administrator:qF3ChYhp@127.0.0.1:5984/');
 const userdb = nano.db.use('users');
 const docsdb = nano.db.use('documents');
 const bodyParser = require('body-parser')
@@ -52,6 +52,42 @@ router.put('/insert-docs',async(req,res)=>{
             res.sendStatus(201)
         }
     });
+})
+
+router.post('/acceptDocs',async(req,res)=>{
+    if(req.headers.access =="admin"){
+        const docs = await docsdb.get(req.body.docId);
+        docs.status = "Accepted"
+
+        await docsdb.insert(docs,req.body.docId,err=>{
+            if(err){
+                res.send(err)
+            }
+            else{
+                res.send(true)
+            }
+        })
+    }else{
+        res.status(401).send("Unauthorized Access");
+    }
+})
+
+router.post('/rejectDocs',async(req,res)=>{
+    if(req.headers.access =="admin"){
+        const docs = await docsdb.get(req.body.docId);
+        docs.status = "Rejected"
+
+        await docsdb.insert(docs,req.body.docId,err=>{
+            if(err){
+                res.send(err)
+            }
+            else{
+                res.send(true)
+            }
+        })
+    }else{
+        res.status(401).send("Unauthorized Access");
+    }
 })
 
 module.exports = router

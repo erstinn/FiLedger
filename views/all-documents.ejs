@@ -26,11 +26,12 @@
                     <div class="sortInput">
                         <label for="sortBy">Sort by:</label>
                         <select name="sortBy" id="sortBy" class="sortBy" onchange="location = `<%=page%>?sort=${this.value}`;">
-                            <option value="title">Title</option>
-                            <option value="date">Date</option>
-                            <option value="size">Size</option>
-                            <option value="type">File Type</option>
-                            <option value="author">Author</option>
+                            <option value="" selected hidden disabled>Choose one...</option>
+                            <option value="title" class="opt">Title</option>
+                            <option value="date" class="opt">Date</option>
+                            <option value="size" class="opt">Size</option>
+                            <option value="type" class="opt">File Type</option>
+                            <option value="author" class="opt">Author</option>
                         </select>
 
                     </div>

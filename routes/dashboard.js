@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
-const fs = require("fs") //remove?
-// const path = require('path')
+const fs = require("fs")
+const path = require('path')
 const myFunc = require('../public/js/pending-docs');
 
 // databases
@@ -89,6 +89,7 @@ router.post('/upload',  upload.single('uploadDoc'),
             res.render('dashboard');
         }
         const fileType = path.extname(req.file.originalname); //extension; including dot
+        console.log(path.extname(req.file.originalname))
         const fileSize = await formatBytes(req.file.size);
         const fileTimestamp = currentTime.getMonth() + 1 + "/" + currentTime.getDate() + "/" + currentTime.getFullYear() // e.g. 04/21/2000 21:32:11
             + " " + currentTime.getHours() + ":" + currentTime.getMinutes() + ":" + currentTime.getSeconds();

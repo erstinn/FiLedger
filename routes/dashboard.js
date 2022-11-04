@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router()
 const fs = require("fs") //remove?
 // const path = require('path')
-const myFunc = require('/public/js/pending-docs');
+const myFunc = require('../public/js/pending-docs');
 
 // databases
 const nano = require('nano')('http://administrator:qF3ChYhp@127.0.0.1:5984/');

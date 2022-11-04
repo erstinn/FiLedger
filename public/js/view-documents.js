@@ -31,7 +31,7 @@ const users = [
     },
 ];
 
-const data = document.querySelectorAll('.data');
+let data = document.querySelectorAll('.data');
 const revertButt = document.querySelector('.revert');
 data.forEach(item => {
     item.addEventListener('click', () => {

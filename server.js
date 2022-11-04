@@ -133,8 +133,8 @@ const documentsRouter = require("./routes/documents")
 const allDocumentsRouter = require("./routes/all-documents")
 const adminRouter = require("./routes/administration")
 const viewDocumentsRouter = require("./routes/view-documents")
-
 const api = require('./routes/api')
+// const pendingDocs = require('./routes/pending-docs')
 //Mount all routers
 app.use('/login',isLoggedIn , loginRouter)
 app.use('/logout', logoutRouter)
@@ -145,7 +145,8 @@ app.use('/all-documents', isAuthenticated, allDocumentsRouter);
 app.use('/administration', isAuthenticated, isAdmin, adminRouter);
 app.use('/view-documents', isAuthenticated, isApprover, isUser,  viewDocumentsRouter) //TODO CONSIDERING REMOVAL
 app.use('/registration',isAuthenticated,isAdmin, regRouter);
-
+// app.use('/pending-docs', isAuthenticated, pendingDocs)
+// app.use('/pending-docs', isAuthenticated, myFunc);
 
 //FOR DEVELOPMENT WITH NO AUTHENTICATION DO NOT REMOVE
 // app.use('/dashboard', dashboardRouter)

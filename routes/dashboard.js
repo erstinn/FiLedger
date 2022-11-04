@@ -1,8 +1,8 @@
 const express = require('express')
 const router = express.Router()
 const fs = require("fs") //remove?
-const path = require('path')
-
+// const path = require('path')
+const myFunc = require('/public/js/pending-docs');
 
 // databases
 const nano = require('nano')('http://administrator:qF3ChYhp@127.0.0.1:5984/');
@@ -33,8 +33,7 @@ router.get("/pending-docs",async(req,res)=>{
                 "$gt":null
             }
         }})
-
-
+    const accepted = req.body.accept;
     const user = req.session.user;
     const admin = req.session.admin;
     const approver = req.session.approver;
@@ -48,67 +47,7 @@ router.get("/pending-docs",async(req,res)=>{
         "name": req.params.name
         // "department":
     }})
-
-    for(let i = 0; i<state.docs.length;i++) {
-        const accepted = req.body[i].accept;
-        const doc = state.docs[i]._id;
-        const fileCreator = state.docs[i].creator;
-        const fileName = state.docs[i].name;
-        const fileType = state.docs[i].type;
-        const fileSize = state.docs[i].size;
-        const category = state.docs[i].category;
-        const tags_history = state.docs[i].tags_history;
-        const version_num = state.docs[i].version_num;
-        const state_history = state.docs[i].state_history;
-        const min_approvers = state.docs[i].min_approvers;
-        const dept = state.docs[i].department; //to be added
-        const last_activity = state.docs[i].last_activity; //not sure if kasama pa
-        let status = state.docs[i].status;
-        const rev = state.docs[i]._rev;
-
-        console.log("fileName",fileName);
-        //dapat off muna
-        console.log("status for accepted", accepted);
-
-        //check only the content of status of the doc
-        console.log("status", status);
-        if (accepted === 'on') {
-            console.log('not clicked');
-        } else {
-            //TODO: if clicked, change status to accepted and
-            // move the specific file to accepted page
-            // if admin and approver, may accept and reject button
-            console.log("clicked")
-            if (admin === true || approver === true) {
-                console.log("status for accepted", accepted);
-                status = "Accepted";
-                await docsDB.insert({
-                    name: fileName,
-                    type: fileType,
-                    size: fileSize,
-                    category: category,
-                    tags_history: tags_history,
-                    version_num: version_num, //finally updates
-                    state_history: state_history,
-                    creator: fileCreator,
-                    min_approvers: min_approvers,
-                    department: dept,
-                    _rev: rev,
-                    // last_activity: "Upload", //TODO: if kaya (not prio)
-                    status: status,
-                }, doc, function (err) {
-                    if (!err) {
-                        console.log("success status update")
-                    } else {
-                        console.log(err)
-                    }
-                })
-
-            }
-        }
-    }
-    // console.log(docz)
-    res.render("pending-docs",{d : docz, username : req.session.username})
+    res.render("pending-docs", {f: myFunc, d: docz, username: req.session.username})
 })
 
 //======================================== UPLOAD FILE-RELATED CODES ================================================================

@@ -7,7 +7,6 @@ const approverDB = nano.db.use('approvers');
 const userDB = nano.db.use('users');
 
 
-
 router.get('/',async(req,res)=>{
     console.log(req.session.approver);
     console.log(req.session.admin);

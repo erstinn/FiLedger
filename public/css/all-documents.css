@@ -18,13 +18,12 @@ a{
     padding-bottom: 5vw;
 }
 .documents-container{
-    height: 100%;
+    height: 85vh;
     display: flex;
     width: 100%;
     padding: .5vh;
     flex-direction: column;
     gap:.2vh;
-
 }
 
 
@@ -34,7 +33,6 @@ a{
     overflow-y: auto;
     border: 1px solid black;
     border-radius:5px 5px 0px 0px;
-
 }
 
 
@@ -55,6 +53,11 @@ a{
     border-bottom: 1px solid black;
 }
 
+.th:nth-child(2),td:nth-child(2){
+    max-width: 25vw;
+    overflow-y: hidden;
+}
+
 .uploaded-docs::-webkit-scrollbar{
     width:5px;
 }
@@ -69,6 +72,7 @@ a{
     color:white;
     font-size: 1.2vw;
     display: flex;
+    position: relative;
 }
 .table-title svg{
     width: 1.2vw;
@@ -86,5 +90,36 @@ a{
     border-radius: 5px;
 }
 
+.pagesButton{
+    border: 1px solid rgb(134, 134, 134);
+    height: 2vw;
+    width: 2vw;
+    background-color: white;
+    cursor: pointer;
+    border-radius: 4px;
+}
+.pagesButton:hover{
+    background-color: #61C6C6;
+    border: none;
+    color:white
+}
 
+.pages{
+    display: flex;
+    justify-content: center;
+    gap: 1vw;
+}
 
+.sortInput{
+    position: absolute;
+    right:2vw;
+}
+.sortInput label{
+    color:white
+}
+
+.sortBy{
+    background-color: white;
+    padding:.1vw;
+    border:none
+}

@@ -97,13 +97,13 @@ async function main(){
         newData.appendChild(newNumDocs);
         usersList.appendChild(newData)
 
-    newData.addEventListener("click",()=>{
-        modal.classList.remove("inactive")
-        document.querySelector("body").style.overflowY = "hidden"
-        scrollTo(0,0)
-        nameUser.textContent = item.name
-        departmentUser.textContent = item.department
-    })
+        newData.addEventListener("click",()=>{
+            modal.classList.remove("inactive")
+            document.querySelector("body").style.overflowY = "hidden"
+            scrollTo(0,0)
+            nameUser.textContent = item.name
+            departmentUser.textContent = item.department
+        })
 
     }
     function generateDocsTable(item){
@@ -127,15 +127,15 @@ async function main(){
         documentList.appendChild(newData);
 
 
-    newData.addEventListener("click",()=>{
-        modal.classList.remove("inactive")
-        document.querySelector("body").style.overflowY = "hidden"
-        scrollTo(0,0)
-        nameUser.textContent = item.name
-        departmentUser.textContent = `User associated with ${item.name}`
+        newData.addEventListener("click",()=>{
+            modal.classList.remove("inactive")
+            document.querySelector("body").style.overflowY = "hidden"
+            scrollTo(0,0)
+            nameUser.textContent = item.name
+            departmentUser.textContent = `User associated with ${item.name}`
 
-    })
-}
+        })
+    }
 
     users.forEach(generateUsersTable)
     documents.forEach(generateDocsTable)

@@ -6,8 +6,10 @@ const path = require('path')
 // databases
 const nano = require('nano')('http://administrator:qF3ChYhp@127.0.0.1:5984/');
 // const nano = require('nano')('http://root:root@127.0.0.1:5984/');
-const docsDB = nano.db.use('documents');
-const userDB = nano.db.use('users');
+const docsOrg1DB = nano.db.use('org1-documents');
+const docsOrg2DB = nano.db.use('org2-documents');
+const userOrg1DB = nano.db.use('org1-users');
+const userOrg2DB = nano.db.use('org2-users');
 const docViews = "/_design/all_users/_view/all";
 const departments = ["Sales","Marketing", "Human Resources", "Accounting"] //to remove when dynamic addition. of dept.s implemented
 
@@ -19,16 +21,13 @@ router.get('/', function (req, res){
     res.render("dashboard", {username : req.session.username}); //after session, username
 })
 
-// router.get("/accepted-docs",(req,res)=>{
-//     res.render("accepted-docs",{username : req.session.username})
-// })
 router.get("/rejected-docs",(req,res)=>{
     res.render("rejected-docs",{username : req.session.username})
 })
 
 router.get("/pending-docs/:page",async(req,res)=>{
     //query for fetching all docs in documents DB
-    const docz = await docsDB.find({selector:{
+    const docz = await docsOrg1DB.find({selector:{
             _id:{
                 "$gt":null
             },
@@ -43,7 +42,7 @@ router.get("/pending-docs/:page",async(req,res)=>{
     const approver = req.session.approver;
 
     //query for updating the status in each json doc
-    const state = await docsDB.find({selector:{
+    const state = await docsOrg1DB.find({selector:{
         _id:{
             "$gt":null
         },
@@ -132,7 +131,7 @@ router.post('/upload',  upload.single('uploadDoc'),
             type: "json",
             name: "doc-rev-index"
         }
-        const index = await docsDB.createIndex(indexDef);
+        const index = await docsOrg1DB.createIndex(indexDef);
 
         const q = {
             selector: {
@@ -140,7 +139,7 @@ router.post('/upload',  upload.single('uploadDoc'),
                 "creator": fileCreator
             }
         };
-        const rev = await docsDB.find(q);
+        const rev = await docsOrg1DB.find(q);
 
         if (rev.docs == '') {
             console.log('inserting')
@@ -148,7 +147,7 @@ router.post('/upload',  upload.single('uploadDoc'),
             let id = uuid.uuids[0];
             var tempPath = path.resolve(__dirname, `./../uploads/${fileName}`);
             fs.writeFileSync(path.resolve(__dirname, `./../uploads/${fileName}`), req.file.buffer)
-            await docsDB.insert({
+            await docsOrg1DB.insert({
                 name: fileName,
                 type: fileType,
                 size: fileSize,
@@ -192,7 +191,7 @@ router.post('/upload',  upload.single('uploadDoc'),
             const frev = await docQuery(fileName, fileCreator);
             const rev = frev[0]._rev;
             fs.readFile(tempPath, async (err, data) => { //dno if async
-                await docsDB.attachment.insert(
+                await docsOrg1DB.attachment.insert(
                     id,
                     fileName,
                     data,
@@ -222,7 +221,7 @@ router.post('/upload',  upload.single('uploadDoc'),
             fs.writeFileSync(path.resolve(__dirname, `./../uploads/${fileName}`), req.file.buffer);
             tags.push(fileTags);
             stateTimestamps.push(stateTimestamp);
-            await docsDB.insert({
+            await docsOrg1DB.insert({
                     name: fileName,
                     type: fileType,
                     size: fileSize,
@@ -268,7 +267,7 @@ router.post('/upload',  upload.single('uploadDoc'),
             const frev = await docQuery(fileName, fileCreator);
             const rev = frev[0]._rev;
             fs.readFile(tempPath, async (err, data) => { //dno if async
-                await docsDB.attachment.insert(
+                await docsOrg1DB.attachment.insert(
                     doc,
                     fileName,
                     data,
@@ -295,7 +294,7 @@ async function docQuery(fileName, creator){
         type: "json",
         name: "doc-rev-index"
     }
-    const index = await docsDB.createIndex(indexDef);
+    const index = await docsOrg1DB.createIndex(indexDef);
 
     const q = {
         selector: {
@@ -303,7 +302,7 @@ async function docQuery(fileName, creator){
             "creator": creator
         }
     };
-    const rev = await docsDB.find(q);
+    const rev = await docsOrg1DB.find(q);
     return rev.docs;
 }
 

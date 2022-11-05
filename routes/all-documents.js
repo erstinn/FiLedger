@@ -21,7 +21,8 @@ router.get('/:page',async(req,res)=>{
                 }
             },
         })
-        let docs;
+        if(Number(req.params.page) <= Math.ceil(documents.docs.length/10)){
+            let docs;
         if(req.query.sort == "title"){
             docs = documents.docs.sort((a,b)=>(a.name > b.name)? 1:-1)
         }
@@ -70,6 +71,9 @@ router.get('/:page',async(req,res)=>{
         }
         res.render("all-documents",{docs:docs,username : req.session.username,page:req.params.page,sort:req.query.sort})
         console.log("docs:",docs);
+        }else{
+            res.redirect("1")
+        }
     }else if (req.session.approver===true){
         //simply to make sure it's an approver, probably not needed
         console.log(req.session.department)

@@ -35,6 +35,7 @@ router.post('/', async function (req, res) {
     console.log(req.body.dept)
     const passw = SHA1(req.body.password).toString(enc.Hex);
     const dept = req.body.dept;
+    const org = req.body.org;
     let logErr = '';
     // load the network configuration
     let mspId = "Org1MSP";
@@ -49,6 +50,9 @@ router.post('/', async function (req, res) {
     const caTLSCACerts = caInfo.tlsCACerts.pem;
     const ca = new FabricCAServices(caInfo.url, {trustedRoots: caTLSCACerts, verify: false}, caInfo.caName);
     const walletPath = path.join(process.cwd(), 'wallet', mspId);
+    // const wallet_admin = await Wallets.newCouchDBWallet('http://root:root@127.0.0.1:5984/', "wallet");
+    // const wallet_user = await Wallets.newCouchDBWallet('http://root:root@127.0.0.1:5984/', "wallet_users");
+    // const wallet_approver = await Wallets.newCouchDBWallet('http://root:root@127.0.0.1:5984/', "wallet_approvers");
     const wallet_admin = await Wallets.newCouchDBWallet('http://administrator:qF3ChYhp@127.0.0.1:5984/', "wallet");
     const wallet_user = await Wallets.newCouchDBWallet('http://administrator:qF3ChYhp@127.0.0.1:5984/', "wallet_users");
     const wallet_approver = await Wallets.newCouchDBWallet('http://administrator:qF3ChYhp@127.0.0.1:5984/', "wallet_approvers");
@@ -63,7 +67,8 @@ router.post('/', async function (req, res) {
         selector: {
             "email": varemail,
             "password": passw,
-            "department": dept
+            "department": dept,
+            "organization":org
         }
     };
     const responseUserDB = await userDB.find(q)

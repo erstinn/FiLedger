@@ -84,6 +84,7 @@ router.post("/status", async function (req, res){
                 // Create a new file system based wallet for managing identities.
                 const walletPath = path.join(process.cwd(), 'wallet', mspId);
                 const wallet_admin = await Wallets.newCouchDBWallet('http://administrator:qF3ChYhp@127.0.0.1:5984/', "wallet");
+                // const wallet_admin = await Wallets.newCouchDBWallet('http://root:root@127.0.0.1:5984/', "wallet");
                 console.log(`Wallet path: ${walletPath}`); //dno if irrelevant if couchdb code
 
                 // Check to see if we've already enrolled the admin user.
@@ -134,6 +135,9 @@ router.post("/status", async function (req, res){
                 console.log("user enrollment ")
                 // Create a new file system based wallet for managing identities.
                 const walletPath = path.join(process.cwd(), 'wallet', mspId);
+                // const wallet_admin = await Wallets.newCouchDBWallet('http://root:root@127.0.0.1:5984/', "wallet");
+                // const wallet_users = await Wallets.newCouchDBWallet('http://root:root@127.0.0.1:5984/', "wallet_users");
+                // const wallet_approvers = await Wallets.newCouchDBWallet('http://root:root@127.0.0.1:5984/', "wallet_approvers");
                 const wallet_admin = await Wallets.newCouchDBWallet('http://administrator:qF3ChYhp@127.0.0.1:5984/', "wallet");
                 const wallet_users = await Wallets.newCouchDBWallet('http://administrator:qF3ChYhp@127.0.0.1:5984/', "wallet_users");
                 const wallet_approvers = await Wallets.newCouchDBWallet('http://administrator:qF3ChYhp@127.0.0.1:5984/', "wallet_approvers");

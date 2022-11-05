@@ -37,7 +37,7 @@ router.get("/pending-docs/:page",async(req,res)=>{
         res.redirect(`1`)
     }
     const accepted = req.body.accept;
-    const user = req.session.user;
+    // const user = req.session.user;
     const admin = req.session.admin;
     const approver = req.session.approver;
 
@@ -64,6 +64,7 @@ router.get('/accepted-docs',(req,res)=>{
 const multer  = require('multer')
 const invoke = require("../network/chaincode/javascript/invoke");
 const {originalMaxAge} = require("express-session/session/cookie");
+const res = require("express/lib/response"); //todo: test if it works without this.
 //todo maybe prevent zip file upload?
 //Specs: 1 file per upload, 1gb, any filetype
 var storage = multer.diskStorage({
@@ -91,40 +92,12 @@ router.post('/upload',  upload.single('uploadDoc'),
         // - state_change_timestamp (always set right after first upload)
         // - auto-append ver control? if the file already exists
         // WHEN DONE: REMOVE "for testing purposes"
+        // ADD 'req.file, req.session, req.body,'ORGDB'' AS PARAMS FOR insertDoc
 
         //init all necessary fields :
-        const currentTime = new Date(Date.now());
-        const fileName = req.file.originalname;
         if (req.file.originalname === null) {
             res.render('dashboard');
         }
-        const fileType = path.extname(req.file.originalname); //extension; including dot
-        console.log(path.extname(req.file.originalname))
-        const fileSize = await formatBytes(req.file.size);
-        const fileTimestamp = currentTime.getMonth() + 1 + "/" + currentTime.getDate() + "/" + currentTime.getFullYear() // e.g. 04/21/2000 21:32:11
-            + " " + currentTime.getHours() + ":" + currentTime.getMinutes() + ":" + currentTime.getSeconds();
-        const filePath = req.file.path; //path but not needed i think
-        console.log("now", fileTimestamp)
-        let user = req.session.username
-        if (req.session.admin === true) {
-            user = 'enroll'
-            console.log('ADMIN DITO STAN NCT POTA')
-        }
-        //TODO! check if filename exists already; add version where `state` = RESUBMITTED; else if new version and state: DRAFT
-        //for now assumes DRAFT state
-        let fileVersion = 1.0; //TODO when findDuplicate() for doc is implemented (auto increment INTEGER if duplicate)
-        const fileMinApprovers = 1; //TODO when UI for this is implemented
-        const state = "Draft"; //TODO when UI is implemented
-        const stateTimestamp = state + " @ " + fileTimestamp; // @ to separate values later
-        // const qName = await userDB.find({selector:{"username":req.session.username}})
-        // const fileCreator = `${await qName.docs[0].firstname} ${await qName.docs[0].lastname}`; //TODO implement once sessions
-        const fileCreator = `${req.session.firstname} ${req.session.lastname}`;
-        let fileTagsList = []
-        let stateTimestampList = []
-        let fileTags = `${fileName}|${req.body.tags.substring(0, req.body.tags.length - 1)}|@ ${fileTimestamp} V${parseFloat(fileVersion).toFixed(2)}`
-        fileTagsList.push(fileTags)
-        stateTimestampList.push(stateTimestamp)
-
         //created another index for querying if there is an existing file
         const indexDef = { //copied cod lol
             index: {fields: ["name", "creator"]},
@@ -142,146 +115,15 @@ router.post('/upload',  upload.single('uploadDoc'),
         const rev = await docsOrg1DB.find(q);
 
         if (rev.docs == '') {
-            console.log('inserting')
-            let uuid = await nano.uuids(1);
-            let id = uuid.uuids[0];
-            var tempPath = path.resolve(__dirname, `./../uploads/${fileName}`);
-            fs.writeFileSync(path.resolve(__dirname, `./../uploads/${fileName}`), req.file.buffer)
-            await docsOrg1DB.insert({
-                name: fileName,
-                type: fileType,
-                size: fileSize,
-                category: "standard",
-                tags_history: fileTagsList,
-                version_num: fileVersion,
-                state_history: stateTimestampList,
-                creator: fileCreator,
-                min_approvers: fileMinApprovers,
-                last_activity: "Upload",
-                status: "Pending",
-            }, id, function (err, response) {
-                if (!err) {
-                    var docdeets = {
-                        name: fileName,
-                        type: fileType,
-                        size: fileSize,
-                        category: "standard",
-                        tags_history: fileTagsList,
-                        version_num: fileVersion,
-                        state_history: stateTimestampList,
-                        creator: fileCreator,
-                        min_approvers: fileMinApprovers,
-                        last_activity: "Upload",
-                        status: "Pending",
-                    }
-
-                    invoke.invokeTransaction(user, req.session.admin, id, docdeets.name, docdeets.type,
-                        docdeets.size, docdeets.tags_history, docdeets.version_num, docdeets.state_history,
-                        docdeets.creator, docdeets.min_approvers);
-
-                    console.log("it worked")
-                    console.log('File Deets:', fileName, req.file.mimetype)
-                    res.redirect("/dashboard?fail=false")
-                } else {
-                    console.log("failed: ", err)
-                    res.redirect("/dashboard/?fail=true")
-                }
-
-            })
-            const frev = await docQuery(fileName, fileCreator);
-            const rev = frev[0]._rev;
-            fs.readFile(tempPath, async (err, data) => { //dno if async
-                await docsOrg1DB.attachment.insert(
-                    id,
-                    fileName,
-                    data,
-                    req.file.mimetype,
-                    {rev: rev}
-                )
-                {
-                    if (err){
-                        console.log('Fail attach: ', err)
-                    }
-                    console.log('no err')
-                }
-            });
+            // TODO: add insertDoc function here
+            //  - add if else for checking orgs for DB
+            await insertDoc(req.file, req.session, docsOrg1DB);
+            //END OF FUNCTION
         } else { //TODO ======================================= UPDATING =================================================
-            //TODO: CHANGE CC FUNCTION TO UPDATEDOCS INSTEAD
-            console.log("updating")
-            const findRev = await docQuery(fileName, fileCreator);
-            const revi = findRev[0]._rev;
-            const doc = findRev[0]._id;
-            let fileVer = findRev[0].version_num;
-            let tags = findRev[0].tags_history;
-            let stateTimestamps = findRev[0].state_history;
-            var file = fs.readFileSync(path.resolve(__dirname, `./../uploads/${fileName}`));
-            var tempPath = path.resolve(__dirname, `./../uploads/${fileName}`);
-            console.log(file) //todo remove
-            checkFileChanges(req.file.buffer, req.body.tags, file);
-            fs.writeFileSync(path.resolve(__dirname, `./../uploads/${fileName}`), req.file.buffer);
-            tags.push(fileTags);
-            stateTimestamps.push(stateTimestamp);
-            await docsOrg1DB.insert({
-                    name: fileName,
-                    type: fileType,
-                    size: fileSize,
-                    category: "standard",
-                    tags_history: tags,
-                    version_num: parseFloat(fileVer).toFixed(2), //finally updates
-                    state_history: stateTimestamps,
-                    creator: fileCreator,
-                    min_approvers: fileMinApprovers,
-                    _rev: revi,
-                    last_activity: "Upload",
-                    status: "Pending",
-                }, doc,
-                function (err, response) {
-                    if (!err) { //todo dana idk if mappush literal file sa ledger, hopefully hndi
-                        var docdeets = {
-                            name: fileName,
-                            type: fileType,
-                            size: fileSize,
-                            category: "standard",
-                            tags_history: tags,
-                            version_num: parseFloat(fileVer).toFixed(2), //finally updates
-                            state_history: stateTimestamps,
-                            creator: fileCreator,
-                            min_approvers: fileMinApprovers,
-                            _rev: revi,
-                            last_activity: "Upload",
-                            status: "Pending",
-                        }
-                        console.log('File Deets:', fileName, req.file.mimetype, tempPath)
-                        console.log("it worked")
-                        invoke.updateTransaction(user, req.session.admin, doc, docdeets.name, docdeets.type, docdeets.size,
-                            docdeets.tags_history, docdeets.version_num, docdeets.creator,
-                            docdeets.min_approvers, docdeets.state_history);
-
-                        res.redirect("/dashboard?fail=false")
-                    } else {
-                        console.log("failed", err)
-                        res.redirect("/dashboard/?fail=true")
-                    }
-                }
-            )
-            const frev = await docQuery(fileName, fileCreator);
-            const rev = frev[0]._rev;
-            fs.readFile(tempPath, async (err, data) => { //dno if async
-                await docsOrg1DB.attachment.insert(
-                    doc,
-                    fileName,
-                    data,
-                    req.file.mimetype,
-                    {rev: rev}
-                )
-                {
-                    if (err){
-                        console.log('Fail attach: ', err)
-                    }
-                    console.log('no err')
-                }
-            });
-
+            //TODO: turn into function
+            // -Add (req.file, req.session, req.body, 'OrgDB') AS PARAMS FOR updateDoc
+            await updateDoc(req.file, req.session, req.body, docsOrg1DB);
+            //end of func
         }
     })
 
@@ -321,6 +163,214 @@ async function checkFileChanges(filebuff, filetag, file){
     }
 }
 
+async function insertDoc(file, session, body, orgDB){
+    const currentTime = new Date(Date.now());
+    const fileName = file.originalname;
+
+    const fileType = path.extname(file.originalname); //extension; including dot
+    console.log(path.extname(file.originalname))
+    const fileSize = await formatBytes(file.size);
+    const fileTimestamp = currentTime.getMonth() + 1 + "/" + currentTime.getDate() + "/" + currentTime.getFullYear() // e.g. 04/21/2000 21:32:11
+        + " " + currentTime.getHours() + ":" + currentTime.getMinutes() + ":" + currentTime.getSeconds();
+    const filePath = file.path; //path but not needed i think
+    console.log("now", fileTimestamp)
+    let user = session.username
+    if (session.admin === true) {
+        user = 'enroll'
+        console.log('ADMIN DITO !!! GRRR')
+    }
+    //TODO! check if filename exists already; add version where `state` = RESUBMITTED; else if new version and state: DRAFT
+    //for now assumes DRAFT state
+    let fileVersion = 1.0; //TODO when findDuplicate() for doc is implemented (auto increment INTEGER if duplicate)
+    const fileMinApprovers = 1; //TODO when UI for this is implemented
+    const state = "Draft"; //TODO when UI is implemented
+    const stateTimestamp = state + " @ " + fileTimestamp; // @ to separate values later
+    // const qName = await userDB.find({selector:{"username":req.session.username}})
+    // const fileCreator = `${await qName.docs[0].firstname} ${await qName.docs[0].lastname}`; //TODO implement once sessions
+    const fileCreator = `${session.firstname} ${session.lastname}`;
+    let fileTagsList = []
+    let stateTimestampList = []
+    let fileTags = `${fileName}|${body.tags.substring(0, body.tags.length - 1)}|@ ${fileTimestamp} V${parseFloat(fileVersion).toFixed(2)}`
+    fileTagsList.push(fileTags)
+    stateTimestampList.push(stateTimestamp)
+
+    //created another index for querying if there is an existing file
+    const indexDef = { //copied cod lol
+        index: {fields: ["name", "creator"]},
+        type: "json",
+        name: "doc-rev-index"
+    }
+    const index = await orgDB.createIndex(indexDef);
+
+    const q = {
+        selector: {
+            "name": fileName,
+            "creator": fileCreator
+        }
+    };
+    const rev = await orgDB.find(q);
+
+        // TODO: add insertNewFile function here
+        console.log('inserting')
+        let uuid = await nano.uuids(1);
+        let id = uuid.uuids[0];
+        var tempPath = path.resolve(__dirname, `./../uploads/${fileName}`);
+        fs.writeFileSync(path.resolve(__dirname, `./../uploads/${fileName}`), file.buffer)
+        await orgDB.insert({
+            name: fileName,
+            type: fileType,
+            size: fileSize,
+            category: "standard",
+            tags_history: fileTagsList,
+            version_num: fileVersion,
+            state_history: stateTimestampList,
+            creator: fileCreator,
+            min_approvers: fileMinApprovers,
+            last_activity: "Upload",
+            status: "Pending",
+        }, id, function (err, response) {
+            if (!err) {
+                var docdeets = {
+                    name: fileName,
+                    type: fileType,
+                    size: fileSize,
+                    category: "standard",
+                    tags_history: fileTagsList,
+                    version_num: fileVersion,
+                    state_history: stateTimestampList,
+                    creator: fileCreator,
+                    min_approvers: fileMinApprovers,
+                    last_activity: "Upload",
+                    status: "Pending",
+                }
+
+                invoke.invokeTransaction(user, session.admin, id, docdeets.name, docdeets.type,
+                    docdeets.size, docdeets.tags_history, docdeets.version_num, docdeets.state_history,
+                    docdeets.creator, docdeets.min_approvers);
+
+                console.log("it worked")
+                console.log('File Deets:', fileName, file.mimetype)
+                res.redirect("/dashboard?fail=false")
+            } else {
+                console.log("failed: ", err)
+                res.redirect("/dashboard/?fail=true")
+            }
+
+        })
+
+        const frev = await docQuery(fileName, fileCreator);
+        const revi = frev[0]._rev;
+        fs.readFile(tempPath, async (err, data) => { //dno if async
+            await orgDB.attachment.insert(
+                id,
+                fileName,
+                data,
+                req.file.mimetype,
+                {rev: revi}
+            )
+            {
+                if (err){
+                    console.log('Fail attach: ', err)
+                }
+                console.log('no err')
+            }
+        }); //END OF FUNCTION
+}
+
+// UPDATE FILE FUNCTION
+async function updateDoc(file, session, body, orgDB){
+    console.log("updating")
+    const currentTime = new Date(Date.now());
+    const fileName = file.originalname;
+    const fileCreator = `${session.firstname} ${session.lastname}`;
+    const fileMinApprovers = 1; //not sure if when this will be changed, placeholder for now
+    const findRev = await docQuery(fileName, fileCreator);
+    const revi = findRev[0]._rev;
+    const doc = findRev[0]._id;
+    let fileVer = findRev[0].version_num;
+    let tags = findRev[0].tags_history;
+    let stateTimestamps = findRev[0].state_history;
+    let user = session.username
+    if (session.admin === true) {
+        user = 'enroll'
+        console.log('ADMIN DITO !!! GRRR')
+    }
+    //DI Q SURE IF DITO TO OR SA LABAS NALANG PERO DITO MUNA -dana
+    const fileTimestamp = currentTime.getMonth() + 1 + "/" + currentTime.getDate() + "/" + currentTime.getFullYear() // e.g. 04/21/2000 21:32:11
+        + " " + currentTime.getHours() + ":" + currentTime.getMinutes() + ":" + currentTime.getSeconds();
+    const state = "Draft"; //TODO when UI is implemented
+    const fileType = path.extname(file.originalname); //extension; including dot
+    const fileSize = await formatBytes(file.size);
+    const stateTimestamp = state + " @ " + fileTimestamp; // @ to separate values later
+    let fileTags = `${fileName}|${body.tags.substring(0, body.tags.length - 1)}|@ ${fileTimestamp} V${parseFloat(fileVersion).toFixed(2)}`
+    var fileInp = fs.readFileSync(path.resolve(__dirname, `./../uploads/${fileName}`));
+    var tempPath = path.resolve(__dirname, `./../uploads/${fileName}`);
+    console.log(fileInp) //todo remove
+    checkFileChanges(file.buffer, body.tags, fileInp);
+    fs.writeFileSync(path.resolve(__dirname, `./../uploads/${fileName}`), file.buffer);
+    tags.push(fileTags);
+    stateTimestamps.push(stateTimestamp);
+    await orgDB.insert({
+            name: fileName,
+            type: fileType,
+            size: fileSize,
+            category: "standard",
+            tags_history: tags,
+            version_num: parseFloat(fileVer).toFixed(2), //finally updates
+            state_history: stateTimestamps,
+            creator: fileCreator,
+            min_approvers: fileMinApprovers,
+            _rev: revi,
+            last_activity: "Upload",
+            status: "Pending",
+        }, doc,
+        function (err, response) {
+            if (!err) {
+                var docdeets = {
+                    name: fileName,
+                    type: fileType,
+                    size: fileSize,
+                    category: "standard",
+                    tags_history: tags,
+                    version_num: parseFloat(fileVer).toFixed(2), //finally updates
+                    state_history: stateTimestamps,
+                    creator: fileCreator,
+                    min_approvers: fileMinApprovers,
+                    _rev: revi,
+                    last_activity: "Upload",
+                    status: "Pending",
+                }
+                console.log('File Deets:', fileName, req.file.mimetype, tempPath)
+                console.log("it worked")
+                invoke.updateTransaction(user, session.admin, doc, docdeets.name, docdeets.type, docdeets.size,
+                    docdeets.tags_history, docdeets.version_num, docdeets.creator,
+                    docdeets.min_approvers, docdeets.state_history);
+
+                res.redirect("/dashboard?fail=false")
+            } else {
+                console.log("failed", err)
+                res.redirect("/dashboard/?fail=true")
+            }
+        }
+    )
+    const frev = await docQuery(fileName, fileCreator);
+    const rev = frev[0]._rev;
+    fs.readFile(tempPath, async (err, data) => { //dno if async
+        await orgDB.attachment.insert(
+            doc,
+            fileName,
+            data,
+            file.mimetype,
+            {rev: rev}
+        )
+        {
+            if (err){
+                console.log('Fail attach: ', err)
+            }
+            console.log('no err')
+        }
+    });
+}
 
 //======================================== EXTRA FUNCS ================================================================
 //src: https://stackoverflow.com/questions/15900485/correct-way-to-convert-size-in-bytes-to-kb-mb-gb-in-javascript

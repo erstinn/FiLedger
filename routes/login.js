@@ -53,9 +53,12 @@ router.post('/', async function (req, res) {
     // const wallet_admin = await Wallets.newCouchDBWallet('http://root:root@127.0.0.1:5984/', "wallet");
     // const wallet_user = await Wallets.newCouchDBWallet('http://root:root@127.0.0.1:5984/', "wallet_users");
     // const wallet_approver = await Wallets.newCouchDBWallet('http://root:root@127.0.0.1:5984/', "wallet_approvers");
-    const wallet_admin = await Wallets.newCouchDBWallet('http://administrator:qF3ChYhp@127.0.0.1:5984/', "wallet");
-    const wallet_user = await Wallets.newCouchDBWallet('http://administrator:qF3ChYhp@127.0.0.1:5984/', "wallet_users");
-    const wallet_approver = await Wallets.newCouchDBWallet('http://administrator:qF3ChYhp@127.0.0.1:5984/', "wallet_approvers");
+    const org1Wallet_admin = await Wallets.newCouchDBWallet('http://administrator:qF3ChYhp@127.0.0.1:5984/', "org1-wallet_admins");
+    const org2Wallet_admin = await Wallets.newCouchDBWallet('http://administrator:qF3ChYhp@127.0.0.1:5984/', "org2-wallet_admins");
+    const org1Wallet_user = await Wallets.newCouchDBWallet('http://administrator:qF3ChYhp@127.0.0.1:5984/', "org1-wallet_users");
+    const org2Wallet_user = await Wallets.newCouchDBWallet('http://administrator:qF3ChYhp@127.0.0.1:5984/', "org2-wallet_users");
+    const org1Wallet_approver = await Wallets.newCouchDBWallet('http://administrator:qF3ChYhp@127.0.0.1:5984/', "org1-wallet_approvers");
+    const org2Wallet_approver = await Wallets.newCouchDBWallet('http://administrator:qF3ChYhp@127.0.0.1:5984/', "org2-wallet_approvers");
     //todo network/wallet connection end
 
     const indexDef = {
@@ -71,9 +74,12 @@ router.post('/', async function (req, res) {
             "organization":org
         }
     };
-    const responseUserDB = await userDB.find(q)
-    const responseAdminDB = await adminDB.find(q)
-    const responseApproverDB = await approverDB.find(q)
+    const responseOrg1UserDB = await userDB.find(q)
+    const responseOrg2UserDB = await userDB.find(q)
+    const responseOrg1AdminDB = await adminDB.find(q)
+    const responseOrg2AdminDB = await adminDB.find(q)
+    const responseOrg1ApproverDB = await approverDB.find(q)
+    const responseOrg2ApproverDB = await approverDB.find(q)
         // console.log("hello")
         // if(responseAdminDB.bookmark === 'nil')
         //     console.log('admin not')

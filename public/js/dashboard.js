@@ -66,3 +66,14 @@ window.addEventListener('load', function () {
     }
 })
 
+const addFile = document.getElementById("addFile")
+const uploadButton = document.querySelector(".button-container button")
+uploadButton.disabled = true
+addFile.addEventListener("change",(evt)=>{
+    if(evt.target.files[0].size > 1073741824){
+        alert("File too large")
+        addFile.value = "";
+    }else if(evt.target.files[0].size < 1073741824){
+        uploadButton.disabled = false
+    }
+})

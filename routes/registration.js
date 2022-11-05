@@ -12,8 +12,8 @@ const generator = require("generate-password");
 const SHA1  = require('crypto-js/sha1');
 const { enc } = require('crypto-js');
 const router = express.Router()
-const nano = require('nano')('http://administrator:qF3ChYhp@127.0.0.1:5984/');
-// const nano = require('nano')('http://root:root@127.0.0.1:5984/');
+// const nano = require('nano')('http://administrator:qF3ChYhp@127.0.0.1:5984/');
+const nano = require('nano')('http://root:root@127.0.0.1:5984/');
 const adminDB = nano.db.use('admins');
 const userDB = nano.db.use('users');
 const approverDB = nano.db.use('approvers');
@@ -90,8 +90,8 @@ router.post("/status", async function (req, res){
 
                 // Create a new file system based wallet for managing identities.
                 const walletPath = path.join(process.cwd(), 'wallet', mspId);
-                const wallet_admin = await Wallets.newCouchDBWallet('http://administrator:qF3ChYhp@127.0.0.1:5984/', "wallet");
-                // const wallet_admin = await Wallets.newCouchDBWallet('http://root:root@127.0.0.1:5984/', "wallet");
+                // const wallet_admin = await Wallets.newCouchDBWallet('http://administrator:qF3ChYhp@127.0.0.1:5984/', "wallet");
+                const wallet_admin = await Wallets.newCouchDBWallet('http://root:root@127.0.0.1:5984/', "wallet");
                 console.log(`Wallet path: ${walletPath}`); //dno if irrelevant if couchdb code
 
                 // Check to see if we've already enrolled the admin user.
@@ -142,12 +142,12 @@ router.post("/status", async function (req, res){
                 console.log("user enrollment ")
                 // Create a new file system based wallet for managing identities.
                 const walletPath = path.join(process.cwd(), 'wallet', mspId);
-                // const wallet_admin = await Wallets.newCouchDBWallet('http://root:root@127.0.0.1:5984/', "wallet");
-                // const wallet_users = await Wallets.newCouchDBWallet('http://root:root@127.0.0.1:5984/', "wallet_users");
-                // const wallet_approvers = await Wallets.newCouchDBWallet('http://root:root@127.0.0.1:5984/', "wallet_approvers");
-                const wallet_admin = await Wallets.newCouchDBWallet('http://administrator:qF3ChYhp@127.0.0.1:5984/', "wallet");
-                const wallet_users = await Wallets.newCouchDBWallet('http://administrator:qF3ChYhp@127.0.0.1:5984/', "wallet_users");
-                const wallet_approvers = await Wallets.newCouchDBWallet('http://administrator:qF3ChYhp@127.0.0.1:5984/', "wallet_approvers");
+                const wallet_admin = await Wallets.newCouchDBWallet('http://root:root@127.0.0.1:5984/', "wallet");
+                const wallet_users = await Wallets.newCouchDBWallet('http://root:root@127.0.0.1:5984/', "wallet_users");
+                const wallet_approvers = await Wallets.newCouchDBWallet('http://root:root@127.0.0.1:5984/', "wallet_approvers");
+                // const wallet_admin = await Wallets.newCouchDBWallet('http://administrator:qF3ChYhp@127.0.0.1:5984/', "wallet");
+                // const wallet_users = await Wallets.newCouchDBWallet('http://administrator:qF3ChYhp@127.0.0.1:5984/', "wallet_users");
+                // const wallet_approvers = await Wallets.newCouchDBWallet('http://administrator:qF3ChYhp@127.0.0.1:5984/', "wallet_approvers");
                 console.log(`Wallet path: ${walletPath}`);
 
                 // Create a new CA client for interacting with the CA.

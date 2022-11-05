@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
-// const nano = require('nano')('http://root:root@127.0.0.1:5984/');
-const nano = require('nano')('http://administrator:qF3ChYhp@127.0.0.1:5984/');
+const nano = require('nano')('http://root:root@127.0.0.1:5984/');
+// const nano = require('nano')('http://administrator:qF3ChYhp@127.0.0.1:5984/');
 const docsDB = nano.db.use('documents');
 const approverDB = nano.db.use('approvers');
 const userDB = nano.db.use('users');

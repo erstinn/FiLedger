@@ -217,6 +217,9 @@
     border-radius: 5px;
     background-color: rgb(122, 215, 88);
 }
+.button-container button:disabled {
+    background-color: #c4c4c4;
+}
 
 
 

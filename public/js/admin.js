@@ -10,6 +10,7 @@ const accessButtons = document.querySelectorAll(".accessButtons .modalButton")
 const nameUser = document.querySelector(".name-user");
 const departmentUser = document.querySelector(".department-user");
 const tableTitle = document.querySelector(".userList-header");
+var selected_userID;
 
 async function getUsers(){
     const response = await fetch('/api/users',{method:"POST",headers:{'access':'admin'}})
@@ -24,6 +25,23 @@ async function getDocs(){
     docs = JSON.stringify(docs);
     docs = JSON.parse(docs);
     return docs;
+}
+async function getDocsOfUser(){
+    const response = await fetch("/api/getDocsOfUser",{
+        method:"POST",
+        headers:{
+            'Content-Type':'application/json',
+            'access':"admin"
+        },
+        body:JSON.stringify({
+            "userId":`${selected_userID}`
+        })
+    })
+
+    let data = await response.json()
+    data = JSON.stringify(data)
+    data = JSON.parse(data)
+    return data
 }
 
 async function main(){
@@ -97,12 +115,27 @@ async function main(){
         newData.appendChild(newNumDocs);
         usersList.appendChild(newData)
 
-        newData.addEventListener("click",()=>{
+        newData.addEventListener("click",async()=>{
             modal.classList.remove("inactive")
             document.querySelector("body").style.overflowY = "hidden"
             scrollTo(0,0)
-            nameUser.textContent = item.name
+            nameUser.textContent = `${item.firstname} ${item.lastname}`
             departmentUser.textContent = item.department
+            selected_userID = item._id
+            const docsOfUser = await getDocsOfUser()
+            docsOfUser.forEach(e=>{
+                let userDoc = document.createElement("tr");
+                userDoc.classList.add("data");
+                let userDocName = document.createElement("td")
+                userDocName.innerHTML = e['document']
+                let userDocAccess = document.createElement("td")
+                userDocAccess.innerHTML = e['access']
+
+                userDoc.appendChild(userDocName)
+                userDoc.appendChild(userDocAccess)
+
+                document.querySelector(".modalTable.tableUser").appendChild(userDoc)
+            })
         })
 
     }
@@ -220,7 +253,7 @@ async function main(){
 
     let doc4user = document.querySelector("#doc4user");
     let accessUser = document.querySelector("#accessUser");
-    let addDoc = document.querySelector(".addDoc");
+    let addDoc = document.getElementsByClassName("addDoc")[0];
 
     addDoc.addEventListener("click",async ()=>{
         console.log(doc4user.value)
@@ -239,6 +272,7 @@ async function main(){
 
         window.location.reload()
     })
+    
 
 
 }

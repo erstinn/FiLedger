@@ -6,8 +6,8 @@ const generator = require('generate-password');
 const app = express();
 const session = require('express-session')
 const invoke = require('./network/chaincode/javascript/invoke')
-const nano = require('nano')('http://administrator:qF3ChYhp@127.0.0.1:5984/');
-// const nano = require('nano')('http://root:root@127.0.0.1:5984/');
+// const nano = require('nano')('http://administrator:qF3ChYhp@127.0.0.1:5984/');
+const nano = require('nano')('http://root:root@127.0.0.1:5984/');
 
 // session var init
 app.use(session({
@@ -109,7 +109,7 @@ app.get('/header', function (req, res){
 })
 
 app.get('/', function (req, res, next){
-    if(!req.session.user){
+    if(!req.session.user || !req.session.admin){
         res.render("index");
     }
     else{
@@ -143,7 +143,7 @@ app.use('/dashboard', isAuthenticated, dashboardRouter);
 app.use('/documents', isAuthenticated, isApprover, isUser, documentsRouter); //TODO CONSIDERING REMOVAL
 app.use('/all-documents', isAuthenticated, allDocumentsRouter);
 app.use('/administration', isAuthenticated, isAdmin, adminRouter);
-app.use('/view-documents', isAuthenticated, isApprover, isUser,  viewDocumentsRouter) //TODO CONSIDERING REMOVAL
+app.use('/view-documents', isAuthenticated, isAdmin,  viewDocumentsRouter) //TODO CONSIDERING REMOVAL
 app.use('/registration',isAuthenticated,isAdmin, regRouter);
 // app.use('/pending-docs', isAuthenticated, pendingDocs)
 // app.use('/pending-docs', isAuthenticated, myFunc);

@@ -40,6 +40,7 @@ router.post('/', async function (req, res) {
     // load the network configuration
     let mspId = "Org1MSP";
     const caURL = "org1-ca.fabric";
+    const caURL2 = "org2-ca.fabric";
     const ccpPath = path.resolve("./network/try-k8/", "connection-org.yaml");
     if (ccpPath.includes(".yaml")) {
         ccp = yaml.load(fs.readFileSync(ccpPath, 'utf-8'));
@@ -47,8 +48,14 @@ router.post('/', async function (req, res) {
         ccp = JSON.parse(fs.readFileSync(ccpPath, 'utf8'));
     }
     const caInfo = ccp.certificateAuthorities[caURL];
+    //for second CA
+    const caInfo2 = ccp.certificateAuthorities[caURL2];
     const caTLSCACerts = caInfo.tlsCACerts.pem;
+    //for second CA
+    const caTLSCACerts2 = caInfo2.tlsCACerts.pem;
     const ca = new FabricCAServices(caInfo.url, {trustedRoots: caTLSCACerts, verify: false}, caInfo.caName);
+    //for second CA
+    const ca2 = new FabricCAServices(caInfo.url, {trustedRoots: caTLSCACerts, verify: false}, caInfo2.caName);
     const walletPath = path.join(process.cwd(), 'wallet', mspId);
     // const wallet_admin = await Wallets.newCouchDBWallet('http://root:root@127.0.0.1:5984/', "wallet");
     // const wallet_user = await Wallets.newCouchDBWallet('http://root:root@127.0.0.1:5984/', "wallet_users");

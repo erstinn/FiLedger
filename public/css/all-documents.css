@@ -43,7 +43,7 @@ a{
 .uploaded-docs-table td,
 .uploaded-docs-table th{
     text-align: center;
-    padding:.4vw;
+    padding:.5vw;
 }
 
 
@@ -122,4 +122,8 @@ a{
     background-color: white;
     padding:.1vw;
     border:none
+}
+
+.data:nth-child(odd){
+    background-color:#61c6c654
 }

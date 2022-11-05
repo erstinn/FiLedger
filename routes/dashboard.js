@@ -2,10 +2,10 @@ const express = require('express')
 const router = express.Router()
 const fs = require("fs")
 const path = require('path')
-const myFunc = require('../public/js/pending-docs');
 
 // databases
 const nano = require('nano')('http://administrator:qF3ChYhp@127.0.0.1:5984/');
+// const nano = require('nano')('http://root:root@127.0.0.1:5984/');
 const docsDB = nano.db.use('documents');
 const userDB = nano.db.use('users');
 const docViews = "/_design/all_users/_view/all";
@@ -26,13 +26,17 @@ router.get("/rejected-docs",(req,res)=>{
     res.render("rejected-docs",{username : req.session.username})
 })
 
-router.get("/pending-docs",async(req,res)=>{
+router.get("/pending-docs/:page",async(req,res)=>{
     //query for fetching all docs in documents DB
     const docz = await docsDB.find({selector:{
             _id:{
                 "$gt":null
-            }
+            },
+            status:"Pending"
         }})
+    if(Number(req.params.page) > (Math.ceil(docz.docs.length/10))){
+        res.redirect(`1`)
+    }
     const accepted = req.body.accept;
     const user = req.session.user;
     const admin = req.session.admin;
@@ -47,7 +51,14 @@ router.get("/pending-docs",async(req,res)=>{
         "name": req.params.name
         // "department":
     }})
-    res.render("pending-docs", {f: myFunc, d: docz, username: req.session.username})
+    res.render("pending-docs", {d: docz, username: req.session.username,page:req.params.page})
+})
+router.get('/pending-docs',(req,res)=>{
+    res.redirect('pending-docs/1')
+})
+
+router.get('/accepted-docs',(req,res)=>{
+    res.render('accepted-docs',{username:req.session.username})
 })
 
 //======================================== UPLOAD FILE-RELATED CODES ================================================================

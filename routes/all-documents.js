@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
-// const nano = require('nano')('http://root:root@127.0.0.1:5984/');
-const nano = require('nano')('http://administrator:qF3ChYhp@127.0.0.1:5984/');
+const nano = require('nano')('http://root:root@127.0.0.1:5984/');
+// const nano = require('nano')('http://administrator:qF3ChYhp@127.0.0.1:5984/');
 const docsDB = nano.db.use('documents');
 const approverDB = nano.db.use('approvers');
 const userDB = nano.db.use('users');
@@ -21,7 +21,8 @@ router.get('/:page',async(req,res)=>{
                 }
             },
         })
-        let docs;
+        if(Number(req.params.page) <= Math.ceil(documents.docs.length/10)){
+            let docs;
         if(req.query.sort == "title"){
             docs = documents.docs.sort((a,b)=>(a.name > b.name)? 1:-1)
         }
@@ -68,9 +69,11 @@ router.get('/:page',async(req,res)=>{
         else{
             docs = documents.docs.sort((a,b)=>(a.name > b.name)? 1:-1)
         }
-
         res.render("all-documents",{docs:docs,username : req.session.username,page:req.params.page,sort:req.query.sort})
         console.log("docs:",docs);
+        }else{
+            res.redirect("1")
+        }
     }else if (req.session.approver===true){
         //simply to make sure it's an approver, probably not needed
         console.log(req.session.department)
@@ -110,11 +113,11 @@ router.get('/:page',async(req,res)=>{
         console.log('paprover')
         console.log(documents);
     }
-    res.render("all-documents",{docs:documents,username : req.session.username})
+    // res.render("all-documents",{docs:documents,username : req.session.username})
 })
 
 router.get('/',(req,res)=>{
-    res.redirect('all-documents/1?sort=title')
+    res.redirect('all-documents/1')
 })
 
 

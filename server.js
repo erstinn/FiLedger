@@ -44,7 +44,7 @@ dbList.then(function (dbs){
 })
 
 function isAuthenticated (req, res, next){
-    if(req.session.user){
+    if(req.session.user || req.session.admin || req.session.approver){
         next();
         console.log('There is a session')
     }
@@ -154,4 +154,5 @@ app.use('/registration',isAuthenticated,isAdmin, regRouter);
 // app.use('/all-documents', allDocumentsRouter)
 // app.use('/administration', adminRouter);
 // app.use('/view-documents', viewDocumentsRouter)
+// app.use('/registration', regRouter);
 

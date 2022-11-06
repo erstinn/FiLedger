@@ -5,7 +5,6 @@ const yaml = require("js-yaml");
 const fs = require('fs');
 const path = require('path');
 const { createConnection } = require('net');
-
 const express = require('express')
 const {generateFromEmail} = require("unique-username-generator");
 const generator = require("generate-password");
@@ -14,10 +13,6 @@ const { enc } = require('crypto-js');
 const router = express.Router()
 const nano = require('nano')('http://administrator:qF3ChYhp@127.0.0.1:5984/');
 // const nano = require('nano')('http://root:root@127.0.0.1:5984/');
-const adminDB = nano.db.use('admins');
-const approverDB = nano.db.use('approvers');
-// const walletDB = nano.db.use('wallet');
-
 const userViews = "/_design/all_users/_view/all";
 const departments = ["Sales","Marketing", "Human Resources", "Accounting"] //to remove when dynamic addition. of dept.s implemented
 
@@ -64,28 +59,24 @@ router.post("/status", async function (req, res){
 
 
     const admin_username = usernameAdmin;
-    //todo uncomment later sry mizi
     const ccpPath = path.resolve("./network/try-k8/", "connection-org.yaml");
     if (ccpPath.includes(".yaml")) {
         ccp = yaml.load(fs.readFileSync(ccpPath, 'utf-8'));
     } else {
         ccp = JSON.parse(fs.readFileSync(ccpPath, 'utf8'));
     }
-    //TODO ENROLLMENT AS ADMIN
+    //TODO ================================================ ENROLLMENT AS ADMIN ================================================
     if(admin==='on') {
         async function enroll() {
             console.log("admin enrollment ")
             try {
                 // Create a new CA client for interacting with the CA.
                 const caInfo = ccp.certificateAuthorities[caURL];
-                //for second CA
-                const caInfo2 = ccp.certificateAuthorities[caURL2];
+                const caInfo2 = ccp.certificateAuthorities[caURL2]; //for second CA
                 const caTLSCACerts = caInfo.tlsCACerts.pem;
-                //for second CA
-                const caTLSCACerts2 = caInfo2.tlsCACerts.pem;
+                const caTLSCACerts2 = caInfo2.tlsCACerts.pem; //for second CA
                 const ca = new FabricCAServices(caInfo.url, {trustedRoots: caTLSCACerts, verify: false}, caInfo.caName);
-                //for second CA
-                const ca2 = new FabricCAServices(caInfo.url, {trustedRoots: caTLSCACerts, verify: false}, caInfo2.caName);
+                const ca2 = new FabricCAServices(caInfo.url, {trustedRoots: caTLSCACerts, verify: false}, caInfo2.caName);//for second CA
 
                 // Create a new file system based wallet for managing identities.
                 const walletPath = path.join(process.cwd(), 'wallet', mspId);
@@ -111,17 +102,7 @@ router.post("/status", async function (req, res){
                     type: 'X.509',
                 };
                 await wallet_admin.put(adminid, x509Identity);
-                await adminDB.insert({
-                    _id: id,
-                    firstname: firstName,
-                    lastname: lastName,
-                    email: email,
-                    username: admin_username,
-                    password: SHA1(password).toString(enc.Hex),
-                    department: dept,
-                    add_doc: uploader,
-                    admin: admin
-                })
+                insertToAdminDB(id, firstName,lastName,email,admin_username,password,dept,uploader,admin,req.body.org);
                 console.log(`Successfully enrolled admin user '${admin_username}'and imported it into the wallet`);
                 res.render('success-reg');
                 console.log(admin);
@@ -135,7 +116,7 @@ router.post("/status", async function (req, res){
 
         await enroll();
     }else {
-        //TODO REGISTER AND ENROLL USER
+        //TODO ================================================ REGISTER AND ENROLL USER ================================================
         async function register() {
             try {
                 console.log("user enrollment ")
@@ -166,7 +147,6 @@ router.post("/status", async function (req, res){
                 }
 
                 // Check to see if we've already enrolled the admin user.
-                //TODO: need icheck if sinong admin or kaninong account yung nag-reregister ng user (idk if need pa to)
                 const adminIdentity = await wallet_admin.get(adminid);
                 if (!adminIdentity) {
                     console.log(`An identity for the admin user ${adminid} does not exist in the wallet`);
@@ -197,7 +177,7 @@ router.post("/status", async function (req, res){
                     type: 'X.509',
                 };
                 if(approver==='on'){
-                    await insertToApprover(id, firstName, lastName, email, username, password, dept, approver)
+                    await insertToApproverDB(id, firstName, lastName, email, username, password, dept, approver)
                     await wallet_approvers.put(username, x509Identity);
                     console.log(`Successfully registered and enrolled admin user ${username} and imported it into the wallet`);
                 }else {
@@ -217,6 +197,10 @@ router.post("/status", async function (req, res){
 
 
 })
+
+
+
+//============================================= GENERAL DB INSERTION =============================================
 async function insertToUserDB(id, firstName, lastName, email, username, password, dept, uploader, org){
     const userOrg1DB = nano.db.use('org1-users');
     const userOrg2DB = nano.db.use('org2-users');
@@ -246,7 +230,7 @@ async function insertToUserDB(id, firstName, lastName, email, username, password
     return;
 }
 
-async function insertToApprover(id, firstName, lastName, email, username, password, dept, approver){
+async function insertToApproverDB(id, firstName, lastName, email, username, password, dept, approver){
     const approverOrg1DB = nano.db.use('org1-approvers');
     const approverOrg2DB = nano.db.use('org2-approvers');
     if (org === 'org1'){
@@ -274,4 +258,37 @@ async function insertToApprover(id, firstName, lastName, email, username, passwo
     }
     return;
 }
+
+async function insertToAdminDB (id, firstName, lastName, email, admin_username, password, dept, uploader, admin,org){
+    const adminOrg1DB = nano.db.use('org1-admins');
+    const adminOrg2DB = nano.db.use('org2-admins');
+    if (org==='org1'){
+        await adminOrg1DB.insert({
+            _id: id,
+            firstname: firstName,
+            lastname: lastName,
+            email: email,
+            username: admin_username,
+            password: SHA1(password).toString(enc.Hex),
+            department: dept,
+            add_doc: uploader,
+            admin: admin
+        })
+    }else if (org==='org2'){
+        await adminOrg2DB.insert({
+            _id: id,
+            firstname: firstName,
+            lastname: lastName,
+            email: email,
+            username: admin_username,
+            password: SHA1(password).toString(enc.Hex),
+            department: dept,
+            add_doc: uploader,
+            admin: admin
+        })
+    }
+}
+
+//============================================= WALLET INSERTION =============================================
+
 module.exports = router

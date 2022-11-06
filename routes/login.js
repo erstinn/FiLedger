@@ -33,6 +33,7 @@ router.post('/',queryDB, getAdminIdentity, getApproverIdentity, getUserIdentity,
     const dept = req.body.dept;
     const org = req.body.org;
     let logErr = '';
+    let ccp;
     // load the network configuration
     let mspId = "Org1MSP";
     const caURL = "org1-ca.fabric";

@@ -9,16 +9,11 @@ const FabricCAServices = require("fabric-ca-client");
 const yaml = require("js-yaml");
 const fs = require("fs");
 // databases
-<<<<<<< Updated upstream
 const nano = require('nano')('http://administrator:qF3ChYhp@127.0.0.1:5984/');
 // const nano = require('nano')('http://root:root@127.0.0.1:5984/');
-=======
-// const nano = require('nano')('http://administrator:qF3ChYhp@127.0.0.1:5984/');
-const nano = require('nano')('http://root:root@127.0.0.1:5984/');
 const userDB = nano.db.use('users');
 const adminDB = nano.db.use('admins');
 const approverDB = nano.db.use('approvers');
->>>>>>> Stashed changes
 const departments = ["Sales","Marketing", "Human Resources", "Accounting"] //to remove when dynamic addition. of dept.s implemented
 
 // session var
@@ -67,18 +62,9 @@ router.post('/', getAdminIdentity, async function (req, res) {
     //for second CA
     const ca2 = new FabricCAServices(caInfo.url, {trustedRoots: caTLSCACerts, verify: false}, caInfo2.caName);
     const walletPath = path.join(process.cwd(), 'wallet', mspId);
-<<<<<<< Updated upstream
     // const wallet_admin = await Wallets.newCouchDBWallet('http://root:root@127.0.0.1:5984/', "wallet");
     // const wallet_user = await Wallets.newCouchDBWallet('http://root:root@127.0.0.1:5984/', "wallet_users");
     // const wallet_approver = await Wallets.newCouchDBWallet('http://root:root@127.0.0.1:5984/', "wallet_approvers");
-=======
-    const wallet_admin = await Wallets.newCouchDBWallet('http://root:root@127.0.0.1:5984/', "wallet");
-    const wallet_user = await Wallets.newCouchDBWallet('http://root:root@127.0.0.1:5984/', "wallet_users");
-    const wallet_approver = await Wallets.newCouchDBWallet('http://root:root@127.0.0.1:5984/', "wallet_approvers");
-    // const wallet_admin = await Wallets.newCouchDBWallet('http://administrator:qF3ChYhp@127.0.0.1:5984/', "wallet");
-    // const wallet_user = await Wallets.newCouchDBWallet('http://administrator:qF3ChYhp@127.0.0.1:5984/', "wallet_users");
-    // const wallet_approver = await Wallets.newCouchDBWallet('http://administrator:qF3ChYhp@127.0.0.1:5984/', "wallet_approvers");
->>>>>>> Stashed changes
     //todo network/wallet connection end
 
     const indexDef = {

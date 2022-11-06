@@ -26,8 +26,7 @@ router.get('/', function (req, res){
 })
 
 //Gets the data obtained from Login Form
-router.post('/', getAdminIdentity, async function (req, res) {
-    const varemail = req.body.email;
+router.post('/',queryDB, getAdminIdentity, getApproverIdentity, getUserIdentity, async function (req, res) {
     console.log(req.body.email)
     console.log(req.body.dept)
     const passw = SHA1(req.body.password).toString(enc.Hex);
@@ -100,15 +99,16 @@ function loginError(responseUserDB, responseAdminDB){
     res.render('login', {dep:departments, logErr:logErr})//placeholder
 }
 
-function queryDB(){
+async function queryDB(req,res,next){
     return q = {
         selector: {
-            "email": varemail,
-            "password": passw,
-            "department": dept,
-            "organization":org
+            "email": req.body.email,
+            "password": req.body.password,
+            "department": req.body.department,
+            "organization":req.body.org
         }
     };
+    next();
 }
 
 
@@ -171,6 +171,7 @@ async function getApproverIdentity(req,res,next){
         req.session.approver = true;
         next();
     }
+    next();
 }
 
 async function getUserIdentity(req,res,next){
@@ -202,6 +203,7 @@ async function getUserIdentity(req,res,next){
         req.session.user = true;
         next();
     }
+    next();
 }
 
 

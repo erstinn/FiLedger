@@ -15,7 +15,6 @@ const router = express.Router()
 const nano = require('nano')('http://administrator:qF3ChYhp@127.0.0.1:5984/');
 // const nano = require('nano')('http://root:root@127.0.0.1:5984/');
 const adminDB = nano.db.use('admins');
-const userDB = nano.db.use('users');
 const approverDB = nano.db.use('approvers');
 // const walletDB = nano.db.use('wallet');
 
@@ -198,29 +197,11 @@ router.post("/status", async function (req, res){
                     type: 'X.509',
                 };
                 if(approver==='on'){
-                    await approverDB.insert({
-                        _id: id,
-                        firstname: firstName,
-                        lastname: lastName,
-                        email: email,
-                        username: username,
-                        password: SHA1(password).toString(enc.Hex),
-                        department: dept,
-                        def_approver:approver|| "off"
-                    })
+                    await insertToApprover(id, firstName, lastName, email, username, password, dept, approver)
                     await wallet_approvers.put(username, x509Identity);
                     console.log(`Successfully registered and enrolled admin user ${username} and imported it into the wallet`);
                 }else {
-                    await userDB.insert({
-                        _id: id,
-                        firstname: firstName,
-                        lastname: lastName,
-                        email: email,
-                        username: username,
-                        password: SHA1(password).toString(enc.Hex),
-                        department: dept,
-                        add_doc: uploader || "off",
-                    })
+                    await insertToUserDB(id, firstName, lastName, email, username, password, dept, uploader, req.body.org); //todo this is add to user
                     await wallet_users.put(username, x509Identity);
                     console.log(`Successfully registered and enrolled admin user ${username} and imported it into the wallet`);
                 }
@@ -236,5 +217,61 @@ router.post("/status", async function (req, res){
 
 
 })
+async function insertToUserDB(id, firstName, lastName, email, username, password, dept, uploader, org){
+    const userOrg1DB = nano.db.use('org1-users');
+    const userOrg2DB = nano.db.use('org2-users');
+    if (org === 'org1'){
+        userOrg1DB.insert({
+            _id: id,
+            firstname: firstName,
+            lastname: lastName,
+            email: email,
+            username: username,
+            password: SHA1(password).toString(enc.Hex),
+            department: dept,
+            add_doc: uploader || "off",
+        })
+    }else if (org === 'org2'){
+        userOrg2DB.insert({
+            _id: id,
+            firstname: firstName,
+            lastname: lastName,
+            email: email,
+            username: username,
+            password: SHA1(password).toString(enc.Hex),
+            department: dept,
+            add_doc: uploader || "off",
+        })
+    }
+    return;
+}
 
+async function insertToApprover(id, firstName, lastName, email, username, password, dept, approver){
+    const approverOrg1DB = nano.db.use('org1-approvers');
+    const approverOrg2DB = nano.db.use('org2-approvers');
+    if (org === 'org1'){
+        await approverOrg1DB.insert({
+            _id: id,
+            firstname: firstName,
+            lastname: lastName,
+            email: email,
+            username: username,
+            password: SHA1(password).toString(enc.Hex),
+            department: dept,
+            def_approver:approver|| "off"
+        })
+    }else if (org === 'org2'){
+        await approverOrg2DB.insert({
+            _id: id,
+            firstname: firstName,
+            lastname: lastName,
+            email: email,
+            username: username,
+            password: SHA1(password).toString(enc.Hex),
+            department: dept,
+            def_approver:approver|| "off"
+        })
+    }
+    return;
+}
 module.exports = router

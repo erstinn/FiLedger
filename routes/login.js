@@ -99,6 +99,7 @@ async function getAdminIdentity(req, res, next) {
         req.session.org = "org2"; //TODO pakinote nalang nito, dito nasset org
         res.redirect('/dashboard');
     next();
+    }
 }
 
 async function getApproverIdentity(req,res,next){
@@ -148,7 +149,7 @@ async function getApproverIdentity(req,res,next){
     next();
 }
 
-async function getUserIdentity(req,res,next){
+async function getUserIdentity(req,res,next) {
     let q = {
         selector: {
             "email": req.body.email,
@@ -164,7 +165,7 @@ async function getUserIdentity(req,res,next){
     const org2Wallet_user = await Wallets.newCouchDBWallet('http://administrator:qF3ChYhp@127.0.0.1:5984/', "org2-wallet_users");
 
     console.log(responseOrg1UserDB.bookmark, "org1user")
-    console.log(responseOrg2UserDB.bookmark, "org2user", )
+    console.log(responseOrg2UserDB.bookmark, "org2user",)
     // console.log(SHA1(req.body.password).toString(enc.Hex), "current pw")
 
     if (responseOrg1UserDB.bookmark !== 'nil') {
@@ -179,18 +180,17 @@ async function getUserIdentity(req,res,next){
             req.session.user = true;
             res.redirect('/dashboard');
         }
-    }else if (responseOrg2UserDB.bookmark !== 'nil') {
-        const userIdentityOrg2 = await org2Wallet_user.get(responseOrg2UserDB.docs[0].username)};
-        if (userIdentityOrg2){
-            console.log('USER LOGGED IN');
-            req.session.username = responseOrg2UserDB.docs[0].username;
-            req.session.department = responseOrg2UserDB.docs[0].department;
-            req.session.firstname = responseOrg2UserDB.docs[0].firstname;
-            req.session.lastname = responseOrg2UserDB.docs[0].lastname;
-            req.session.org = "org2"; //TODO pakinote nalang nito, dito nasset org
-            req.session.user = true;
-            res.redirect('/dashboard');
-        }
+    } else if (responseOrg2UserDB.bookmark !== 'nil') {
+        const userIdentityOrg2 = await org2Wallet_user.get(responseOrg2UserDB.docs[0].username)}
+    if (userIdentityOrg2) {
+        console.log('USER LOGGED IN');
+        req.session.username = responseOrg2UserDB.docs[0].username;
+        req.session.department = responseOrg2UserDB.docs[0].department;
+        req.session.firstname = responseOrg2UserDB.docs[0].firstname;
+        req.session.lastname = responseOrg2UserDB.docs[0].lastname;
+        req.session.org = "org2"; //TODO pakinote nalang nito, dito nasset org
+        req.session.user = true;
+        res.redirect('/dashboard');
     }
     next();
 }

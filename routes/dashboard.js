@@ -242,7 +242,6 @@ router.get('/rejected-docs',(req,res)=>{
 const multer  = require('multer')
 const invoke = require("../network/chaincode/javascript/invoke");
 const {originalMaxAge} = require("express-session/session/cookie");
-const res = require("express/lib/response"); //todo: test if it works without this.
 // const e = require('express'); //?
 //todo maybe prevent zip file upload?
 //Specs: 1 file per upload, 1gb, any filetype
@@ -285,6 +284,10 @@ router.post('/upload',  upload.single('uploadDoc'),
         }
         const index = await docsOrg1DB.createIndex(indexDef);
 
+        const fileCreator = `${req.session.firstname} ${req.session.lastname}`;
+        const fileName = req.file.originalname;
+
+
         const q = {
             selector: {
                 "name": fileName,
@@ -296,12 +299,12 @@ router.post('/upload',  upload.single('uploadDoc'),
         if (rev.docs == '') {
             // TODO: add insertDoc function here
             //  - add if else for checking orgs for DB
-            await insertDoc(req.file, req.session, docsOrg1DB);
+            await insertDoc(req.file, req.session, req.body, docsOrg1DB, res);
             //END OF FUNCTION
         } else { //TODO ======================================= UPDATING =================================================
             //TODO: turn into function
             // -Add (req.file, req.session, req.body, 'OrgDB') AS PARAMS FOR updateDoc
-            await updateDoc(req.file, req.session, req.body, docsOrg1DB);
+            await updateDoc(req.file, req.session, req.body, docsOrg1DB, res);
             //end of func
         }
     })
@@ -327,6 +330,7 @@ async function docQuery(fileName, creator){
     return rev.docs;
 }
 
+//TODO: change these into returns so that we can assign it to var nalang
 async function checkFileChanges(filebuff, filetag, file){
     if (!file.equals(filebuff)) { //checking if same file
         if (fileTags.split("|")[1] == "") {
@@ -342,7 +346,7 @@ async function checkFileChanges(filebuff, filetag, file){
     }
 }
 
-async function insertDoc(file, session, body, orgDB){
+async function insertDoc(file, session, body, orgDB, res){
     const currentTime = new Date(Date.now());
     const fileName = file.originalname;
 
@@ -444,7 +448,7 @@ async function insertDoc(file, session, body, orgDB){
                 id,
                 fileName,
                 data,
-                req.file.mimetype,
+                file.mimetype,
                 {rev: revi}
             )
             {
@@ -457,7 +461,7 @@ async function insertDoc(file, session, body, orgDB){
 }
 
 // UPDATE FILE FUNCTION
-async function updateDoc(file, session, body, orgDB){
+async function updateDoc(file, session, body, orgDB, res){
     console.log("updating")
     const currentTime = new Date(Date.now());
     const fileName = file.originalname;
@@ -481,7 +485,7 @@ async function updateDoc(file, session, body, orgDB){
     const fileType = path.extname(file.originalname); //extension; including dot
     const fileSize = await formatBytes(file.size);
     const stateTimestamp = state + " @ " + fileTimestamp; // @ to separate values later
-    let fileTags = `${fileName}|${body.tags.substring(0, body.tags.length - 1)}|@ ${fileTimestamp} V${parseFloat(fileVersion).toFixed(2)}`
+    let fileTags = `${fileName}|${body.tags.substring(0, body.tags.length - 1)}|@ ${fileTimestamp} V${parseFloat(fileVer).toFixed(2)}`
     var fileInp = fs.readFileSync(path.resolve(__dirname, `./../uploads/${fileName}`));
     var tempPath = path.resolve(__dirname, `./../uploads/${fileName}`);
     console.log(fileInp) //todo remove
@@ -519,7 +523,7 @@ async function updateDoc(file, session, body, orgDB){
                     last_activity: "Upload",
                     status: "Pending",
                 }
-                console.log('File Deets:', fileName, req.file.mimetype, tempPath)
+                console.log('File Deets:', fileName, file.mimetype, tempPath)
                 console.log("it worked")
                 invoke.updateTransaction(user, session.admin, doc, docdeets.name, docdeets.type, docdeets.size,
                     docdeets.tags_history, docdeets.version_num, docdeets.creator,
@@ -527,7 +531,7 @@ async function updateDoc(file, session, body, orgDB){
 
                 res.redirect("/dashboard?fail=false")
             } else {
-                console.log("failed", err)
+                console.log("failed dIT0: ", err)
                 res.redirect("/dashboard/?fail=true")
             }
         }

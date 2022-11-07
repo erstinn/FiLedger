@@ -25,7 +25,7 @@ router.get('/', function (req, res){
 //     res.render("accepted-docs",{username : req.session.username})
 // })
 router.get("/rejected-docs/:page",async(req,res)=>{
-    let docz = await docsDB.find({selector:{
+    let docz = await docsOrg1DB.find({selector:{
         _id:{
             "$gt":null
         },
@@ -100,7 +100,7 @@ router.get("/pending-docs/:page",async(req,res)=>{
         const approver = req.session.approver;
     
         //query for updating the status in each json doc
-        const state = await docsDB.find({selector:{
+        const state = await docsOrg1DB.find({selector:{
             _id:{
                 "$gt":null
             },
@@ -165,14 +165,14 @@ router.get("/pending-docs/:page",async(req,res)=>{
     const approver = req.session.approver;
 
     //query for updating the status in each json doc
-    const state = await docsOrg1DB.find({selector:{
+    // const state = await docsOrg1DB.find({selector:{
 })
 router.get('/pending-docs',(req,res)=>{
     res.redirect('pending-docs/1')
 })
 
 router.get('/accepted-docs/:page',async(req,res)=>{
-    const docz = await docsDB.find({selector:{
+    const docz = await docsOrg1DB.find({selector:{
         _id:{
             "$gt":null
         },

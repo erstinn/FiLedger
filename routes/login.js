@@ -180,7 +180,7 @@ async function getUserIdentity(req,res,next){
             res.redirect('/dashboard');
         }
     }else if (responseOrg2UserDB.bookmark !== 'nil') {
-        const userIdentityOrg2 = await org2Wallet_user.get(responseOrg2UserDB.docs[0].username);
+        const userIdentityOrg2 = await org2Wallet_user.get(responseOrg2UserDB.docs[0].username)};
         if (userIdentityOrg2){
             console.log('USER LOGGED IN');
             req.session.username = responseOrg2UserDB.docs[0].username;

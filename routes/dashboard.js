@@ -331,17 +331,26 @@ async function docQuery(fileName, creator){
 }
 
 //TODO: change these into returns so that we can assign it to var nalang
-async function checkFileChanges(filebuff, filetag, file){
+async function checkFileChanges(filebuff, filetag, file, fileVer, fileTimestamp, fileTags){
+    var ver = parseInt(fileVer);
+
     if (!file.equals(filebuff)) { //checking if same file
         if (fileTags.split("|")[1] == "") {
-            fileVer++;
-            fileTags = `${fileName}|${tags[tags.length - 1].split("|")[1]}|@ ${fileTimestamp} V${parseFloat(fileVer).toFixed(2)}`
-        } else if (fileTags.split("|")[1] == tags[tags.length - 1].split("|")[1]) {
-            fileVer++;
-            fileTags = `${fileName}|${tags[tags.length - 1].split("|")[1]}|@ ${fileTimestamp} V${parseFloat(fileVer).toFixed(2)}`
-        } else if (fileTags.split("|")[1] != tags[tags.length - 1].split("|")[1]) {
-            fileVer += 0.1;
-            fileTags = `${fileName}|${filetag.substring(0, req.body.tags.length - 1)}|@ ${fileTimestamp} V${parseFloat(fileVer).toFixed(2)}`
+            return{
+                version: ver++,
+                tags: `${file.originalname}|${filetag[filetag.length - 1].split("|")[1]}|@ ${fileTimestamp} V${parseFloat(fileVer).toFixed(2)}`
+            };
+        } else if (fileTags.split("|")[1] == filetag[filetag.length - 1].split("|")[1]) {
+            return{
+                version: ver++,
+                tags: `${file.originalname}|${filetag[filetag.length - 1].split("|")[1]}|@ ${fileTimestamp} V${parseFloat(fileVer).toFixed(2)}`
+            }
+        } else if (fileTags.split("|")[1] != filetag[filetag.length - 1].split("|")[1]) {
+            return {
+                version: ver += 0.1,
+                tags: `${file.originalname}|${filetag.substring(0, filetag.length - 1)}|@ ${fileTimestamp} V${parseFloat(fileVer).toFixed(2)}`
+
+            }
         }
     }
 }
@@ -489,8 +498,10 @@ async function updateDoc(file, session, body, orgDB, res){
     var fileInp = fs.readFileSync(path.resolve(__dirname, `./../uploads/${fileName}`));
     var tempPath = path.resolve(__dirname, `./../uploads/${fileName}`);
     console.log(fileInp) //todo remove
-    checkFileChanges(file.buffer, body.tags, fileInp);
+    let newMetadata = checkFileChanges(file.buffer, body.tags, fileInp, fileVer, fileTimestamp, fileTags);
+    // let newVer = newMetadata.version; //calls version of newMetadata kaso undefined daw huhu.
     fs.writeFileSync(path.resolve(__dirname, `./../uploads/${fileName}`), file.buffer);
+    // tags.push(newMetadata.tags); //TODO: call newMetada.tags
     tags.push(fileTags);
     stateTimestamps.push(stateTimestamp);
     await orgDB.insert({

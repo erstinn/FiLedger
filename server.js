@@ -56,9 +56,9 @@ function isAuthenticated (req, res, next){
 }
 
 function isLoggedIn (req, res, next){
-    if(!req.session.user){
+    if(!req.session.username){
         next();
-        console.log('no session')
+        console.log('BITCH IS NOT LOGGED IN')
     }
     else{
         console.log("with session");
@@ -136,7 +136,7 @@ const viewDocumentsRouter = require("./routes/view-documents")
 const api = require('./routes/api')
 // const pendingDocs = require('./routes/pending-docs')
 //Mount all routers
-app.use('/login',isLoggedIn , loginRouter)
+app.use('/login', isLoggedIn , loginRouter)
 app.use('/logout', logoutRouter)
 app.use('/api',api)
 app.use('/dashboard', isAuthenticated, dashboardRouter);

@@ -27,7 +27,7 @@ async function invokeTransaction (user, isAdmin, id, fileName, fileType, fileSiz
     try {
         console.log("Invoking chaincode using :", user);
         // load the network configuration
-        const ccpPath = path.resolve("./network/try-k8", "connection-org.yaml");
+        const ccpPath = path.resolve("./network/cluster", "connection-org.yaml");
         if (ccpPath.includes(".yaml")) {
             ccp = yaml.load(fs.readFileSync(ccpPath, "utf8"));
         } else {
@@ -92,7 +92,7 @@ async function updateTransaction(user, isAdmin, id, fileName, fileType, fileSize
     try {
         console.log("Invoking chaincode using :", user);
         // load the network configuration
-        const ccpPath = path.resolve("./network/try-k8", "connection-org.yaml");
+        const ccpPath = path.resolve("./network/cluster", "connection-org.yaml");
         if (ccpPath.includes(".yaml")) {
             ccp = yaml.load(fs.readFileSync(ccpPath, "utf8"));
         } else {

@@ -66,7 +66,7 @@ router.post("/status", async function (req, res){
 
 
     const admin_username = usernameAdmin;
-    const ccpPath = path.resolve("./network/try-k8/", "connection-org.yaml");
+    const ccpPath = path.resolve("./network/cluster/", "connection-org.yaml");
     if (ccpPath.includes(".yaml")) {
         ccp = yaml.load(fs.readFileSync(ccpPath, 'utf-8'));
     } else {
@@ -84,11 +84,11 @@ router.post("/status", async function (req, res){
             const ca = new FabricCAServices(caInfo.url, {trustedRoots: caTLSCACerts, verify: false}, caInfo.caName);
 
             // Create a new file system based wallet for managing identities.
-            const walletPath = path.join(process.cwd(), 'wallet', mspId);
+            // const walletPath = path.join(process.cwd(), 'wallet', mspId);
             const wallet_admin = await Wallets.newCouchDBWallet('http://administrator:qF3ChYhp@127.0.0.1:5984/', "org1-wallet_admins");
             // const wallet_admin2 = await Wallets.newCouchDBWallet('http://administrator:qF3ChYhp@127.0.0.1:5984/', "org2-wallet_admins");
             // const wallet_admin = await Wallets.newCouchDBWallet('http://root:root@127.0.0.1:5984/', "wallet");
-            console.log(`Wallet path: ${walletPath}`); //dno if irrelevant if couchdb code
+            // console.log(`Wallet path: ${walletPath}`); //dno if irrelevant if couchdb code
 
             // Check to see if we've already enrolled the admin user org1
             const identity = await wallet_admin.get(adminid);

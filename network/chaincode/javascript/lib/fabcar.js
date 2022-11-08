@@ -19,9 +19,9 @@ class MyFiLedgerContract extends Contract {
         const exists = await this.myDocExists(ctx, id);
         if (exists) {
             //update the version instead of throwing error
-            this.updateDoc(ctx, id, fileName, fileType, fileSize, fileTagsList,
-                fileVersion, fileCreator, fileMinApprovers, stateTimestamps, tags, revi)
-            // throw new Error(`The my document ${id} already exists`);
+            // this.updateDoc(ctx, id, fileName, fileType, fileSize, fileTagsList,
+            //     fileVersion, fileCreator, fileMinApprovers, stateTimestamps, tags, revi)
+            throw new Error(`The my document ${id} already exists`);
         }
         console.log('inserting')
         const document = {

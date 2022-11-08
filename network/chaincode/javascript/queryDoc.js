@@ -25,7 +25,7 @@ let queryDoc = async function main(user, isAdmin, id) {
     try {
         console.log("Invoking chaincode using :", user);
         // load the network configuration
-        const ccpPath = path.resolve("./network/try-k8", "connection-org.yaml");
+        const ccpPath = path.resolve("./network/cluster", "connection-org.yaml");
         if (ccpPath.includes(".yaml")) {
             ccp = yaml.load(fs.readFileSync(ccpPath, "utf8"));
         } else {

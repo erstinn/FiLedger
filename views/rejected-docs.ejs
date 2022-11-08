@@ -4,8 +4,9 @@
         rel="stylesheet">
     <link rel="stylesheet" href="/css/accepted-docs.css">
     <link rel="stylesheet" href="/css/navbar.css">
-    <!-- <script src="/js/dashboard.js" defer></script> -->
-    <script src="/js/navbar.js" defer></script>
+    <script src="/routes/dashboard.js" defer></script>
+    <script src="public/js/navbar.js" defer></script>
+    <script src="public/js/pending-docs.js" defer></script>
 
     </head>
 
@@ -56,28 +57,28 @@
                         </th>
                     </tr>
                     <%var perPage = 10 %>
-                    <%if(perPage > d.docs.length){%>
-                    <%perPage = d.docs.length%>
+                    <%if(perPage > doc2.docs.length){%>
+                    <%perPage = doc2.docs.length%>
                     <%}%>
-                    <%var start = (page-1) * perPage %>
-                    <%var end = start + (perPage-1) %>
-                    <%if(page == Math.ceil(d.docs.length/perPage) && page != 1){%>
-                    <%end = d.docs.length-1%>
+                    <%let start = (page-1) * perPage %>
+                    <%let end = start + (perPage-1) %>
+                    <%if(page === Math.ceil(doc2.docs.length/perPage) && page !== 1){%>
+                    <%end = doc2.docs.length-1%>
                     <%}%>
                     <%for(let i=start;i<=end;i++){%>
                         <tr class="data">
-                            <td><%=d.docs[i].type.slice(1).toUpperCase()%></td>
-                            <td class="docname" onmouseenter="setTitle('<%=d.docs[i].name%>')"><%=d.docs[i].name.length < 40 ? d.docs[i].name:d.docs[i].name.substring(0,40)+"..."%></td>
+                            <td><%=doc2.docs[i].type.slice(1).toUpperCase()%></td>
+                            <td class="docname" onmouseenter="setTitle('<%=doc2.docs[i].name%>')"><%=doc2.docs[i].name.length < 40 ? doc2.docs[i].name:doc2.docs[i].name.substring(0,40)+"..."%></td>
                             <td>
-                                <%for(let j=0;j<d.docs[i].state_history.length;j++){%>
-                                    <%if(d.docs[i].state_history[j].split(" ")[0]=="Rejected"){%>
-                                        <%=d.docs[i].state_history[j].split(" ").slice(2).toString().replace(","," ")%>
+                                <%for(let j=0;j<doc2.docs[i].state_history.length;j++){%>
+                                    <%if(doc2.docs[i].state_history[j].split(" ")[0]==="Rejected"){%>
+                                        <%=doc2.docs[i].state_history[j].split(" ").slice(2).toString().replace(","," ")%>
                                     <%}%>
                                 <%}%>
                             </td>
-                            <td><%=d.docs[i].creator%></td>
+                            <td><%=doc2.docs[i].creator%></td>
                             <td>Abacan</td>
-                            <td><%=d.docs[i].tags_history.slice(-1).toString().split('|')[1]%></td>
+                            <td><%=doc2.docs[i].tags_history.slice(-1).toString().split('|')[1]%></td>
                             <td>
                             <form id="uploadDoc" enctype="multipart/form-data" action="/dashboard/upload" method="POST">
                                 <label for="addFile" class="accept">
@@ -91,7 +92,7 @@
                 </table>
             </div>
             <div class="pages">
-                <%for(let i=1;i <= Math.ceil(d.docs.length/perPage);i++){%>
+                <%for(let i=1;i <= Math.ceil(doc2.docs.length/perPage);i++){%>
                     <a href="<%=i%>"><button class="pagesButton"><%=i%></button></a>
                 <%}%>
             </div>
@@ -136,19 +137,20 @@ docname.forEach(e=>{
 
 const query = new URLSearchParams(window.location.search)
 const opt = document.querySelectorAll(".opt")
-if(query.get("sort")=="title"){
+if(query.get("sort")==="title"){
     opt[0].selected = true
 }
-else if(query.get("sort")=="date"){
+else if(query.get("sort")==="date"){
     opt[1].selected = true
 }
-else if(query.get("sort")=="size"){
+else if(query.get("sort")==="size"){
     opt[2].selected = true
 }
-else if(query.get("sort")=="type"){
+else if(query.get("sort")==="type"){
     opt[3].selected = true
 }
-else if(query.get("sort")=="author"){
+else if(query.get("sort")==="author"){
     opt[4].selected = true
 }
 </script>
+</body>

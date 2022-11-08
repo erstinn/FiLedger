@@ -3,8 +3,9 @@
         rel="stylesheet">
     <link rel="stylesheet" href="/css/pending-docs.css">
     <link rel="stylesheet" href="/css/navbar.css">
-    <script src="/js/pending-docs.js" defer></script>
-    <script src="/js/navbar.js" defer></script>
+    <script src="/routes/dashboard.js" defer></script>
+    <script src="/public/js/pending-docs.js" defer></script>
+    <script src="/public/js/navbar.js" defer></script>
     </head>
     <body>
         <%-include("navbar-component")-%>
@@ -38,36 +39,36 @@
                             <th>Department</th>
                         </tr>
                         <%var perPage = 10 %>
-                        <%if(perPage > d.docs.length){%>
-                        <%perPage = d.docs.length%>
+                        <%if(perPage > doc3.docs.length){%>
+                        <%perPage = doc3.docs.length%>
                         <%}%>
-                        <%var start = (page-1) * perPage %>
-                        <%var end = start + (perPage-1) %>
-                        <%if(page == Math.ceil(d.docs.length/perPage) && page != 1){%>
-                        <%end = d.docs.length-1%>
+                        <%let start = (page-1) * perPage %>
+                        <%let end = start + (perPage-1) %>
+                        <%if(page === Math.ceil(doc3.docs.length/perPage) && page !== 1){%>
+                        <%end = doc3.docs.length-1%>
                         <%}%>
-                        <%for(var i=start;i<=end;i++){%>
+                        <%for(let i=start;i<=end;i++){%>
                         <tr class="data">
-                            <td><%=d.docs[i].type.slice(1).toUpperCase()%></td>
-                            <td class="docname" onmouseenter="setTitle('<%=d.docs[i].name%>')"><%=d.docs[i].name.length < 40 ? d.docs[i].name:d.docs[i].name.substring(0,40)+"..."%></td>
+                            <td><%=doc3.docs[i].type.slice(1).toUpperCase()%></td>
+                            <td class="docname" onmouseenter="setTitle('<%=doc3.docs[i].name%>')"><%=doc3.docs[i].name.length < 40 ? doc3.docs[i].name:doc3.docs[i].name.substring(0,40)+"..."%></td>
                             <td>
-                                <%for(let j=0;j<d.docs[i].state_history.length;j++){%>
-                                    <%if(d.docs[i].state_history[j].split(" ")[0]=="Draft"){%>
-                                        <%=d.docs[i].state_history[j].split(" ").slice(2).toString().replace(","," ")%>
+                                <%for(let j=0;j<doc3.docs[i].state_history.length;j++){%>
+                                    <%if(doc3.docs[i].state_history[j].split(" ")[0]==="Draft"){%>
+                                        <%=doc3.docs[i].state_history[j].split(" ").slice(2).toString().replace(","," ")%>
                                     <%}%>
                                 <%}%>
                             </td>
-                            <td><%=d.docs[i].creator%></td>
+                            <td><%=doc3.docs[i].creator%></td>
                             <td>tags</td> <!--tags-->
-                            <td><%=d.docs[i].size%></td>
+                            <td><%=doc3.docs[i].size%></td>
                             <td>department</td> <!--  departments (to be added in DB structure)-->
-                            <td><button class="accept <%=d.docs[i]._id%>" name="accept">Accept</button><button class="reject <%=d.docs[i]._id%>" name="reject">Reject</button> </td>
+                            <td><button class="accept <%=doc3.docs[i]._id%>" name="accept">Accept</button><button class="reject <%=doc3.docs[i]._id%>" name="reject">Reject</button> </td>
                         </tr>
                         <%}%>
                     </table>
             </div>
             <div class="pages">
-                <%for(let i=1;i <= Math.ceil(d.docs.length/perPage);i++){%>
+                <%for(let i=1;i <= Math.ceil(doc3.docs.length/perPage);i++){%>
                     <a href="<%=i%>"><button class="pagesButton"><%=i%></button></a>
                 <%}%>
             </div>

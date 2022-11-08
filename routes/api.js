@@ -3,7 +3,7 @@ const router = express.Router()
 // const nano = require('nano')('http://root:root@127.0.0.1:5984/');
 const nano = require('nano')('http://administrator:qF3ChYhp@127.0.0.1:5984/');
 const userdb = nano.db.use('users');
-const docsdb = nano.db.use('documents');
+const docsdb = nano.db.use('org1-documents');// change db from documents to org1-documents
 const bodyParser = require('body-parser')
 router.use(bodyParser.json())
 

@@ -86,6 +86,7 @@ router.post("/status", async function (req, res){
             // Create a new file system based wallet for managing identities.
             // const walletPath = path.join(process.cwd(), 'wallet', mspId);
             const wallet_admin = await Wallets.newCouchDBWallet('http://administrator:qF3ChYhp@127.0.0.1:5984/', "org1-wallet_admins");
+            // const wallet_admin = await Wallets.newCouchDBWallet('http://root:root@127.0.0.1:5984/', "org1-wallet_admins");
             // const wallet_admin2 = await Wallets.newCouchDBWallet('http://administrator:qF3ChYhp@127.0.0.1:5984/', "org2-wallet_admins");
             // const wallet_admin = await Wallets.newCouchDBWallet('http://root:root@127.0.0.1:5984/', "wallet");
             // console.log(`Wallet path: ${walletPath}`); //dno if irrelevant if couchdb code
@@ -116,7 +117,7 @@ router.post("/status", async function (req, res){
             console.log(admin);
         } catch (error) {
             console.error(`Failed to enroll admin user ${admin_username}: ${error}`);
-            process.exit(1);
+            // process.exit(1);
             res.render('failure-reg');
 
         }
@@ -131,6 +132,7 @@ router.post("/status", async function (req, res){
             const ca2 = new FabricCAServices(caInfo2.url, {trustedRoots: caTLSCACerts2, verify: false}, caInfo2.caName);//for second CA
 
             const walletPath2 = path.join(process.cwd(), 'wallet2', mspId2);
+            // const wallet_admin2 = await Wallets.newCouchDBWallet('http://root:root@127.0.0.1:5984/', "org2-wallet_admins");
             const wallet_admin2 = await Wallets.newCouchDBWallet('http://administrator:qF3ChYhp@127.0.0.1:5984/', "org2-wallet_admins");
 
             //display in the console the walletpath for org2
@@ -161,7 +163,7 @@ router.post("/status", async function (req, res){
             console.log(admin);
         } catch (error) {
             console.error(`Failed to enroll admin user ${admin_username}: ${error}`);
-            process.exit(1);
+            // process.exit(1);
             res.render('failure-reg');
 
         }
@@ -178,6 +180,9 @@ router.post("/status", async function (req, res){
             // const wallet_admin = await Wallets.newCouchDBWallet('http://root:root@127.0.0.1:5984/', "wallet");
             // const wallet_users = await Wallets.newCouchDBWallet('http://root:root@127.0.0.1:5984/', "wallet_users");
             // const wallet_approvers = await Wallets.newCouchDBWallet('http://root:root@127.0.0.1:5984/', "wallet_approvers");
+            // const wallet_admin = await Wallets.newCouchDBWallet('http://root:root@127.0.0.1:5984/', "org1-wallet_admins");
+            // const wallet_users = await Wallets.newCouchDBWallet('http://root:root@127.0.0.1:5984/', "org1-wallet_users");
+            // const wallet_approvers = await Wallets.newCouchDBWallet('http://root:root@127.0.0.1:5984/', "org1-wallet_approvers");
             const wallet_admin = await Wallets.newCouchDBWallet('http://administrator:qF3ChYhp@127.0.0.1:5984/', "org1-wallet_admins");
             const wallet_users = await Wallets.newCouchDBWallet('http://administrator:qF3ChYhp@127.0.0.1:5984/', "org1-wallet_users");
             const wallet_approvers = await Wallets.newCouchDBWallet('http://administrator:qF3ChYhp@127.0.0.1:5984/', "org1-wallet_approvers");
@@ -237,7 +242,7 @@ router.post("/status", async function (req, res){
             res.render('success-reg');
         }catch (error) {
             console.error(`Failed to register user ${username}: ${error}`);
-            process.exit(1);
+            // process.exit(1);
             res.render('failure-reg');
         }
     }
@@ -251,6 +256,9 @@ router.post("/status", async function (req, res){
             const walletPath2 = path.join(process.cwd(), 'wallet2', mspId2);
 
             //for org2 wallets
+            // const wallet_admin2 = await Wallets.newCouchDBWallet('http://root:root@127.0.0.1:5984/', "org2-wallet_admins");
+            // const wallet_users2 = await Wallets.newCouchDBWallet('http://root:root@127.0.0.1:5984/', "org2-wallet_users");
+            // const wallet_approvers2 = await Wallets.newCouchDBWallet('http://root:root@127.0.0.1:5984/', "org2-wallet_approvers");
             const wallet_admin2 = await Wallets.newCouchDBWallet('http://administrator:qF3ChYhp@127.0.0.1:5984/', "org2-wallet_admins");
             const wallet_users2 = await Wallets.newCouchDBWallet('http://administrator:qF3ChYhp@127.0.0.1:5984/', "org2-wallet_users");
             const wallet_approvers2 = await Wallets.newCouchDBWallet('http://administrator:qF3ChYhp@127.0.0.1:5984/', "org2-wallet_approvers");
@@ -311,7 +319,7 @@ router.post("/status", async function (req, res){
             res.render('success-reg');
         }catch (error) {
             console.error(`Failed to register user ${username}: ${error}`);
-            process.exit(1);
+            // process.exit(1);
             res.render('failure-reg');
         }
 

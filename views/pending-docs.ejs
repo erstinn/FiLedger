@@ -3,9 +3,9 @@
         rel="stylesheet">
     <link rel="stylesheet" href="/css/pending-docs.css">
     <link rel="stylesheet" href="/css/navbar.css">
-    <script src="/routes/dashboard.js" defer></script>
-    <script src="/public/js/pending-docs.js" defer></script>
-    <script src="/public/js/navbar.js" defer></script>
+    <!-- <script src="/routes/dashboard.js" defer></script> causes an error -->
+    <script src="/js/pending-docs.js" defer></script> <!--remove /public/-->
+    <script src="/js/navbar.js" defer></script> <!--remove /public/-->
     </head>
     <body>
         <%-include("navbar-component")-%>

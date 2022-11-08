@@ -68,6 +68,10 @@ async function main(){
             accessButtons.forEach(button=>{
                 button.disabled = true;
             })
+            //removes all modal data when modal is exited
+            document.querySelectorAll('.data').forEach(e=>{
+                document.querySelector(".modalTable.tableUser").removeChild(e)
+            })
         }
     })
 
@@ -130,9 +134,12 @@ async function main(){
                 userDocName.innerHTML = e['document']
                 let userDocAccess = document.createElement("td")
                 userDocAccess.innerHTML = e['access']
+                let userDept = document.createElement("td")
+                userDept.innerHTML = item['department']
 
                 userDoc.appendChild(userDocName)
                 userDoc.appendChild(userDocAccess)
+                userDoc.appendChild(userDept)
 
                 document.querySelector(".modalTable.tableUser").appendChild(userDoc)
             })
@@ -183,7 +190,7 @@ async function main(){
 
         if(currentActive==0){
             users.forEach(item=>{
-                if(item.firstname.toUpperCase().includes(searchBar.value.toUpperCase())){
+                if(`${item.firstname.toUpperCase()} ${item.lastname.toUpperCase()}`.includes(searchBar.value.toUpperCase())){
                     matchedObject.push(item)
                 }
             })
@@ -216,7 +223,6 @@ async function main(){
             })
         }
 
-
     }
 
     exitModal.addEventListener("click",()=>{
@@ -230,6 +236,10 @@ async function main(){
 
         accessButtons.forEach(button=>{
             button.disabled = true;
+        })
+
+        document.querySelectorAll('.data').forEach(e=>{
+            document.querySelector(".modalTable.tableUser").removeChild(e)
         })
 
     })

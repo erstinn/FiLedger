@@ -40,6 +40,11 @@ router.get("/rejected-docs/:page",async(req,res)=>{
         },
         status:"Rejected"
     }})
+    //checks if there are docs
+    if(docz.docs.length <= 0){
+        res.render('approver-rejected-docs',{username:req.session.username,doc2:docz,page:req.params.page})
+        return
+    }
     if(Number(req.params.page) <= (Math.ceil(docz.docs.length/10))){
         if(req.query.sort === "title"){
             docz.docs = docz.docs.sort((a,b)=>(a.name > b.name)? 1:-1)
@@ -87,7 +92,6 @@ router.get("/rejected-docs/:page",async(req,res)=>{
         else{
             docz.docs = docz.docs.sort((a,b)=>(a.name > b.name)? 1:-1)
         }
-        res.render('rejected-docs',{username:req.session.username,doc2:docz,page:req.params.page})
     }
     else{
         res.redirect("1")
@@ -102,6 +106,11 @@ router.get("/pending-docs/:page",async(req,res)=>{
             },
             status:"Pending"
         }})
+        //checks if there are docs
+        if(docz.docs.length <= 0){
+            res.render('pending-docs',{username:req.session.username,doc3:docz,page:req.params.page})
+            return
+        }
     if(Number(req.params.page) <= (Math.ceil(docz.docs.length/10))){
         const accepted = req.body.accept;
         const user = req.session.user;
@@ -184,6 +193,11 @@ router.get('/accepted-docs/:page',async(req,res)=>{
         },
         status:"Accepted"
     }})
+    //checks if there are docs
+    if(docz.docs.length <= 0){
+        res.render('accepted-docs',{username:req.session.username,doc1:docz,page:req.params.page})
+        return
+    }
     if(Number(req.params.page) <= (Math.ceil(docz.docs.length/10))){
         if(req.query.sort === "title"){
             docz.docs = docz.docs.sort((a,b)=>(a.name > b.name)? 1:-1)
@@ -242,6 +256,7 @@ router.get('/accepted-docs/:page',async(req,res)=>{
 const multer  = require('multer')
 const invoke = require("../network/chaincode/javascript/invoke");
 const {originalMaxAge} = require("express-session/session/cookie");
+const session = require('express-session');
 // const e = require('express'); //?
 //todo maybe prevent zip file upload?
 //Specs: 1 file per upload, 1gb, any filetype

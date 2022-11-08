@@ -136,23 +136,23 @@ const viewDocumentsRouter = require("./routes/view-documents")
 const api = require('./routes/api')
 // const pendingDocs = require('./routes/pending-docs')
 //Mount all routers
-// app.use('/login', isLoggedIn , loginRouter)
-// app.use('/logout', logoutRouter)
-// app.use('/api',api)
-// app.use('/dashboard', isAuthenticated, dashboardRouter);
-// app.use('/documents', isAuthenticated, isApprover, isUser, documentsRouter); //TODO CONSIDERING REMOVAL
-// app.use('/all-documents', isAuthenticated, allDocumentsRouter);
-// app.use('/administration', isAuthenticated, isAdmin, adminRouter);
-// app.use('/view-documents', isAuthenticated, isAdmin,  viewDocumentsRouter) //TODO CONSIDERING REMOVAL
-// app.use('/registration',isAuthenticated,isAdmin, regRouter);
+app.use('/login', isLoggedIn , loginRouter)
+app.use('/logout', logoutRouter)
+app.use('/api',api)
+app.use('/dashboard', isAuthenticated, dashboardRouter);
+app.use('/documents', isAuthenticated, isApprover, isUser, documentsRouter); //TODO CONSIDERING REMOVAL
+app.use('/all-documents', isAuthenticated, allDocumentsRouter);
+app.use('/administration', isAuthenticated, isAdmin, adminRouter);
+app.use('/view-documents', isAuthenticated, isAdmin,  viewDocumentsRouter) //TODO CONSIDERING REMOVAL
+app.use('/registration',isAuthenticated,isAdmin, regRouter);
 // app.use('/pending-docs', isAuthenticated, pendingDocs)
 // app.use('/pending-docs', isAuthenticated, myFunc);
 
 //FOR DEVELOPMENT WITH NO AUTHENTICATION DO NOT REMOVE
-app.use('/dashboard', dashboardRouter)
-app.use('/documents', documentsRouter)
-app.use('/all-documents', allDocumentsRouter)
-app.use('/administration', adminRouter);
-app.use('/view-documents', viewDocumentsRouter)
-app.use('/registration', regRouter);
+// app.use('/dashboard', dashboardRouter)
+// app.use('/documents', documentsRouter)
+// app.use('/all-documents', allDocumentsRouter)
+// app.use('/administration', adminRouter);
+// app.use('/view-documents', viewDocumentsRouter)
+// app.use('/registration', regRouter);
 

@@ -185,7 +185,7 @@ router.get('/accepted-docs/:page',async(req,res)=>{
         status:"Accepted"
     }})
     if(Number(req.params.page) <= (Math.ceil(docz.docs.length/10))){
-        if(req.query.sort === "title"){
+        if (req.query.sort === "title"){
             docz.docs = docz.docs.sort((a,b)=>(a.name > b.name)? 1:-1)
         }
         else if(req.query.sort === 'type'){

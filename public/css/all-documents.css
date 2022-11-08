@@ -127,3 +127,7 @@ a{
 .data:nth-child(odd){
     background-color:#61c6c654
 }
+
+.uploaded-docs-table tr:hover{
+    background-color: lightgray;
+}

@@ -12,7 +12,7 @@ const docsOrg2DB = nano.db.use('org2-documents');
 const userOrg1DB = nano.db.use('org1-users');
 const userOrg2DB = nano.db.use('org2-users');
 
-router.get('/all-documents/:page',async(req,res)=>{
+router.get('/:page',async(req,res)=>{
     console.log(req.session.approver);
     console.log(req.session.admin);
     console.log(req.session.user);
@@ -121,15 +121,8 @@ router.get('/all-documents/:page',async(req,res)=>{
     // res.render("all-documents",{docs:documents,username : req.session.username})
 })
 
-router.get('/',async(req,res)=>{
-    const documents = await docsOrg1DB.find({
-        selector: {
-            _id: {
-                "$gt": null
-            }
-        },
-    })
-    res.render('all-documents',{docs:documents,username : req.session.username,page:req.params.page})
+router.get('/',(req,res)=>{
+    res.redirect('all-documents/1')
 })
 
 

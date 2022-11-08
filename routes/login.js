@@ -98,8 +98,8 @@ async function getAdminIdentity(req, res, next) {
         req.session.lastname = responseOrg2AdminDB.docs[0].lastname;
         req.session.org = "org2"; //TODO pakinote nalang nito, dito nasset org
         res.redirect('/dashboard');
-    next();
     }
+    next();
 }
 
 async function getApproverIdentity(req,res,next){
@@ -181,19 +181,19 @@ async function getUserIdentity(req,res,next) {
             res.redirect('/dashboard');
         }
     } else if (responseOrg2UserDB.bookmark !== 'nil') {
-        const userIdentityOrg2 = await org2Wallet_user.get(responseOrg2UserDB.docs[0].username)}
-    if (userIdentityOrg2) {
-        console.log('USER LOGGED IN');
-        req.session.username = responseOrg2UserDB.docs[0].username;
-        req.session.department = responseOrg2UserDB.docs[0].department;
-        req.session.firstname = responseOrg2UserDB.docs[0].firstname;
-        req.session.lastname = responseOrg2UserDB.docs[0].lastname;
-        req.session.org = "org2"; //TODO pakinote nalang nito, dito nasset org
-        req.session.user = true;
-        res.redirect('/dashboard');
+        const userIdentityOrg2 = await org2Wallet_user.get(responseOrg2UserDB.docs[0].username)
+        if (userIdentityOrg2) {
+            console.log('USER LOGGED IN');
+            req.session.username = responseOrg2UserDB.docs[0].username;
+            req.session.department = responseOrg2UserDB.docs[0].department;
+            req.session.firstname = responseOrg2UserDB.docs[0].firstname;
+            req.session.lastname = responseOrg2UserDB.docs[0].lastname;
+            req.session.org = "org2"; //TODO pakinote nalang nito, dito nasset org
+            req.session.user = true;
+            res.redirect('/dashboard');
+        }
     }
     next();
 }
-
 
 module.exports = router

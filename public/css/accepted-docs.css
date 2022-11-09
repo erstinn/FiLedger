@@ -6,7 +6,7 @@
 .acceptedDocs-list {
     width: 95vw;
     height: 80vh;
-    margin: 5vh auto 2vh auto;
+    margin: 5vh auto 0 auto;
     border: 1px solid black;
     border-radius: 5px 5px 0px 0px;
 }
@@ -26,14 +26,11 @@ tr {
 }
 .table-title {
     background-color: #61c6c6;
-    padding: 0.2vw;
-    /* border-top: 1px solid black;
-    border-left: 1px solid black;
-    border-right: 1px solid black; */
+    padding: 0.5vw;
     text-align: center;
     color: white;
-    font-weight: 600;
-    font-size: 2vw;
+    /*font-weight: 600;*/
+    /*font-size: 2vw;*/
     border-radius: 5px 5px 0px 0px;
 }
 .data:nth-child(odd){
@@ -42,8 +39,12 @@ tr {
 .data td:first-child {
     text-align: center;
 }
+.table-headers{
+    background-color: #D9D9D9;
+    border-bottom: 1px solid black;
+}
 .table-headers th:nth-child(2) {
-    width: 30%;
+    min-width: 20%;
 }
 
 .accept {
@@ -73,4 +74,30 @@ tr {
     display: flex;
     justify-content: center;
     gap: 1vw;
+}
+
+
+
+.sortInput{
+    position: absolute;
+    right:3vw;
+}
+.sortInput label{
+    color:white
+}
+
+.sortBy{
+    background-color: white;
+    padding:.1vw;
+    border:none
+}
+
+.input-content button {
+    padding: 0.5vw;
+    margin-left: 0.5vw;
+    border: none;
+    color: black;
+    cursor: pointer;
+    border-radius: 5px;
+    background-color: rgb(218, 218, 36);
 }

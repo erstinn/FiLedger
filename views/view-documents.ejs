@@ -25,7 +25,7 @@
               </svg>
               <input type="text" value="<%=data.docs[0].name%>" class="editable-docName">
               <form action="downloads/<%=data.docs[0].name%>" method="POST">
-                <button class="download">Download File</button>
+                <button class="download <%=data.docs[0].name%>">Download File</button>
               </form>
             </div>
             <div class="metadata">

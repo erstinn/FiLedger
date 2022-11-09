@@ -2,56 +2,61 @@ const express = require('express')
 const router = express.Router()
 // const nano = require('nano')('http://root:root@127.0.0.1:5984/');
 const nano = require('nano')('http://administrator:qF3ChYhp@127.0.0.1:5984/');
-const docsDB = nano.db.use('documents');
-const approverDB = nano.db.use('approvers');
-const userDB = nano.db.use('users');
+// const docsDB = nano.db.use('documents');
+// const approverDB = nano.db.use('approvers');
+// const userDB = nano.db.use('users');
 
-
+//di parin pinalitan dbs pota ako pa nagpalit
+const docsOrg1DB = nano.db.use('org1-documents');
+const docsOrg2DB = nano.db.use('org2-documents');
+const userOrg1DB = nano.db.use('org1-users');
+const userOrg2DB = nano.db.use('org2-users');
 
 router.get('/:page',async(req,res)=>{
     console.log(req.session.approver);
     console.log(req.session.admin);
     console.log(req.session.user);
+    const documents = await docsOrg1DB.find({
+        selector: {
+            _id: {
+                "$gt": null
+            }
+        },
+    })
 
     if (req.session.admin===true) {
-        const documents = await docsDB.find({
-            selector: {
-                _id: {
-                    "$gt": null
-                }
-            },
-        })
+
         if(Number(req.params.page) <= Math.ceil(documents.docs.length/10)){
             let docs;
-        if(req.query.sort == "title"){
+        if(req.query.sort === "title"){
             docs = documents.docs.sort((a,b)=>(a.name > b.name)? 1:-1)
         }
-        else if(req.query.sort == 'type'){
+        else if(req.query.sort === 'type'){
             docs = documents.docs.sort((a,b)=>(a.type.slice(1).toUpperCase() > b.type.slice(1).toUpperCase())? 1:-1)
         }
-        else if(req.query.sort == "size"){
+        else if(req.query.sort === "size"){
             docs = documents.docs.sort((a,b)=>{
                 let unitA = a.size.split(" ")[1]
                 let unitB = b.size.split(" ")[1]
                 let valueA;
                 let valueB;
-                if(unitA == 'GB'){
+                if(unitA === 'GB'){
                     valueA = parseFloat(a.size.split(' ')[0]) * 125000
                 }
-                else if(unitA == 'MB'){
+                else if(unitA === 'MB'){
                     valueA = parseFloat(a.size.split(' ')[0]) * 125
                 }
-                else if(unitA == 'KB'){
+                else if(unitA === 'KB'){
                     valueA = parseFloat(a.size.split(' ')[0])
                 }
 
-                if(unitB == 'GB'){
+                if(unitB === 'GB'){
                     valueB = parseFloat(b.size.split(' ')[0]) * 125000
                 }
-                else if(unitB == 'MB'){
+                else if(unitB === 'MB'){
                     valueB = parseFloat(b.size.split(' ')[0]) * 125
                 }
-                else if(unitB == 'KB'){
+                else if(unitB === 'KB'){
                     valueB = parseFloat(b.size.split(' ')[0])
                 }
                 if(valueA > valueB){
@@ -61,9 +66,9 @@ router.get('/:page',async(req,res)=>{
                     return -1
                 }
             })
-        }else if(req.query.sort == "author"){
+        }else if(req.query.sort === "author"){
             docs = documents.docs.sort((a,b)=>(a.creator > b.creator)? 1:-1)
-        }else if(req.query.sort == 'date'){
+        }else if(req.query.sort === 'date'){
             docs = documents.docs.sort((a,b)=>(a.state_history.slice(-1) > b.state_history.slice(-1))? 1:-1)
         }
         else{
@@ -79,7 +84,7 @@ router.get('/:page',async(req,res)=>{
         console.log(req.session.department)
         console.log("appotasetihjrit");
 
-        const documents = await docsDB.find({
+        const documents = await docsOrg1DB.find({
             selector: {
                 "department": req.session.department
             }
@@ -89,25 +94,25 @@ router.get('/:page',async(req,res)=>{
     }else{
         //TODO uncomment pseudocode soon
 
-        const user = await userDB.find({
+        const user = await userOrg1DB.find({
             selector:{
                 "department": req.session.department
             }
         })
-        // const document = await docsDB.find({
+        // const document = await docsOrg1DB.find({
         //     selector: {
         //         //TODO "department": responseApproverDB.docs[0].department @BALALA @BALALA
         //         ""
         //     }
         // })
         //selectors end
-        const responseUserDB = await userDB.find(user);
+        const responseUserDB = await userOrg1DB.find(user);
         //fetch if align w dept of the creator? TODO MAYBE NOT
         //todo
         //  fetch all documents such that it matches username inside roles array (editor/viewer)
         // fetch by username == creator
 
-        const responseDocsDB = await docsDB.find(user);
+        const responseDocsDB = await docsOrg1DB.find(user);
         res.render("all-documents",{docs:documents,username : req.session.username,page:req.params.page})
         //todo ent of soducod
         console.log('paprover')

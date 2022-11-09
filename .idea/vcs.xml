@@ -2,6 +2,7 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/caliper-benchmarks" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/example_chaincodes" vcs="Git" />
   </component>
 </project>

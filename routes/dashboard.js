@@ -21,9 +21,18 @@ router.get('/', function (req, res){
     res.render("dashboard", {username : req.session.username}); //after session, username
 })
 
-// router.get("/accepted-docs",(req,res)=>{
-//     res.render("accepted-docs",{username : req.session.username})
-// })
+//GANTO GINAWA KO PARA LUMITAW PERO HINDI KO ALAM ANO GAGAWIN FOR PAGINATION SHIT
+router.get("/accepted-docs",async(req,res)=>{
+    res.redirect('accepted-docs/1');
+})
+
+router.get('/rejected-docs',async(req,res)=>{
+    res.redirect('rejected-docs/1');
+})
+router.get('/pending-docs',async(req,res)=>{
+    res.redirect('pending-docs/1');
+})
+
 router.get("/rejected-docs/:page",async(req,res)=>{
     let docz = await docsOrg1DB.find({selector:{
         _id:{
@@ -32,35 +41,35 @@ router.get("/rejected-docs/:page",async(req,res)=>{
         status:"Rejected"
     }})
     if(Number(req.params.page) <= (Math.ceil(docz.docs.length/10))){
-        if(req.query.sort == "title"){
+        if(req.query.sort === "title"){
             docz.docs = docz.docs.sort((a,b)=>(a.name > b.name)? 1:-1)
         }
-        else if(req.query.sort == 'type'){
+        else if(req.query.sort === 'type'){
             docz.docs = docz.docs.sort((a,b)=>(a.type.slice(1).toUpperCase() > b.type.slice(1).toUpperCase())? 1:-1)
         }
-        else if(req.query.sort == "size"){
+        else if(req.query.sort === "size"){
             docz.docs = docz.docs.sort((a,b)=>{
                 let unitA = a.size.split(" ")[1]
                 let unitB = b.size.split(" ")[1]
                 let valueA;
                 let valueB;
-                if(unitA == 'GB'){
+                if(unitA === 'GB'){
                     valueA = parseFloat(a.size.split(' ')[0]) * 125000
                 }
-                else if(unitA == 'MB'){
+                else if(unitA === 'MB'){
                     valueA = parseFloat(a.size.split(' ')[0]) * 125
                 }
-                else if(unitA == 'KB'){
+                else if(unitA === 'KB'){
                     valueA = parseFloat(a.size.split(' ')[0])
                 }
 
-                if(unitB == 'GB'){
+                if(unitB === 'GB'){
                     valueB = parseFloat(b.size.split(' ')[0]) * 125000
                 }
-                else if(unitB == 'MB'){
+                else if(unitB === 'MB'){
                     valueB = parseFloat(b.size.split(' ')[0]) * 125
                 }
-                else if(unitB == 'KB'){
+                else if(unitB === 'KB'){
                     valueB = parseFloat(b.size.split(' ')[0])
                 }
                 if(valueA > valueB){
@@ -70,15 +79,15 @@ router.get("/rejected-docs/:page",async(req,res)=>{
                     return -1
                 }
             })
-        }else if(req.query.sort == "author"){
+        }else if(req.query.sort === "author"){
             docz.docs = docz.docs.sort((a,b)=>(a.creator > b.creator)? 1:-1)
-        }else if(req.query.sort == 'date'){
+        }else if(req.query.sort === 'date'){
             docz.docs = docz.docs.sort((a,b)=>(a.state_history.slice(-1) > b.state_history.slice(-1))? 1:-1)
         }
         else{
             docz.docs = docz.docs.sort((a,b)=>(a.name > b.name)? 1:-1)
         }
-        res.render('rejected-docs',{username:req.session.username,d:docz,page:req.params.page})
+        res.render('rejected-docs',{username:req.session.username,doc2:docz,page:req.params.page})
     }
     else{
         res.redirect("1")
@@ -109,35 +118,35 @@ router.get("/pending-docs/:page",async(req,res)=>{
             // "department":
         }})
 
-        if(req.query.sort == "title"){
+        if(req.query.sort === "title"){
             docz.docs = docz.docs.sort((a,b)=>(a.name > b.name)? 1:-1)
         }
-        else if(req.query.sort == 'type'){
+        else if(req.query.sort === 'type'){
             docz.docs = docz.docs.sort((a,b)=>(a.type.slice(1).toUpperCase() > b.type.slice(1).toUpperCase())? 1:-1)
         }
-        else if(req.query.sort == "size"){
+        else if(req.query.sort === "size"){
             docz.docs = docz.docs.sort((a,b)=>{
                 let unitA = a.size.split(" ")[1]
                 let unitB = b.size.split(" ")[1]
                 let valueA;
                 let valueB;
-                if(unitA == 'GB'){
+                if(unitA === 'GB'){
                     valueA = parseFloat(a.size.split(' ')[0]) * 125000
                 }
-                else if(unitA == 'MB'){
+                else if(unitA === 'MB'){
                     valueA = parseFloat(a.size.split(' ')[0]) * 125
                 }
-                else if(unitA == 'KB'){
+                else if(unitA === 'KB'){
                     valueA = parseFloat(a.size.split(' ')[0])
                 }
 
-                if(unitB == 'GB'){
+                if(unitB === 'GB'){
                     valueB = parseFloat(b.size.split(' ')[0]) * 125000
                 }
-                else if(unitB == 'MB'){
+                else if(unitB === 'MB'){
                     valueB = parseFloat(b.size.split(' ')[0]) * 125
                 }
-                else if(unitB == 'KB'){
+                else if(unitB === 'KB'){
                     valueB = parseFloat(b.size.split(' ')[0])
                 }
                 if(valueA > valueB){
@@ -147,15 +156,15 @@ router.get("/pending-docs/:page",async(req,res)=>{
                     return -1
                 }
             })
-        }else if(req.query.sort == "author"){
+        }else if(req.query.sort === "author"){
             docz.docs = docz.docs.sort((a,b)=>(a.creator > b.creator)? 1:-1)
-        }else if(req.query.sort == 'date'){
+        }else if(req.query.sort === 'date'){
             docz.docs = docz.docs.sort((a,b)=>(a.state_history.slice(-1) > b.state_history.slice(-1))? 1:-1)
         }
         else{
             docz.docs = docz.docs.sort((a,b)=>(a.name > b.name)? 1:-1)
         }
-        res.render("pending-docs", {d: docz, username: req.session.username,page:req.params.page})
+        res.render("pending-docs", {doc3: docz, username: req.session.username,page:req.params.page})
     }else{
         res.redirect('1')
     }
@@ -167,9 +176,6 @@ router.get("/pending-docs/:page",async(req,res)=>{
     //query for updating the status in each json doc
     // const state = await docsOrg1DB.find({selector:{
 })
-router.get('/pending-docs',(req,res)=>{
-    res.redirect('pending-docs/1')
-})
 
 router.get('/accepted-docs/:page',async(req,res)=>{
     const docz = await docsOrg1DB.find({selector:{
@@ -179,35 +185,35 @@ router.get('/accepted-docs/:page',async(req,res)=>{
         status:"Accepted"
     }})
     if(Number(req.params.page) <= (Math.ceil(docz.docs.length/10))){
-        if(req.query.sort == "title"){
+        if(req.query.sort === "title"){
             docz.docs = docz.docs.sort((a,b)=>(a.name > b.name)? 1:-1)
         }
-        else if(req.query.sort == 'type'){
+        else if(req.query.sort === 'type'){
             docz.docs = docz.docs.sort((a,b)=>(a.type.slice(1).toUpperCase() > b.type.slice(1).toUpperCase())? 1:-1)
         }
-        else if(req.query.sort == "size"){
+        else if(req.query.sort === "size"){
             docz.docs = docz.docs.sort((a,b)=>{
                 let unitA = a.size.split(" ")[1]
                 let unitB = b.size.split(" ")[1]
                 let valueA;
                 let valueB;
-                if(unitA == 'GB'){
+                if(unitA === 'GB'){
                     valueA = parseFloat(a.size.split(' ')[0]) * 125000
                 }
-                else if(unitA == 'MB'){
+                else if(unitA ==='MB'){
                     valueA = parseFloat(a.size.split(' ')[0]) * 125
                 }
-                else if(unitA == 'KB'){
+                else if(unitA === 'KB'){
                     valueA = parseFloat(a.size.split(' ')[0])
                 }
 
-                if(unitB == 'GB'){
+                if(unitB === 'GB'){
                     valueB = parseFloat(b.size.split(' ')[0]) * 125000
                 }
-                else if(unitB == 'MB'){
+                else if(unitB === 'MB'){
                     valueB = parseFloat(b.size.split(' ')[0]) * 125
                 }
-                else if(unitB == 'KB'){
+                else if(unitB === 'KB'){
                     valueB = parseFloat(b.size.split(' ')[0])
                 }
                 if(valueA > valueB){
@@ -217,25 +223,19 @@ router.get('/accepted-docs/:page',async(req,res)=>{
                     return -1
                 }
             })
-        }else if(req.query.sort == "author"){
+        }else if(req.query.sort === "author"){
             docz.docs = docz.docs.sort((a,b)=>(a.creator > b.creator)? 1:-1)
-        }else if(req.query.sort == 'date'){
+        }else if(req.query.sort === 'date'){
             docz.docs = docz.docs.sort((a,b)=>(a.state_history.slice(-1) > b.state_history.slice(-1))? 1:-1)
         }
         else{
             docz.docs = docz.docs.sort((a,b)=>(a.name > b.name)? 1:-1)
         }
-        res.render('accepted-docs',{username:req.session.username,d:docz,page:req.params.page})
+        res.render('accepted-docs',{username:req.session.username,doc1:docz,page:req.params.page})
     }
     else{
         res.redirect("1")
     }
-})
-router.get('/accepted-docs',(req,res)=>{
-    res.redirect('accepted-docs/1')
-})
-router.get('/rejected-docs',(req,res)=>{
-    res.redirect('rejected-docs/1')
 })
 
 //======================================== UPLOAD FILE-RELATED CODES ================================================================

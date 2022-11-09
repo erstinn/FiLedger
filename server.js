@@ -135,6 +135,7 @@ const adminRouter = require("./routes/administration")
 const viewDocumentsRouter = require("./routes/view-documents")
 const api = require('./routes/api')
 // const pendingDocs = require('./routes/pending-docs')
+
 //Mount all routers
 app.use('/login', isLoggedIn , loginRouter)
 app.use('/logout', logoutRouter)

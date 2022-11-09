@@ -20,7 +20,7 @@ accept.forEach(e=>{
 })
 reject.forEach(e=>{
     e.addEventListener('click',async()=>{
-        const response = await fetch('/api/rejectDocs',
+        const response = await fetch('/api/rejectDocs', //TODO this connects to api.js
         {
             method:"POST",
             headers:{'Content-Type':'application/json','access':'admin'},

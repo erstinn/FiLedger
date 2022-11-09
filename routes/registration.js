@@ -11,7 +11,7 @@ const generator = require("generate-password");
 const SHA1  = require('crypto-js/sha1');
 const { enc } = require('crypto-js');
 const router = express.Router()
-const nano = require('nano')('http://administrator:qF3ChYhp@127.0.0.1:5984/');
+const nano = require('nano')('http://root:root@127.0.0.1:5984/');
 // const nano = require('nano')('http://root:root@127.0.0.1:5984/');
 const adminDB = nano.db.use('admins');
 const userDB = nano.db.use('users');
@@ -85,8 +85,14 @@ router.post("/status", async function (req, res){
 
             // Create a new file system based wallet for managing identities.
             // const walletPath = path.join(process.cwd(), 'wallet', mspId);
+<<<<<<< Updated upstream
             const wallet_admin = await Wallets.newCouchDBWallet('http://administrator:qF3ChYhp@127.0.0.1:5984/', "org1-wallet_admins");
             // const wallet_admin2 = await Wallets.newCouchDBWallet('http://administrator:qF3ChYhp@127.0.0.1:5984/', "org2-wallet_admins");
+=======
+            const wallet_admin = await Wallets.newCouchDBWallet('http://root:root@127.0.0.1:5984/', "org1-wallet_admins");
+            // const wallet_admin = await Wallets.newCouchDBWallet('http://root:root@127.0.0.1:5984/', "org1-wallet_admins");
+            // const wallet_admin2 = await Wallets.newCouchDBWallet('http://root:root@127.0.0.1:5984/', "org2-wallet_admins");
+>>>>>>> Stashed changes
             // const wallet_admin = await Wallets.newCouchDBWallet('http://root:root@127.0.0.1:5984/', "wallet");
             // console.log(`Wallet path: ${walletPath}`); //dno if irrelevant if couchdb code
 
@@ -131,7 +137,12 @@ router.post("/status", async function (req, res){
             const ca2 = new FabricCAServices(caInfo2.url, {trustedRoots: caTLSCACerts2, verify: false}, caInfo2.caName);//for second CA
 
             const walletPath2 = path.join(process.cwd(), 'wallet2', mspId2);
+<<<<<<< Updated upstream
             const wallet_admin2 = await Wallets.newCouchDBWallet('http://administrator:qF3ChYhp@127.0.0.1:5984/', "org2-wallet_admins");
+=======
+            // const wallet_admin2 = await Wallets.newCouchDBWallet('http://root:root@127.0.0.1:5984/', "org2-wallet_admins");
+            const wallet_admin2 = await Wallets.newCouchDBWallet('http://root:root@127.0.0.1:5984/', "org2-wallet_admins");
+>>>>>>> Stashed changes
 
             //display in the console the walletpath for org2
             console.log(`Wallet path: ${walletPath2}`);
@@ -178,9 +189,18 @@ router.post("/status", async function (req, res){
             // const wallet_admin = await Wallets.newCouchDBWallet('http://root:root@127.0.0.1:5984/', "wallet");
             // const wallet_users = await Wallets.newCouchDBWallet('http://root:root@127.0.0.1:5984/', "wallet_users");
             // const wallet_approvers = await Wallets.newCouchDBWallet('http://root:root@127.0.0.1:5984/', "wallet_approvers");
+<<<<<<< Updated upstream
             const wallet_admin = await Wallets.newCouchDBWallet('http://administrator:qF3ChYhp@127.0.0.1:5984/', "org1-wallet_admins");
             const wallet_users = await Wallets.newCouchDBWallet('http://administrator:qF3ChYhp@127.0.0.1:5984/', "org1-wallet_users");
             const wallet_approvers = await Wallets.newCouchDBWallet('http://administrator:qF3ChYhp@127.0.0.1:5984/', "org1-wallet_approvers");
+=======
+            // const wallet_admin = await Wallets.newCouchDBWallet('http://root:root@127.0.0.1:5984/', "org1-wallet_admins");
+            // const wallet_users = await Wallets.newCouchDBWallet('http://root:root@127.0.0.1:5984/', "org1-wallet_users");
+            // const wallet_approvers = await Wallets.newCouchDBWallet('http://root:root@127.0.0.1:5984/', "org1-wallet_approvers");
+            const wallet_admin = await Wallets.newCouchDBWallet('http://root:root@127.0.0.1:5984/', "org1-wallet_admins");
+            const wallet_users = await Wallets.newCouchDBWallet('http://root:root@127.0.0.1:5984/', "org1-wallet_users");
+            const wallet_approvers = await Wallets.newCouchDBWallet('http://root:root@127.0.0.1:5984/', "org1-wallet_approvers");
+>>>>>>> Stashed changes
             console.log(`Wallet path: ${walletPath}`);
 
             // Create a new CA client for interacting with the CA.
@@ -251,9 +271,18 @@ router.post("/status", async function (req, res){
             const walletPath2 = path.join(process.cwd(), 'wallet2', mspId2);
 
             //for org2 wallets
+<<<<<<< Updated upstream
             const wallet_admin2 = await Wallets.newCouchDBWallet('http://administrator:qF3ChYhp@127.0.0.1:5984/', "org2-wallet_admins");
             const wallet_users2 = await Wallets.newCouchDBWallet('http://administrator:qF3ChYhp@127.0.0.1:5984/', "org2-wallet_users");
             const wallet_approvers2 = await Wallets.newCouchDBWallet('http://administrator:qF3ChYhp@127.0.0.1:5984/', "org2-wallet_approvers");
+=======
+            // const wallet_admin2 = await Wallets.newCouchDBWallet('http://root:root@127.0.0.1:5984/', "org2-wallet_admins");
+            // const wallet_users2 = await Wallets.newCouchDBWallet('http://root:root@127.0.0.1:5984/', "org2-wallet_users");
+            // const wallet_approvers2 = await Wallets.newCouchDBWallet('http://root:root@127.0.0.1:5984/', "org2-wallet_approvers");
+            const wallet_admin2 = await Wallets.newCouchDBWallet('http://root:root@127.0.0.1:5984/', "org2-wallet_admins");
+            const wallet_users2 = await Wallets.newCouchDBWallet('http://root:root@127.0.0.1:5984/', "org2-wallet_users");
+            const wallet_approvers2 = await Wallets.newCouchDBWallet('http://root:root@127.0.0.1:5984/', "org2-wallet_approvers");
+>>>>>>> Stashed changes
             console.log(`Wallet path: ${walletPath2}`);
 
             //for second CA

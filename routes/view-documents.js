@@ -5,7 +5,7 @@ const fs = require('fs');
 const http = require('https');
 const axios = require('axios')
 //databases
-const nano = require('nano')('http://administrator:qF3ChYhp@127.0.0.1:5984/');
+const nano = require('nano')('http://root:root@127.0.0.1:5984/');
 //const nano = require('nano')('http://admin:mysecretpassword@127.0.0.1:5984/');
 // const nano = require('nano')('http://root:root@127.0.0.1:5984/');
 // const nano = require('nano')('http://admin:pw123@127.0.0.1:5984/');

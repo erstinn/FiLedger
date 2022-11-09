@@ -6,8 +6,13 @@ const generator = require('generate-password');
 const app = express();
 const session = require('express-session')
 const invoke = require('./network/chaincode/javascript/invoke')
+<<<<<<< Updated upstream
 const nano = require('nano')('http://administrator:qF3ChYhp@127.0.0.1:5984/');
 // const nano = require('nano')('http://root:root@127.0.0.1:5984/');
+=======
+// const nano = require('nano')('http://administrator:qF3ChYhp@127.0 .0.1:5984/');
+const nano = require('nano')('http://root:root@127.0.0.1:5984/');
+>>>>>>> Stashed changes
 
 // session var init
 app.use(session({
@@ -140,7 +145,8 @@ const api = require('./routes/api')
 app.use('/login', isLoggedIn , loginRouter)
 app.use('/logout', logoutRouter)
 app.use('/api',api)
-app.use('/dashboard', isAuthenticated, dashboardRouter);
+// app.use('/dashboard', isAuthenticated, dashboardRouter);
+app.use('/dashboard', dashboardRouter);
 app.use('/documents', isAuthenticated, isApprover, isUser, documentsRouter); //TODO CONSIDERING REMOVAL
 app.use('/all-documents', isAuthenticated, allDocumentsRouter);
 app.use('/administration', isAuthenticated, isAdmin, adminRouter);

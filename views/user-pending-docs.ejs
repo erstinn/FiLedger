@@ -1,0 +1,372 @@
+<%-include("header")-%>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="/css/pending-docs.css">
+    <link rel="stylesheet" href="/css/navbar.css">
+    <!-- <script src="/routes/dashboard.js" defer></script> causes an error -->
+    <script src="/js/pending-docs.js" defer></script> <!--remove /public/-->
+    <script src="/js/navbar.js" defer></script> <!--remove /public/-->
+    </head>
+    <body>
+        <%-include("navbar-component")-%>
+            <div class="main-cont">
+                <div class="pendingDocs-list">
+                    <div class="table-title">
+                        Pending Documents
+                        <div class="sortInput">
+                        <label for="sortBy">Sort:</label>
+                        <select name="sortBy" id="sortBy" class="sortBy" onchange="location = `<%=page%>?sort=${this.value}`;">
+                            <option value="" selected hidden disabled>Choose one...</option>
+                            <option value="title" class="opt">Title</option>
+                            <option value="date" class="opt">Date</option>
+                            <option value="size" class="opt">Size</option>
+                            <option value="type" class="opt">File Type</option>
+                            <option value="author" class="opt">Author</option>
+                        </select>
+                    </div>
+                    </div>
+                    <table class="pendingDocs-table">
+                        <tr class="toApprove">
+                            <td colspan="9">Documents awaiting your approval</td>
+                        </tr>
+                        <tr class="table-headers">
+                            <th>Filetype</th>
+                            <th>Title</th>
+                            <th>Date Uploaded</th>
+                            <th>Approver</th>
+                            <th>Tags</th>
+                            <th>File Size</th>
+                            <th>Department</th>
+                        </tr>
+                        <%var perPage = 10 %>
+                        <%if(perPage > doc3.docs.length){%>
+                        <%perPage = doc3.docs.length%>
+                        <%}%>
+                        <%let start = (page-1) * perPage %>
+                        <%let end = start + (perPage-1) %>
+                        <%if(page === Math.ceil(doc3.docs.length/perPage) && page !== 1){%>
+                        <%end = doc3.docs.length-1%>
+                        <%}%>
+                        <%for(let i=start;i<=end;i++){%>
+                        <tr class="data">
+                            <td><%=doc3.docs[i].type.slice(1).toUpperCase()%></td>
+                            <td class="docname" onmouseenter="setTitle('<%=doc3.docs[i].name%>')"><%=doc3.docs[i].name.length < 40 ? doc3.docs[i].name:doc3.docs[i].name.substring(0,40)+"..."%></td>
+                            <td>
+                                <%for(let j=0;j<doc3.docs[i].state_history.length;j++){%>
+                                    <%if(doc3.docs[i].state_history[j].split(" ")[0]==="Draft"){%>
+                                        <%=doc3.docs[i].state_history[j].split(" ").slice(2).toString().replace(","," ")%>
+                                    <%}%>
+                                <%}%>
+                            </td>
+                            <td><%=doc3.docs[i].creator%></td>
+                            <td>tags</td> <!--tags-->
+                            <td><%=doc3.docs[i].size%></td>
+                            <td>department</td> <!--  departments (to be added in DB structure)-->
+                        </tr>
+                        <%}%>
+                    </table>
+            </div>
+            <div class="pages">
+                <%for(let i=1;i <= Math.ceil(doc3.docs.length/perPage);i++){%>
+                    <a href="<%=i%>"><button class="pagesButton"><%=i%></button></a>
+                <%}%>
+            </div>
+            </div>
+    </body>
+
+
+
+<!--TODO: if not admin, show the table below-->
+
+
+
+<!--                    <table class="pendingDocs-table forApproval">-->
+<!--                        <tr class="toApprove">-->
+<!--                            <td colspan="9">Your documents awaiting approval</td>-->
+<!--                        </tr>-->
+<!--                        <tr class="table-headers">-->
+<!--                            <th>-->
+<!--                                Filetype-->
+<!--                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"-->
+<!--                                    class="bi bi-chevron-down" viewBox="0 0 16 16">-->
+<!--                                    <path fill-rule="evenodd"-->
+<!--                                        d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z" />-->
+<!--                                </svg>-->
+<!--                            </th>-->
+<!--                            <th>-->
+<!--                                Title-->
+<!--                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"-->
+<!--                                    class="bi bi-chevron-down" viewBox="0 0 16 16">-->
+<!--                                    <path fill-rule="evenodd"-->
+<!--                                        d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z" />-->
+<!--                                </svg>-->
+<!--                            </th>-->
+<!--                            <th>-->
+<!--                                Date Uploaded-->
+<!--                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"-->
+<!--                                    class="bi bi-chevron-down" viewBox="0 0 16 16">-->
+<!--                                    <path fill-rule="evenodd"-->
+<!--                                        d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z" />-->
+<!--                                </svg>-->
+<!--                            </th>-->
+<!--                            <th>-->
+<!--                                Author-->
+<!--                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"-->
+<!--                                    class="bi bi-chevron-down" viewBox="0 0 16 16">-->
+<!--                                    <path fill-rule="evenodd"-->
+<!--                                        d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z" />-->
+<!--                                </svg>-->
+<!--                            </th>-->
+<!--                            <th>-->
+<!--                                Approver-->
+<!--                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"-->
+<!--                                    class="bi bi-chevron-down" viewBox="0 0 16 16">-->
+<!--                                    <path fill-rule="evenodd"-->
+<!--                                        d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z" />-->
+<!--                                </svg>-->
+<!--                            </th>-->
+<!--                            <th>-->
+<!--                                File Size-->
+<!--                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"-->
+<!--                                    class="bi bi-chevron-down" viewBox="0 0 16 16">-->
+<!--                                    <path fill-rule="evenodd"-->
+<!--                                        d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z" />-->
+<!--                                </svg>-->
+<!--                            </th>-->
+<!--                            <th>-->
+<!--                                File Version-->
+<!--                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"-->
+<!--                                    class="bi bi-chevron-down" viewBox="0 0 16 16">-->
+<!--                                    <path fill-rule="evenodd"-->
+<!--                                        d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z" />-->
+<!--                                </svg>-->
+<!--                            </th>-->
+<!--                            <th>-->
+<!--                                Tags-->
+<!--                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"-->
+<!--                                    class="bi bi-chevron-down" viewBox="0 0 16 16">-->
+<!--                                    <path fill-rule="evenodd"-->
+<!--                                        d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z" />-->
+<!--                                </svg>-->
+<!--                            </th>-->
+<!--                            <th>-->
+<!--                                Access-->
+<!--                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"-->
+<!--                                    class="bi bi-chevron-down" viewBox="0 0 16 16">-->
+<!--                                    <path fill-rule="evenodd"-->
+<!--                                        d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z" />-->
+<!--                                </svg>-->
+<!--                            </th>-->
+<!--                        </tr>-->
+<!--                        <tr class="data">-->
+<!--                            <td>-->
+<!--                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"-->
+<!--                                    class="bi bi-files" viewBox="0 0 16 16">-->
+<!--                                    <path-->
+<!--                                        d="M13 0H6a2 2 0 0 0-2 2 2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2 2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm0 13V4a2 2 0 0 0-2-2H5a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1zM3 4a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4z" />-->
+<!--                                </svg>-->
+<!--                            </td>-->
+<!--                            <td>Document 1</td>-->
+<!--                            <td>07/17/2022 - 12:54</td>-->
+<!--                            <td>Decano</td>-->
+<!--                            <td>Abacan</td>-->
+<!--                            <td>5 MB</td>-->
+<!--                            <td>3.0</td>-->
+<!--                            <td>&nbsp;</td>-->
+<!--                            <td>Editor</td>-->
+<!--                        </tr>-->
+<!--                        <tr class="data">-->
+<!--                            <td>-->
+<!--                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"-->
+<!--                                    class="bi bi-files" viewBox="0 0 16 16">-->
+<!--                                    <path-->
+<!--                                        d="M13 0H6a2 2 0 0 0-2 2 2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2 2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm0 13V4a2 2 0 0 0-2-2H5a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1zM3 4a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4z" />-->
+<!--                                </svg>-->
+<!--                            </td>-->
+<!--                            <td>Document 1</td>-->
+<!--                            <td>07/17/2022 - 12:54</td>-->
+<!--                            <td>Decano</td>-->
+<!--                            <td>Abacan</td>-->
+<!--                            <td>5 MB</td>-->
+<!--                            <td>3.0</td>-->
+<!--                            <td>&nbsp;</td>-->
+<!--                            <td>Editor</td>-->
+<!--                        </tr>-->
+<!--                        <tr class="data">-->
+<!--                            <td>-->
+<!--                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"-->
+<!--                                    class="bi bi-files" viewBox="0 0 16 16">-->
+<!--                                    <path-->
+<!--                                        d="M13 0H6a2 2 0 0 0-2 2 2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2 2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm0 13V4a2 2 0 0 0-2-2H5a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1zM3 4a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4z" />-->
+<!--                                </svg>-->
+<!--                            </td>-->
+<!--                            <td>Document 1</td>-->
+<!--                            <td>07/17/2022 - 12:54</td>-->
+<!--                            <td>Decano</td>-->
+<!--                            <td>Abacan</td>-->
+<!--                            <td>5 MB</td>-->
+<!--                            <td>3.0</td>-->
+<!--                            <td>&nbsp;</td>-->
+<!--                            <td>Editor</td>-->
+<!--                        </tr>-->
+<!--                        <tr class="data">-->
+<!--                            <td>-->
+<!--                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"-->
+<!--                                    class="bi bi-files" viewBox="0 0 16 16">-->
+<!--                                    <path-->
+<!--                                        d="M13 0H6a2 2 0 0 0-2 2 2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2 2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm0 13V4a2 2 0 0 0-2-2H5a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1zM3 4a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4z" />-->
+<!--                                </svg>-->
+<!--                            </td>-->
+<!--                            <td>Document 1</td>-->
+<!--                            <td>07/17/2022 - 12:54</td>-->
+<!--                            <td>Decano</td>-->
+<!--                            <td>Abacan</td>-->
+<!--                            <td>5 MB</td>-->
+<!--                            <td>3.0</td>-->
+<!--                            <td>&nbsp;</td>-->
+<!--                            <td>Editor</td>-->
+<!--                        </tr>-->
+<!--                        <tr class="data">-->
+<!--                            <td>-->
+<!--                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"-->
+<!--                                    class="bi bi-files" viewBox="0 0 16 16">-->
+<!--                                    <path-->
+<!--                                        d="M13 0H6a2 2 0 0 0-2 2 2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2 2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm0 13V4a2 2 0 0 0-2-2H5a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1zM3 4a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4z" />-->
+<!--                                </svg>-->
+<!--                            </td>-->
+<!--                            <td>Document 1</td>-->
+<!--                            <td>07/17/2022 - 12:54</td>-->
+<!--                            <td>Decano</td>-->
+<!--                            <td>Abacan</td>-->
+<!--                            <td>5 MB</td>-->
+<!--                            <td>3.0</td>-->
+<!--                            <td>&nbsp;</td>-->
+<!--                            <td>Editor</td>-->
+<!--                        </tr>-->
+<!--                        <tr class="data">-->
+<!--                            <td>-->
+<!--                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"-->
+<!--                                    class="bi bi-files" viewBox="0 0 16 16">-->
+<!--                                    <path-->
+<!--                                        d="M13 0H6a2 2 0 0 0-2 2 2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2 2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm0 13V4a2 2 0 0 0-2-2H5a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1zM3 4a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4z" />-->
+<!--                                </svg>-->
+<!--                            </td>-->
+<!--                            <td>Document 1</td>-->
+<!--                            <td>07/17/2022 - 12:54</td>-->
+<!--                            <td>Decano</td>-->
+<!--                            <td>Abacan</td>-->
+<!--                            <td>5 MB</td>-->
+<!--                            <td>3.0</td>-->
+<!--                            <td>&nbsp;</td>-->
+<!--                            <td>Editor</td>-->
+<!--                        </tr>-->
+<!--                        <tr class="data">-->
+<!--                            <td>-->
+<!--                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"-->
+<!--                                    class="bi bi-files" viewBox="0 0 16 16">-->
+<!--                                    <path-->
+<!--                                        d="M13 0H6a2 2 0 0 0-2 2 2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2 2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm0 13V4a2 2 0 0 0-2-2H5a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1zM3 4a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4z" />-->
+<!--                                </svg>-->
+<!--                            </td>-->
+<!--                            <td>Document 1</td>-->
+<!--                            <td>07/17/2022 - 12:54</td>-->
+<!--                            <td>Decano</td>-->
+<!--                            <td>Abacan</td>-->
+<!--                            <td>5 MB</td>-->
+<!--                            <td>3.0</td>-->
+<!--                            <td>&nbsp;</td>-->
+<!--                            <td>Editor</td>-->
+<!--                        </tr>-->
+<!--                        <tr class="data">-->
+<!--                            <td>-->
+<!--                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"-->
+<!--                                    class="bi bi-files" viewBox="0 0 16 16">-->
+<!--                                    <path-->
+<!--                                        d="M13 0H6a2 2 0 0 0-2 2 2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2 2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm0 13V4a2 2 0 0 0-2-2H5a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1zM3 4a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4z" />-->
+<!--                                </svg>-->
+<!--                            </td>-->
+<!--                            <td>Document 1</td>-->
+<!--                            <td>07/17/2022 - 12:54</td>-->
+<!--                            <td>Decano</td>-->
+<!--                            <td>Abacan</td>-->
+<!--                            <td>5 MB</td>-->
+<!--                            <td>3.0</td>-->
+<!--                            <td>&nbsp;</td>-->
+<!--                            <td>Editor</td>-->
+<!--                        </tr>-->
+<!--                        <tr class="data">-->
+<!--                            <td>-->
+<!--                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"-->
+<!--                                    class="bi bi-files" viewBox="0 0 16 16">-->
+<!--                                    <path-->
+<!--                                        d="M13 0H6a2 2 0 0 0-2 2 2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2 2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm0 13V4a2 2 0 0 0-2-2H5a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1zM3 4a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4z" />-->
+<!--                                </svg>-->
+<!--                            </td>-->
+<!--                            <td>Document 1</td>-->
+<!--                            <td>07/17/2022 - 12:54</td>-->
+<!--                            <td>Decano</td>-->
+<!--                            <td>Abacan</td>-->
+<!--                            <td>5 MB</td>-->
+<!--                            <td>3.0</td>-->
+<!--                            <td>&nbsp;</td>-->
+<!--                            <td>Editor</td>-->
+<!--                        </tr>-->
+<!--                        <tr class="data">-->
+<!--                            <td>-->
+<!--                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"-->
+<!--                                    class="bi bi-files" viewBox="0 0 16 16">-->
+<!--                                    <path-->
+<!--                                        d="M13 0H6a2 2 0 0 0-2 2 2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2 2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm0 13V4a2 2 0 0 0-2-2H5a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1zM3 4a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4z" />-->
+<!--                                </svg>-->
+<!--                            </td>-->
+<!--                            <td>Document 1</td>-->
+<!--                            <td>07/17/2022 - 12:54</td>-->
+<!--                            <td>Decano</td>-->
+<!--                            <td>Abacan</td>-->
+<!--                            <td>5 MB</td>-->
+<!--                            <td>3.0</td>-->
+<!--                            <td>&nbsp;</td>-->
+<!--                            <td>Editor</td>-->
+<!--                        </tr>-->
+<!--                    </table>-->
+<!--                </div>-->
+
+            <!-- <div id="myModal" class="modal">
+
+                <div class="modal-content">
+                    <span class="close">&times;</span>
+                    <div class="reject-title">
+                        <p>Document #5 - Rejected</p>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <script>
+                // Get the modal
+                var modal = document.getElementById("myModal");
+
+                var span = document.querySelector(".close");
+
+                const buttons = document.querySelectorAll('.reject')
+
+                buttons.forEach(btn => {
+                    btn.onclick = function () {
+                        modal.style.display = "block";
+                    }
+                })
+                console.log(span)
+                span.onclick = function () {
+                    modal.style.display = "none";
+                }
+                window.onclick = function (event) {
+                    if (event.target == modal) {
+                        modal.style.display = "none";
+                    }
+                }
+
+
+
+            </script> -->
+

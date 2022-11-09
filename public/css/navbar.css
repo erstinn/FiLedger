@@ -103,7 +103,7 @@
     color:#fff;
 }
 .header-left{
-    width:75vw
+    width:85vw
 }
 .header-right{
     display: flex;
@@ -117,6 +117,7 @@
     fill:#fff;
     stroke: #111827;
 }
+
 .title{
     padding: 1em 0 2em 3em;
     color: #111827;

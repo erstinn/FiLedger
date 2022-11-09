@@ -12,17 +12,19 @@ const userOrg2DB = nano.db.use('org2-users');
 const docViews = "/_design/all_users/_view/all";
 const departments = ["Sales","Marketing", "Human Resources", "Accounting"] //todo remove last dept.
 
-router.get("/",async(req,res)=>{
-    res.redirect('accepted-docs/1');
+
+router.use(setSessionDocsDB);
+router.get("/", async(req,res)=>{
+    if (req.session.admin || req.session.approver)
+        res.redirect('accepted-docs/1');
+    if (req.session.user)
+        res.redirect('user-accepted-docs/1');
+
 })
 router.get('/:page',async(req,res)=>{
-    const docz = await docsOrg1DB.find({selector:{
-            _id:{
-                "$gt":null
-            },
-            status:"Accepted"
-        }})
-    //TODO may remove
+    //todo soz ni-one liner ko nalang .find() :D
+    docsDB = req.session.currentDocsDB
+    const docz = await docsDB.find({selector:{_id:{"$gt":null}, status:"Accepted"}})
     if(docz.docs.length <= 0){
         res.render('accepted-docs',{username:req.session.username,doc1:docz,page:req.params.page})
         return
@@ -30,11 +32,9 @@ router.get('/:page',async(req,res)=>{
     if(Number(req.params.page) <= (Math.ceil(docz.docs.length/10))){
         if(req.query.sort === "title"){
             docz.docs = docz.docs.sort((a,b)=>(a.name > b.name)? 1:-1)
-        }
-        else if(req.query.sort === 'type'){
+        }else if(req.query.sort === 'type'){
             docz.docs = docz.docs.sort((a,b)=>(a.type.slice(1).toUpperCase() > b.type.slice(1).toUpperCase())? 1:-1)
-        }
-        else if(req.query.sort === "size"){
+        }else if(req.query.sort === "size"){
             docz.docs = docz.docs.sort((a,b)=>{
                 let unitA = a.size.split(" ")[1]
                 let unitB = b.size.split(" ")[1]
@@ -42,27 +42,19 @@ router.get('/:page',async(req,res)=>{
                 let valueB;
                 if(unitA === 'GB'){
                     valueA = parseFloat(a.size.split(' ')[0]) * 125000
-                }
-                else if(unitA ==='MB'){
+                }else if(unitA ==='MB'){
                     valueA = parseFloat(a.size.split(' ')[0]) * 125
-                }
-                else if(unitA === 'KB'){
+                }else if(unitA === 'KB'){
                     valueA = parseFloat(a.size.split(' ')[0])
-                }
-
-                if(unitB === 'GB'){
+                }if(unitB === 'GB'){
                     valueB = parseFloat(b.size.split(' ')[0]) * 125000
-                }
-                else if(unitB === 'MB'){
+                }else if(unitB === 'MB'){
                     valueB = parseFloat(b.size.split(' ')[0]) * 125
-                }
-                else if(unitB === 'KB'){
+                } else if(unitB === 'KB'){
                     valueB = parseFloat(b.size.split(' ')[0])
-                }
-                if(valueA > valueB){
+                } if(valueA > valueB){
                     return 1
-                }
-                else{
+                } else{
                     return -1
                 }
             })
@@ -70,14 +62,32 @@ router.get('/:page',async(req,res)=>{
             docz.docs = docz.docs.sort((a,b)=>(a.creator > b.creator)? 1:-1)
         }else if(req.query.sort === 'date'){
             docz.docs = docz.docs.sort((a,b)=>(a.state_history.slice(-1) > b.state_history.slice(-1))? 1:-1)
-        }
-        else{
+        } else{
             docz.docs = docz.docs.sort((a,b)=>(a.name > b.name)? 1:-1)
         }
-        res.render('accepted-docs',{username:req.session.username,doc1:docz,page:req.params.page})
+        if (req.session.admin ||req.session.approver) {
+            res.render('accepted-docs', {username: req.session.username, doc1: docz, page: req.params.page})
+        }else {
+            res.render('user-accepted-docs', {username: req.session.username, doc1: docz, page: req.params.page})
+        }
     }
     else{
-        res.redirect("accepted-docs/1")
+        if (req.session.admin ||req.session.approver) {
+            res.redirect("accepted-docs/1")
+        }else{
+            res.redirect("user-accepted-docs/1")
+        }
     }
 })
+
+//todo ======================================= ACTUAL MIDDLEWARES =======================================
+function setSessionDocsDB(req, res, next){ //bobo ko bat di ko ginawa una palang 🤡
+    if (req.session.org==='org1'){
+        req.session.currentDocsDB = docsOrg1DB;
+    }else{
+        req.session.currentDocsDB = docsOrg2DB;
+    }
+    next();
+}
+
 module.exports = router;

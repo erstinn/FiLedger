@@ -13,37 +13,24 @@ const docViews = "/_design/all_users/_view/all";
 const departments = ["Sales","Marketing", "Human Resources", "Accounting"] //to remove when dynamic addition. of dept.s implemented
 
 
+router.use(setSessionDocsDB);
 
-router.get('/',async(req,res)=>{
-    res.redirect('pending-docs/1');
+router.get('/', async(req,res)=>{
+    if (req.session.admin ||req.session.approver) {
+        res.redirect('pending-docs/1');
+    }else {
+        res.redirect('user-pending-docs/1');
+    }
+
 })
 
 
 router.get("/:page",async(req,res)=>{
-    //query for fetching all docs in documents DB
-
-    const docz = await docsOrg1DB.find({selector:{
-            _id:{
-                "$gt":null
-            },
-            status:"Pending"
-        }})
+    //todo soz ni-one liner ko nalang .find() :D
+    docsDB = req.session.currentDocsDB
+    const docz = await docsDB.find({selector:{_id:{"$gt":null},status:"Pending"}})
     if(Number(req.params.page) <= (Math.ceil(docz.docs.length/10))){
-        const accepted = req.body.accept;
-        const user = req.session.user;
-        const admin = req.session.admin;
-        const approver = req.session.approver;
-
         //query for updating the status in each json doc
-        const state = await docsOrg1DB.find({selector:{
-                _id:{
-                    "$gt":null
-                },
-                "status": req.params.status,
-                "name": req.params.name
-                // "department":
-            }})
-
         if(req.query.sort === "title"){
             docz.docs = docz.docs.sort((a,b)=>(a.name > b.name)? 1:-1)
         }
@@ -58,24 +45,17 @@ router.get("/:page",async(req,res)=>{
                 let valueB;
                 if(unitA === 'GB'){
                     valueA = parseFloat(a.size.split(' ')[0]) * 125000
-                }
-                else if(unitA === 'MB'){
+                }else if(unitA === 'MB'){
                     valueA = parseFloat(a.size.split(' ')[0]) * 125
-                }
-                else if(unitA === 'KB'){
+                } else if(unitA === 'KB'){
                     valueA = parseFloat(a.size.split(' ')[0])
-                }
-
-                if(unitB === 'GB'){
+                }if(unitB === 'GB'){
                     valueB = parseFloat(b.size.split(' ')[0]) * 125000
-                }
-                else if(unitB === 'MB'){
+                } else if(unitB === 'MB'){
                     valueB = parseFloat(b.size.split(' ')[0]) * 125
-                }
-                else if(unitB === 'KB'){
+                }else if(unitB === 'KB'){
                     valueB = parseFloat(b.size.split(' ')[0])
-                }
-                if(valueA > valueB){
+                }if(valueA > valueB){
                     return 1
                 }
                 else{
@@ -90,15 +70,27 @@ router.get("/:page",async(req,res)=>{
         else{
             docz.docs = docz.docs.sort((a,b)=>(a.name > b.name)? 1:-1)
         }
-        res.render("pending-docs", {doc3: docz, username: req.session.username,page:req.params.page})
+        if (req.session.admin ||req.session.approver) {
+            res.render("pending-docs", {doc3: docz, username: req.session.username, page: req.params.page})
+        }else{
+            res.render("user-pending-docs", {doc3: docz, username: req.session.username, page: req.params.page})
+        }
     }else{
-        res.redirect('pending-docs/1') //todo DID NOT TEST YET, MAY PRODUCE AN ERROR
+        if (req.session.admin ||req.session.approver) {
+            res.redirect('pending-docs/1')
+        }else{
+            res.redirect('user-pending-docs/1')
+        }
     }
-    const accepted = req.body.accept;
-    const admin = req.session.admin;
-    const approver = req.session.approver;
 })
 
-
+function setSessionDocsDB(req, res, next){ //bobo ko bat di ko ginawa una palang 🤡
+    if (req.session.org==='org1'){
+        req.session.currentDocsDB = docsOrg1DB;
+    }else{
+        req.session.currentDocsDB = docsOrg2DB;
+    }
+    next();
+}
 
 module.exports = router;

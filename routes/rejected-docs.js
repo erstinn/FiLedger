@@ -12,12 +12,20 @@ const userOrg2DB = nano.db.use('org2-users');
 const docViews = "/_design/all_users/_view/all";
 const departments = ["Sales","Marketing", "Human Resources", "Accounting"] //to remove when dynamic addition. of dept.s implemented
 
-router.get('/',async(req,res)=>{
-    res.redirect('rejected-docs/1');
+
+router.use(setSessionDocsDB);
+router.get('/', async(req,res)=>{
+    console.log(req.session.admin);
+    if (req.session.admin ||req.session.approver) {
+        res.redirect('rejected-docs/1');
+    }else {
+        res.redirect('user-rejected-docs/1');
+    }
 })
 
 router.get("/:page",async(req,res)=>{
-    let docz = await docsOrg1DB.find({selector:{
+    docsDB = req.session.currentDocsDB;
+    let docz = await docsDB.find({selector:{
             _id:{
                 "$gt":null
             },
@@ -25,7 +33,11 @@ router.get("/:page",async(req,res)=>{
         }})
     //checks if there are docs TODO may remove
     if(docz.docs.length <= 0){
-        res.render('approver-rejected-docs',{username:req.session.username,doc2:docz,page:req.params.page})
+        if (req.session.admin ||req.session.approver) {
+            res.render('rejected-docs', {username: req.session.username, doc2: docz, page: req.params.page})
+        }else{
+            res.render('user-rejected-docs', {username: req.session.username, doc2: docz, page: req.params.page})
+        }
         return
     }
     if(Number(req.params.page) <= (Math.ceil(docz.docs.length/10))){
@@ -75,10 +87,28 @@ router.get("/:page",async(req,res)=>{
         else{
             docz.docs = docz.docs.sort((a,b)=>(a.name > b.name)? 1:-1)
         }
-        res.render('rejected-docs',{username:req.session.username,doc2:docz,page:req.params.page})
+        if (req.session.admin ||req.session.approver) {
+            res.render('rejected-docs',{username:req.session.username,doc2:docz,page:req.params.page})
+        }else{
+            res.render('user-rejected-docs',{username:req.session.username,doc2:docz,page:req.params.page})
+        }
     }
     else{
-        res.redirect("rejected-docs/1")
+        if (req.session.admin ||req.session.approver) {
+            res.redirect("rejected-docs/1")
+        }else{
+            res.redirect("user-rejected-docs/1")
+        }
     }
 })
+
+function setSessionDocsDB(req, res, next){ //bobo ko bat di ko ginawa una palang 🤡
+    if (req.session.org==='org1'){
+        req.session.currentDocsDB = docsOrg1DB;
+    }else{
+        req.session.currentDocsDB = docsOrg2DB;
+    }
+    next();
+}
 module.exports = router;
+

@@ -14,12 +14,16 @@ const departments = ["Sales","Marketing", "Human Resources", "Accounting"] //tod
 
 
 //TODO this is the make lipat of rejected/accepted/pending
+// ALSO,
 const rejectedRouter = require("./rejected-docs");
 const acceptedRouter = require("./accepted-docs");
 const pendingRouter = require("./pending-docs");
 router.use('/rejected-docs', rejectedRouter);
 router.use('/pending-docs', pendingRouter);
 router.use('/accepted-docs', acceptedRouter);
+router.use('/user-rejected-docs', rejectedRouter);
+router.use('/user-pending-docs', pendingRouter);
+router.use('/user-accepted-docs', acceptedRouter);
 
 
 

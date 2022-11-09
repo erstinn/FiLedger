@@ -68,6 +68,11 @@ async function main(){
             accessButtons.forEach(button=>{
                 button.disabled = true;
             })
+            //TODO may remove:
+            // removes all modal data when modal is exited
+            document.querySelectorAll('.data').forEach(e=>{
+                document.querySelector(".modalTable.tableUser").removeChild(e)
+            })
         }
     })
 
@@ -130,9 +135,14 @@ async function main(){
                 userDocName.innerHTML = e['document']
                 let userDocAccess = document.createElement("td")
                 userDocAccess.innerHTML = e['access']
+                //todo may remove
+                let userDept = document.createElement("td")
+                userDept.innerHTML = item['department']
+                //end
 
                 userDoc.appendChild(userDocName)
                 userDoc.appendChild(userDocAccess)
+                userDoc.appendChild(userDept) //todo may remove
 
                 document.querySelector(".modalTable.tableUser").appendChild(userDoc)
             })
@@ -183,7 +193,7 @@ async function main(){
 
         if(currentActive==0){
             users.forEach(item=>{
-                if(item.firstname.toUpperCase().includes(searchBar.value.toUpperCase())){
+                if(`${item.firstname.toUpperCase()} ${item.lastname.toUpperCase()}`.includes(searchBar.value.toUpperCase())){
                     matchedObject.push(item)
                 }
             })
@@ -216,7 +226,6 @@ async function main(){
             })
         }
 
-
     }
 
     exitModal.addEventListener("click",()=>{
@@ -232,6 +241,11 @@ async function main(){
             button.disabled = true;
         })
 
+        //todo may remove
+        document.querySelectorAll('.data').forEach(e=>{
+            document.querySelector(".modalTable.tableUser").removeChild(e)
+        })
+//end of may remove
     })
 
     modalData.forEach((item,index)=>{

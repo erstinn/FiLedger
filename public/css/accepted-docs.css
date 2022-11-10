@@ -89,7 +89,8 @@ tr {
 .sortBy{
     background-color: white;
     padding:.1vw;
-    border:none
+    border:none;
+    border-radius: 3px;
 }
 
 .input-content button {

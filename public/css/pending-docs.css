@@ -164,11 +164,12 @@ tr {
     right:3vw;
 }
 .sortInput label{
-    color:white
+    color:white;
 }
 
 .sortBy{
     background-color: white;
     padding:.1vw;
-    border:none
+    border:none;
+    border-radius: 3px;
 }

@@ -3,7 +3,7 @@ const router = express.Router()
 const fs = require("fs")
 const path = require('path')
 
-
+router.use(setDocz);
 router.get('/', async(req,res)=>{
     console.log(req.session.admin);
     if (req.session.admin ||req.session.approver) {
@@ -14,14 +14,7 @@ router.get('/', async(req,res)=>{
 })
 
 router.get("/:page",async(req,res)=>{
-    docsDB = req.session.currentDocsDB;
-    let docz = await docsDB.find({selector:{
-            _id:{
-                "$gt":null
-            },
-            status:"Rejected"
-        }})
-    //checks if there are docs TODO may remove
+    const docz = req.session.docz;
     if(docz.docs.length <= 0){
         if (req.session.admin ||req.session.approver) {
             res.render('rejected-docs', {username: req.session.username, doc2: docz, page: req.params.page})
@@ -87,8 +80,10 @@ router.get("/:page",async(req,res)=>{
 })
 
 
-
+//todo ======================================= ACTUAL MIDDLEWARES =======================================
+//pls do ignore errors lolol
 async function setDocz(req, res, next) {
+    const docsDB = req.session.currentDocsDB; //this is nano.db.use :D
     if (req.session.admin)
         req.session.docz = await docsDB.find({selector: {_id: {"$gt": null}, status: "Rejected"}})
     if (req.session.approver)

@@ -3,7 +3,7 @@ const router = express.Router()
 const fs = require("fs")
 const path = require('path')
 
-
+router.use(setDocz);
 router.get("/", async(req,res)=>{
     if (req.session.admin || req.session.approver)
         res.redirect('accepted-docs/1');
@@ -71,7 +71,9 @@ router.get('/:page',async(req,res)=>{
 })
 
 //todo ======================================= ACTUAL MIDDLEWARES =======================================
+//pls do ignore errors lolol
 async function setDocz(req, res, next) {
+    const docsDB = req.session.currentDocsDB; //this is nano.db.use :D
     if (req.session.admin)
         req.session.docz = await docsDB.find({selector: {_id: {"$gt": null}, status: "Accepted"}})
     if (req.session.approver)

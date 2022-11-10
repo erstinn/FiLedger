@@ -4,7 +4,7 @@
         rel="stylesheet">
     <link rel="stylesheet" href="/css/accepted-docs.css">
     <link rel="stylesheet" href="/css/navbar.css">
-    <script src="/js/navbar.js" defer></script>
+    <script src="/js/navbar.js" defer></script> <!--remove public-->
     </head>
 
     <body>
@@ -13,7 +13,7 @@
                 <div class="table-title">
                     Rejected Documents
                     <div class="sortInput">
-                        <label for="sortBy">Sort by:</label>
+                        <label for="sortBy">Sort:</label>
                         <select name="sortBy" id="sortBy" class="sortBy" onchange="location = `<%=page%>?sort=${this.value}`;">
                             <option value="" selected hidden disabled>Choose one...</option>
                             <option value="title" class="opt">Title</option>
@@ -44,6 +44,9 @@
                         <th>
                             Tags
                         </th>
+                        <th>
+                            Resubmit
+                        </th>
                     </tr>
                     <%var perPage = 10 %>
                     <%if(perPage > doc2.docs.length){%>
@@ -68,6 +71,14 @@
                             <td><%=doc2.docs[i].creator%></td>
                             <td>Abacan</td>
                             <td><%=doc2.docs[i].tags_history.slice(-1).toString().split('|')[1]%></td>
+                            <td>
+                            <form id="uploadDoc" enctype="multipart/form-data" action="/dashboard/upload" method="POST">
+                                <label for="addFile" class="accept">
+                                    Resubmit
+                                </label>
+                                <input type="file" name="uploadDoc" id="addFile" hidden onchange="form.submit()">
+                            </form>
+                        </td>
                     </tr>
                     <%}%>
                 </table>

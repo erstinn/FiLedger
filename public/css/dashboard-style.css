@@ -207,6 +207,9 @@
 
 .button-container {
     margin-top: 10px;
+    display: flex;
+    gap:2vw;
+
 }
 
 .button-container button {
@@ -216,6 +219,8 @@
     cursor: pointer;
     border-radius: 5px;
     background-color: rgb(122, 215, 88);
+    width: 45%;
+
 }
 .button-container button:disabled {
     background-color: #c4c4c4;
@@ -268,8 +273,11 @@
 .docType{
     height: 100%;
     padding:.45vw;
-    margin-left: 30.7%;
     width: 45%;
     background-color: transparent;
     border:1px solid black
+}
+
+.button-inner{
+    width:45%
 }

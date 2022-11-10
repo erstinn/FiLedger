@@ -158,13 +158,17 @@ async function main(){
         let newDocType = document.createElement("td");
         newDocType.classList.add("docType");
         newDocType.innerHTML = item.category;
+        let newNumApp = document.createElement("td");
+        newNumApp.classList.add("numApp");
+        newNumApp.innerHTML = Math.floor(Math.random()*10);
         let newNumUsers = document.createElement("td");
         newNumUsers.classList.add("numUser");
-        newNumUsers.innerHTML = 100;
+        newNumUsers.innerHTML = Math.floor(Math.random()*10);
 
 
         newData.appendChild(newTitle);
         newData.appendChild(newDocType)
+        newData.appendChild(newNumApp)
         newData.appendChild(newNumUsers);
 
         documentList.appendChild(newData);

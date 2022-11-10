@@ -84,8 +84,7 @@ router.post('/upload',  upload.single('uploadDoc'), async function (req, res, ne
     })
 
 //todo ======================================== FUNCTIONS ================================================================
-async function docQuery(fileName, creator){
-    const docz = req.session.currentDocsDB;
+async function docQuery(fileName, creator, docz){
     const indexDef = { //copied cod lol
         index: { fields: ["name", "creator"]},
         type: "json",
@@ -193,7 +192,7 @@ async function insertDoc(file, session, body, orgDB, res){
             }
         })
 
-        const frev = await docQuery(fileName, fileCreator);
+        const frev = await docQuery(fileName, fileCreator,orgDB);
         const revi = frev[0]._rev;
         fs.readFile(tempPath, async (err, data) => { //dno if async
             await orgDB.attachment.insert(
@@ -218,7 +217,7 @@ async function updateDoc(file, session, body, orgDB, res){
     const currentTime = new Date(Date.now());
     const fileName = file.originalname;
     const fileCreator = `${session.firstname} ${session.lastname}`;
-    const findRev = await docQuery(fileName, fileCreator);
+    const findRev = await docQuery(fileName, fileCreator,orgDB);
     const revi = findRev[0]._rev;
     const doc = findRev[0]._id;
     let fileVer = findRev[0].version_num;
@@ -285,7 +284,7 @@ async function updateDoc(file, session, body, orgDB, res){
             }
         }
     )
-    const frev = await docQuery(fileName, fileCreator);
+    const frev = await docQuery(fileName, fileCreator, orgDB);
     const rev = frev[0]._rev;
     fs.readFile(tempPath, async (err, data) => { //dno if async
         await orgDB.attachment.insert(

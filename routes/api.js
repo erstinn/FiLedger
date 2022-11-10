@@ -3,6 +3,7 @@ const router = express.Router()
 const bodyParser = require('body-parser')
 router.use(bodyParser.json())
 
+//todo ====================================================== admin ======================================================
 //used on /admin
 router.post('/users',async function (req,res){
     const docz = req.session.currentUsersDB;
@@ -42,7 +43,55 @@ router.put('/insert-docs',async(req,res)=>{
     }
 })
 
-//used in pending-docs
+//todo ====================================================== accepted-docs APPROVER/ADMIN ======================================================
+router.post('/tagResubmit',async(req,res)=>{
+    const docz = req.session.currentDocsDB;
+    if(req.session.admin || req.session.approver) {
+        const docs = await docz.get(req.body.docId);
+        docs.status = "Resubmit";
+        const date = new Date();
+        const state = `Resubmit  @ ${date.getMonth()+1}/${date.getDate()}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
+        docs.state_history.push(state);
+
+        await docz.insert(docs,req.body.docId,err=>{
+            if(err){
+                res.send(err)
+            }
+            else{
+                res.send(true)
+            }
+        })
+    }else{
+        res.status(401).send("Unauthorized Access");
+    }
+})
+
+//todo ====================================================== rejected-docs ======================================================
+//tag for resubmit button
+// router.post('/tagResubmit',async(req,res)=>{
+//     const docz = req.session.currentDocsDB;
+//     if(req.session.admin || req.session.approver) {
+//         const docs = await docz.get(req.body.docId);
+//         docs.status = "Accepted"
+//         const date = new Date();
+//         const state = `Accepted @ ${date.getMonth()+1}/${date.getDate()}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`
+//         docs.state_history.push(state)
+//
+//         await docz.insert(docs,req.body.docId,err=>{
+//             if(err){
+//                 res.send(err)
+//             }
+//             else{
+//                 res.send(true)
+//             }
+//         })
+//     }else{
+//         res.status(401).send("Unauthorized Access");
+//     }
+// })
+
+//todo ====================================================== pending-docs ======================================================
+//used in pending-docs: ACCEPT BUTTON
 router.post('/acceptDocs',async(req,res)=>{
     const docz = req.session.currentDocsDB;
     if(req.session.admin || req.session.approver) {
@@ -66,7 +115,7 @@ router.post('/acceptDocs',async(req,res)=>{
 })
 
 
-//used on /pending-docs/
+//used on /pending-docs/ REJECT BUTTON
 router.post('/rejectDocs',async(req,res)=>{
     const docz = req.session.currentDocsDB;
     if( req.session.admin || req.session.approver) {
@@ -98,6 +147,6 @@ router.post('/getDocsOfUser',async(req,res)=>{
     }
 })
 
-//todo ====================================================== middleware ======================================================
+//todo ====================================================== middleware (n/a) ======================================================
 
 module.exports = router

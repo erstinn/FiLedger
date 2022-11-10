@@ -13,14 +13,33 @@ const CC_NAME="assetcc";
 const CHANNEL="mychannel";
 let ccp = null;
 
-let queryDoc = async function main(user, isAdmin, id) {
+let queryDoc = async function main(user, isAdmin, isApprov, Org, id) {
+    var dbName = '';
+    var org = ''
+    var userType = '';
 
-    var wallet = '';
-    if (isAdmin === true){
-        wallet = await Wallets.newCouchDBWallet('http://administrator:qF3ChYhp@127.0.0.1:5984/',"wallet");
-    }else{
-        wallet = await Wallets.newCouchDBWallet('http://administrator:qF3ChYhp@127.0.0.1:5984/',"wallet_users");
+    if(Org == 'org1'){
+        org = 'org1'
     }
+    else if(Org == 'org2'){
+        org = 'org2'
+    }
+
+    if(isAdmin === true){
+        userType = 'admins'
+    }
+    else if(isApprov === true){
+        userType = 'approvers'
+    }
+    else{
+        userType = 'users'
+    }
+
+    dbName = org + '-wallet_' + userType;
+    console.log(dbName, "!!!!!");
+
+
+    var wallet = await Wallets.newCouchDBWallet('http://administrator:qF3ChYhp@127.0.0.1:5984/', dbName);
 
     try {
         console.log("Invoking chaincode using :", user);
@@ -59,7 +78,7 @@ let queryDoc = async function main(user, isAdmin, id) {
         // queryCar transaction - requires 1 argument, ex: ('queryCar', 'CAR4')
         // queryAllCars transaction - requires no arguments, ex: ('queryAllCars')
         const result = await contract.evaluateTransaction('readDoc', id);
-        //console.log(`Transaction has been evaluated, result is: ${result.toString()}`);
+        console.log(`Transaction has been evaluated, result is: ${result.toString()}`);
 
         return JSON.parse(result);
     } catch (error) {

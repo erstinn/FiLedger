@@ -13,7 +13,7 @@ class MyFiLedgerContract extends Contract {
     //uploadDoc
     //metadata from couchdb
     async createDoc(ctx, id, fileName, fileType, fileSize, fileTagsList,
-                     fileVersion, stateTimestampList, fileCreator, fileMinApprovers) {
+                     fileVersion, stateTimestampList, fileCreator) {
 
         //checks if assetID exists
         const exists = await this.myDocExists(ctx, id);
@@ -32,8 +32,7 @@ class MyFiLedgerContract extends Contract {
             tag_history: fileTagsList,
             version_num: fileVersion,
             state_history: stateTimestampList,
-            owner: fileCreator,
-            min_approvers: fileMinApprovers,
+            creator: fileCreator,
             last_activity: "Upload",
             status: "Pending",
         };
@@ -54,7 +53,7 @@ class MyFiLedgerContract extends Contract {
     }
     // //updateVer
     async updateDocs(ctx, id, fileName, fileType, fileSize, fileTagsList,
-                     fileVersion, fileCreator, fileMinApprovers, stateTimestamps) {
+                     fileVersion, fileCreator, stateTimestamps) {
         // const exists = await this.myDocExists(ctx, id);
         // if (!exists) {
         //     throw new Error(`The my document ${MyDocId} does not exist`);
@@ -70,7 +69,7 @@ class MyFiLedgerContract extends Contract {
             version_num: parseFloat(fileVersion).toFixed(2), //finally updates
             state_history: stateTimestamps,
             creator: fileCreator,
-            min_approvers: fileMinApprovers,
+            // min_approvers: fileMinApprovers,
             // revision: revi, hindi sya pede iinsert sa db
             last_activity:"Upload",
             status:"Pending",

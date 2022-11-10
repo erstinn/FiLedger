@@ -4,6 +4,7 @@ const path = require('path');
 const fs = require('fs');
 const http = require('https');
 const axios = require('axios')
+const query = require('../network/chaincode/javascript/queryDoc')
 //databases
 const nano = require('nano')('http://administrator:qF3ChYhp@127.0.0.1:5984/');
 //const nano = require('nano')('http://admin:mysecretpassword@127.0.0.1:5984/');
@@ -18,14 +19,29 @@ const docsOrg2DB = nano.db.use('org2-documents');
 
 
 
-
 router.get('/:id', async function (req,res){
+    //TODO: make this into a function if using pa sa ibang parts
+    var user = '';
+    var ver = '';
+    // var timestamp = [];
+    let data = '';
+    if(req.session.admin){
+        user = 'enroll';
+    }
+    else{
+        user = req.session.username;
+    }
+
     if (req.session.org==='org1'){
-        const data = await  docsOrg1DB.find({selector:{"_id":req.params.id}})
-        res.render("view-documents",{data:data,username : req.session.username});
+        data = await docsOrg1DB.find({selector:{"_id":req.params.id}})
+        ver = await query.queryDoc(user, req.session.admin, req.session.approver, req.session.org, data.docs[0]._id);
+        var timestamp = ver.state_history.split(',');
+        res.render("view-documents",{data:data,username : req.session.username, ver:ver, timestamp:timestamp});
     } else if (req.session.org==='org2'){
-        const data = await  docsOrg2DB.find({selector:{"_id":req.params.id}})
-        res.render("view-documents",{data:data,username : req.session.username});
+        data = await docsOrg2DB.find({selector:{"_id":req.params.id}})
+        ver = await query.queryDoc(user, req.session.admin, req.session.approver, req.session.org, data.docs[0]._id);
+        var timestamp = ver.state_history.split(',');
+        res.render("view-documents",{data:data,username : req.session.username, ver:ver, timestamp:timestamp});
     }
 })
 

@@ -14,18 +14,17 @@ exports.log = async function(req, res) {
     return "SUCCESS"
 }
 
-async function invokeTransaction (user, isAdmin, id, fileName, fileType, fileSize, fileTagsList,
-                                  fileVersion, stateTimestampList, fileCreator, fileMinApprovers) {
+async function invokeTransaction (user, isAdmin, isApprov, Org, id, fileName, fileType, fileSize, fileTagsList,
+                                  fileVersion, stateTimestampList, fileCreator) {
 
-    var wallet = '';
-        if (isAdmin === true){
-            wallet = await Wallets.newCouchDBWallet('http://administrator:qF3ChYhp@127.0.0.1:5984/',"wallet");
-        }else{
-            wallet = await Wallets.newCouchDBWallet('http://administrator:qF3ChYhp@127.0.0.1:5984/',"wallet_users");
-        }
+    var dbName = dbGen(isAdmin, isApprov, Org);
+
+    var wallet = await Wallets.newCouchDBWallet('http://administrator:qF3ChYhp@127.0.0.1:5984/', dbName);
+
+    //     }
 
     try {
-        console.log("Invoking chaincode using :", user);
+        console.log("Invoking cREATE chaincode using :", user);
         // load the network configuration
         const ccpPath = path.resolve("./network/cluster", "connection-org.yaml");
         if (ccpPath.includes(".yaml")) {
@@ -63,7 +62,7 @@ async function invokeTransaction (user, isAdmin, id, fileName, fileType, fileSiz
         await contract.submitTransaction(
             "createDoc",
             id, fileName, fileType, fileSize, fileTagsList,
-            fileVersion, stateTimestampList, fileCreator, fileMinApprovers,
+            fileVersion, stateTimestampList, fileCreator,
         );
         console.log("Transaction has been submitted");
 
@@ -79,18 +78,14 @@ async function invokeTransaction (user, isAdmin, id, fileName, fileType, fileSiz
     // return result;
 }
 
-async function updateTransaction(user, isAdmin, id, fileName, fileType, fileSize, fileTagsList,
-                                 fileVersion, fileCreator, fileMinApprovers, stateTimestamps) {
+async function updateTransaction(user, isAdmin, isApprov, Org, id, fileName, fileType, fileSize, fileTagsList,
+                                 fileVersion, fileCreator, stateTimestamps) {
 
-    var wallet = '';
-    if (isAdmin === true){
-        wallet = await Wallets.newCouchDBWallet('http://administrator:qF3ChYhp@127.0.0.1:5984/',"wallet");
-    }else{
-        wallet = await Wallets.newCouchDBWallet('http://administrator:qF3ChYhp@127.0.0.1:5984/',"wallet_users");
-    }
+    var dbName = dbGen(isAdmin, isApprov, Org);
+    var wallet = await Wallets.newCouchDBWallet('http://administrator:qF3ChYhp@127.0.0.1:5984/', dbName);
 
     try {
-        console.log("Invoking chaincode using :", user);
+        console.log("Invoking UPDATE chaincode using :", user);
         // load the network configuration
         const ccpPath = path.resolve("./network/cluster", "connection-org.yaml");
         if (ccpPath.includes(".yaml")) {
@@ -128,7 +123,7 @@ async function updateTransaction(user, isAdmin, id, fileName, fileType, fileSize
         await contract.submitTransaction(
             "updateDocs",
             id, fileName, fileType, fileSize, fileTagsList,
-            fileVersion, fileCreator, fileMinApprovers, stateTimestamps
+            fileVersion, fileCreator, stateTimestamps
         );
         console.log("Document has been updated in the ledger");
 
@@ -142,6 +137,33 @@ async function updateTransaction(user, isAdmin, id, fileName, fileType, fileSize
 
     }
     // return result;
+}
+
+function dbGen(isAdmin, isApprov, Org){
+    var dbName = '';
+    var org = ''
+    var userType = '';
+
+    if(Org == 'org1'){
+        org = 'org1'
+    }
+    else if(Org == 'org2'){
+        org = 'org2'
+    }
+
+    if(isAdmin === true){
+        userType = 'admins'
+    }
+    else if(isApprov === true){
+        userType = 'approvers'
+    }
+    else{
+        userType = 'users'
+    }
+
+    dbName = org + '-wallet_' + userType;
+    return dbName
+
 }
 
 module.exports = {invokeTransaction, updateTransaction};

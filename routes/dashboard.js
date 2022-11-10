@@ -179,9 +179,10 @@ async function insertDoc(file, session, body, orgDB, res){
                     status: "Pending",
                 }
 
-                invoke.invokeTransaction(user, session.admin, id, docdeets.name, docdeets.type,
-                    docdeets.size, docdeets.tags_history, docdeets.version_num, docdeets.state_history,
-                    docdeets.creator, docdeets.min_approvers);
+                invoke.invokeTransaction(user, session.admin, session.approver, session.org, id, docdeets.name,
+                    docdeets.type, docdeets.size, docdeets.tags_history, docdeets.version_num,
+                    docdeets.state_history, docdeets.creator);
+
 
                 console.log("it worked")
                 console.log('File Deets:', fileName, file.mimetype)
@@ -273,9 +274,8 @@ async function updateDoc(file, session, body, orgDB, res){
                 }
                 console.log('File Deets:', fileName, file.mimetype, tempPath)
                 console.log("it worked")
-                invoke.updateTransaction(user, session.admin, doc, docdeets.name, docdeets.type, docdeets.size,
-                    docdeets.tags_history, docdeets.version_num, docdeets.creator,
-                    docdeets.min_approvers, docdeets.state_history);
+                invoke.updateTransaction(user, session.admin, session.approver, session.org, doc, docdeets.name, docdeets.type, docdeets.size,
+                    docdeets.tags_history, docdeets.version_num, docdeets.creator, docdeets.state_history);
 
                 res.redirect("/dashboard?fail=false")
             } else {

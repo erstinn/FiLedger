@@ -13,12 +13,7 @@ router.get("/", async(req,res)=>{
 })
 router.get('/:page',async(req,res)=>{
     //todo soz ni-one liner ko nalang .find() :D
-    docsDB = req.session.currentDocsDB
-    const docz = await docsDB.find({selector:{_id:{"$gt":null}, status:"Accepted"}})
-    if(docz.docs.length <= 0){
-        res.render('accepted-docs',{username:req.session.username,doc1:docz,page:req.params.page})
-        return
-    }
+    const docz = req.session.docz;
     if(Number(req.params.page) <= (Math.ceil(docz.docs.length/10))){
         if(req.query.sort === "title"){
             docz.docs = docz.docs.sort((a,b)=>(a.name > b.name)? 1:-1)

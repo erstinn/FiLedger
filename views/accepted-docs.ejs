@@ -5,10 +5,10 @@
 <link rel="stylesheet" href="/css/navbar.css">
 <!--todo uncomment: if needed-->
  <!-- <script src="/routes/dashboard.js" defer></script> //causes problems-->
+<script src="/js/accepted-docs.js" defer></script> <!--remove /public/-->
 <script src="/js/navbar.js" defer></script>
 <link rel="stylesheet" href="/css/pending-docs.css">
 
-</head>
 <body>
 <%-include("navbar-component")-%>
     <div class="acceptedDocs-list">
@@ -64,9 +64,9 @@
                     <td><%=doc1.docs[i].version_num%></td>
                     <td><%=doc1.docs[i].tags_history.slice(-1).toString().split('|')[1]%></td>
                     <td>
-                        <div class="input-content">
-                            <button class="reject">Tag For Resubmission</button>
-                        </div>
+<!--                        <div class="input-content">-->
+                            <button class="reject <%=doc1.docs[i]._id%>" name="reject">Tag For Resubmission</button>
+<!--                        </div>-->
                     </td>
                 </tr>
             <%}%>
@@ -77,13 +77,10 @@
             <a href="<%=i%>"><button class="pagesButton"><%=i%></button></a>
         <%}%>
     </div>
-</div>
 <script>
     var title;
 function setTitle(name){
-    title = name
-}
-
+    title = nam 3
 var tooltip = document.createElement("span")
 tooltip.classList.add("tooltip")
 tooltip.style.position = "absolute"

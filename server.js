@@ -100,6 +100,15 @@ function isApprover (req, res, next){
     }
 }
 
+function setSessionDocsDB(req, res, next){ //bobo ko bat di ko ginawa una palang 🤡
+    if (req.session.org==='org1'){
+        req.session.currentDocsDB = nano.db.use('org1-documents');
+    }else{
+        req.session.currentDocsDB = nano.db.use('org2-documents');
+    }
+    next();
+}
+
 app.get('/create-docs', function (req, res){
     res.render("create-docs");
 })
@@ -140,12 +149,12 @@ const api = require('./routes/api')
 app.use('/login', isLoggedIn , loginRouter)
 app.use('/logout', logoutRouter)
 app.use('/api',api)
-app.use('/dashboard', isAuthenticated, dashboardRouter);
-app.use('/documents', isAuthenticated, isApprover, isUser, documentsRouter); //TODO CONSIDERING REMOVAL
-app.use('/all-documents', isAuthenticated, allDocumentsRouter);
-app.use('/administration', isAuthenticated, isAdmin, adminRouter);
-app.use('/view-documents', isAuthenticated, isAdmin,  viewDocumentsRouter) //TODO CONSIDERING REMOVAL
-app.use('/registration',isAuthenticated,isAdmin, regRouter);
+app.use('/dashboard', isAuthenticated,setSessionDocsDB,dashboardRouter);
+app.use('/documents', isAuthenticated, isApprover, isUser,setSessionDocsDB,documentsRouter); //TODO CONSIDERING REMOVAL
+app.use('/all-documents', isAuthenticated,setSessionDocsDB,allDocumentsRouter);
+app.use('/administration', isAuthenticated, isAdmin,setSessionDocsDB,adminRouter);
+app.use('/view-documents', isAuthenticated, isAdmin,setSessionDocsDB, viewDocumentsRouter) //TODO CONSIDERING REMOVAL
+app.use('/registration',isAuthenticated,isAdmin,setSessionDocsDB,regRouter);
 // app.use('/pending-docs', isAuthenticated, pendingDocs)
 // app.use('/pending-docs', isAuthenticated, myFunc);
 

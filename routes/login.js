@@ -84,6 +84,7 @@ async function getAdminIdentity(req, res, next) {
         req.session.admin = true;
         console.log('Org1 ADMIN LOGGED IN');
         req.session.username = responseOrg1AdminDB.docs[0].username;
+        req.session.department = responseOrg1AdminDB.docs[0].department;
         req.session.email = req.body.email; //TODO palitan req.session.user if username ung gamit
         req.session.firstname = responseOrg1AdminDB.docs[0].firstname;
         req.session.lastname = responseOrg1AdminDB.docs[0].lastname;
@@ -93,6 +94,7 @@ async function getAdminIdentity(req, res, next) {
         req.session.admin = true;
         console.log('Org2 ADMIN LOGGED IN');
         req.session.username = responseOrg2AdminDB.docs[0].username;
+        req.session.department = responseOrg2AdminDB.docs[0].department;
         req.session.email = req.body.email;
         req.session.firstname = responseOrg2AdminDB.docs[0].firstname;
         req.session.lastname = responseOrg2AdminDB.docs[0].lastname;
@@ -116,7 +118,6 @@ async function getApproverIdentity(req,res,next){
     const responseOrg2ApproverDB = await approverOrg2DB.find(q)
     const org1Wallet_approver = await Wallets.newCouchDBWallet('http://administrator:qF3ChYhp@127.0.0.1:5984/', "org1-wallet_approver");
     const org2Wallet_approver = await Wallets.newCouchDBWallet('http://administrator:qF3ChYhp@127.0.0.1:5984/', "org2-wallet_approver");
-
     console.log(responseOrg1ApproverDB.bookmark, "org1approver")
     console.log(responseOrg2ApproverDB.bookmark, "org2approver")
     console.log(SHA1(req.body.password).toString(enc.Hex), "current pw")

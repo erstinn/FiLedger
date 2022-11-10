@@ -5,16 +5,8 @@ const path = require('path')
 // databases
 const nano = require('nano')('http://administrator:qF3ChYhp@127.0.0.1:5984/');
 // const nano = require('nano')('http://root:root@127.0.0.1:5984/');
-const docsOrg1DB = nano.db.use('org1-documents');
-const docsOrg2DB = nano.db.use('org2-documents');
-const userOrg1DB = nano.db.use('org1-users');
-const userOrg2DB = nano.db.use('org2-users');
-const docViews = "/_design/all_users/_view/all";
-const departments = ["Sales","Marketing", "Human Resources", "Accounting"] //todo remove last dept.
-
 
 //TODO this is the make lipat of rejected/accepted/pending
-// ALSO,
 const rejectedRouter = require("./rejected-docs");
 const acceptedRouter = require("./accepted-docs");
 const pendingRouter = require("./pending-docs");
@@ -22,9 +14,8 @@ router.use('/rejected-docs', rejectedRouter);
 router.use('/pending-docs', pendingRouter);
 router.use('/accepted-docs', acceptedRouter);
 router.use('/user-rejected-docs', rejectedRouter);
-router.use('/user-pending-docs', pendingRouter);
-router.use('/user-accepted-docs', acceptedRouter);
-
+router.use('/user-pending-docs',pendingRouter);
+router.use('/user-accepted-docs' ,acceptedRouter);
 
 
 
@@ -54,8 +45,8 @@ const upload = multer({
 })
 
 //TODO =============================== UPLOADING ONLY ===============================
-router.post('/upload',  upload.single('uploadDoc'),
-    async function (req, res, next) {
+router.post('/upload',  upload.single('uploadDoc'), async function (req, res, next) {
+        const docz = req.session.currentDocsDB; //todo this is now the current DOCS database
         if (req.file.originalname === null) {
             res.render('dashboard');
         }
@@ -65,7 +56,7 @@ router.post('/upload',  upload.single('uploadDoc'),
             type: "json",
             name: "doc-rev-index"
         }
-        const index = await docsOrg1DB.createIndex(indexDef);
+        const index = await docz.createIndex(indexDef);
 
         const fileCreator = `${req.session.firstname} ${req.session.lastname}`;
         const fileName = req.file.originalname;
@@ -77,29 +68,30 @@ router.post('/upload',  upload.single('uploadDoc'),
                 "creator": fileCreator
             }
         };
-        const rev = await docsOrg1DB.find(q);
+        const rev = await docz.find(q);
 
         if (rev.docs == '') {
             // TODO: add insertDoc function here
             //  - add if else for checking orgs for DB
-            await insertDoc(req.file, req.session, req.body, docsOrg1DB, res);
+            await insertDoc(req.file, req.session, req.body, docz, res);
             //END OF FUNCTION
         } else { //TODO ======================================= UPDATING =================================================
             //TODO: turn into function
             // -Add (req.file, req.session, req.body, 'OrgDB') AS PARAMS FOR updateDoc
-            await updateDoc(req.file, req.session, req.body, docsOrg1DB, res);
+            await updateDoc(req.file, req.session, req.body, docz, res);
             //end of func
         }
     })
 
 //todo ======================================== FUNCTIONS ================================================================
 async function docQuery(fileName, creator){
+    const docz = req.session.currentDocsDB;
     const indexDef = { //copied cod lol
         index: { fields: ["name", "creator"]},
         type: "json",
         name: "doc-rev-index"
     }
-    const index = await docsOrg1DB.createIndex(indexDef);
+    const index = await docz.createIndex(indexDef);
 
     const q = {
         selector: {
@@ -107,7 +99,7 @@ async function docQuery(fileName, creator){
             "creator": creator
         }
     };
-    const rev = await docsOrg1DB.find(q);
+    const rev = await docz.find(q);
     return rev.docs;
 }
 
@@ -249,9 +241,7 @@ async function updateDoc(file, session, body, orgDB, res){
     var tempPath = path.resolve(__dirname, `./../uploads/${fileName}`);
     console.log(fileInp) //todo remove
     let newMetadata = checkFileChanges(file.buffer, body.tags, fileInp, fileVer, fileTimestamp, fileTags);
-    // let newVer = newMetadata.version; //calls version of newMetadata kaso undefined daw huhu.
     fs.writeFileSync(path.resolve(__dirname, `./../uploads/${fileName}`), file.buffer);
-    // tags.push(newMetadata.tags); //TODO: call newMetada.tags
     tags.push(fileTags);
     stateTimestamps.push(stateTimestamp);
     await orgDB.insert({
@@ -314,7 +304,7 @@ async function updateDoc(file, session, body, orgDB, res){
     });
 }
 
-//======================================== EXTRA FUNCS ================================================================
+//todo ======================================== EXTRA FUNCS ================================================================
 //src: https://stackoverflow.com/questions/15900485/correct-way-to-convert-size-in-bytes-to-kb-mb-gb-in-javascript
 async function formatBytes(bytes, decimals = 2) { //dno if need to async
     if (bytes === 0) return '0 Bytes';
@@ -350,7 +340,7 @@ async function checkFileChanges(filebuff, filetag, file, fileVer, fileTimestamp,
         }
     }
 }
-//======================================== X CODES ================================================================
+//todo ======================================== X CODES ================================================================
 
 module.exports = router;
 

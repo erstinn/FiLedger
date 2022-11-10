@@ -2,18 +2,8 @@ const express = require('express')
 const router = express.Router()
 const fs = require("fs")
 const path = require('path')
-// databases
-const nano = require('nano')('http://administrator:qF3ChYhp@127.0.0.1:5984/');
-// const nano = require('nano')('http://root:root@127.0.0.1:5984/');
-const docsOrg1DB = nano.db.use('org1-documents');
-const docsOrg2DB = nano.db.use('org2-documents');
-const userOrg1DB = nano.db.use('org1-users');
-const userOrg2DB = nano.db.use('org2-users');
-const docViews = "/_design/all_users/_view/all";
-const departments = ["Sales","Marketing", "Human Resources", "Accounting"] //todo remove last dept.
 
 
-router.use(setSessionDocsDB);
 router.get("/", async(req,res)=>{
     if (req.session.admin || req.session.approver)
         res.redirect('accepted-docs/1');
@@ -81,13 +71,15 @@ router.get('/:page',async(req,res)=>{
 })
 
 //todo ======================================= ACTUAL MIDDLEWARES =======================================
-function setSessionDocsDB(req, res, next){ //bobo ko bat di ko ginawa una palang 🤡
-    if (req.session.org==='org1'){
-        req.session.currentDocsDB = docsOrg1DB;
-    }else{
-        req.session.currentDocsDB = docsOrg2DB;
-    }
+async function setDocz(req, res, next) {
+    if (req.session.admin)
+        req.session.docz = await docsDB.find({selector: {_id: {"$gt": null}, status: "Accepted"}})
+    if (req.session.approver)
+        req.session.docz = await docsDB.find({selector: {_id: {"$gt": null}, status: "Accepted", department: req.session.department}})
+    if (req.session.user) //todo tngina, querying of the array na relevant documents
+        req.session.docz = await docsDB.find({selector: {_id: {"$gt": null}, status: "Accepted"}})
     next();
 }
+
 
 module.exports = router;

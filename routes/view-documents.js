@@ -6,9 +6,9 @@ const http = require('https');
 const axios = require('axios')
 const query = require('../network/chaincode/javascript/queryDoc')
 //databases
-const nano = require('nano')('http://administrator:qF3ChYhp@127.0.0.1:5984/');
+// const nano = require('nano')('http://administrator:qF3ChYhp@127.0.0.1:5984/');
 //const nano = require('nano')('http://admin:mysecretpassword@127.0.0.1:5984/');
-// const nano = require('nano')('http://root:root@127.0.0.1:5984/');
+const nano = require('nano')('http://root:root@127.0.0.1:5984/');
 // const nano = require('nano')('http://admin:pw123@127.0.0.1:5984/');
 const docsOrg1DB = nano.db.use('org1-documents');
 const docsOrg2DB = nano.db.use('org2-documents');

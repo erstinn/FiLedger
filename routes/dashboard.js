@@ -3,8 +3,8 @@ const router = express.Router()
 const fs = require("fs")
 const path = require('path')
 // databases
-const nano = require('nano')('http://administrator:qF3ChYhp@127.0.0.1:5984/');
-// const nano = require('nano')('http://root:root@127.0.0.1:5984/');
+// const nano = require('nano')('http://administrator:qF3ChYhp@127.0.0.1:5984/');
+const nano = require('nano')('http://root:root@127.0.0.1:5984/');
 
 //TODO this is the make lipat of rejected/accepted/pending
 const rejectedRouter = require("./rejected-docs");

@@ -5,7 +5,6 @@ const viewModes = document.querySelectorAll(".viewsMode");
 const searchBar = document.getElementById("searchUserList");
 const exitModal = document.querySelector(".exitModal");
 const modal = document.querySelector(".detailsModal-wrapper")
-const modalData = document.querySelectorAll(".modalTable .data")
 const accessButtons = document.querySelectorAll(".accessButtons .modalButton")
 const nameUser = document.querySelector(".name-user");
 const departmentUser = document.querySelector(".department-user");
@@ -70,8 +69,8 @@ async function main(){
             })
             //TODO may remove:
             // removes all modal data when modal is exited
-            document.querySelectorAll('.data').forEach(e=>{
-                document.querySelector(".modalTable.tableUser").removeChild(e)
+            document.querySelectorAll('.tableUserData').forEach(f=>{
+                document.querySelector(".modalTable.tableUser").removeChild(f)
             })
         }
     })
@@ -130,7 +129,7 @@ async function main(){
             const docsOfUser = await getDocsOfUser()
             docsOfUser.forEach(e=>{
                 let userDoc = document.createElement("tr");
-                userDoc.classList.add("data");
+                userDoc.classList.add("tableUserData");
                 let userDocName = document.createElement("td")
                 userDocName.innerHTML = e['document']
                 let userDocAccess = document.createElement("td")
@@ -145,6 +144,21 @@ async function main(){
                 userDoc.appendChild(userDept) //todo may remove
 
                 document.querySelector(".modalTable.tableUser").appendChild(userDoc)
+
+                userDoc.addEventListener("click",()=>{
+                    const activeData = document.querySelector(".clicked-data")
+                    if(activeData!=undefined){
+                        activeData.classList.remove("clicked-data")
+                    }
+                    userDoc.classList.add("clicked-data")
+        
+        
+                    accessButtons.forEach(button=>{
+                        button.disabled = false;
+                    })
+        
+                })
+
             })
         })
 
@@ -252,23 +266,6 @@ async function main(){
 //end of may remove
     })
 
-    modalData.forEach((item,index)=>{
-        item.addEventListener("click",()=>{
-            const activeData = document.querySelector(".clicked-data")
-            if(activeData!=undefined){
-                activeData.classList.remove("clicked-data")
-            }
-            item.classList.add("clicked-data")
-
-
-            accessButtons.forEach(button=>{
-                button.disabled = false;
-            })
-
-        })
-    })
-
-
     let doc4user = document.querySelector("#doc4user");
     let accessUser = document.querySelector("#accessUser");
     let addDoc = document.getElementsByClassName("addDoc")[0];
@@ -289,6 +286,30 @@ async function main(){
         })
 
         window.location.reload()
+    })
+
+    let revAccess = document.querySelector(".modal-revokeButton");
+    revAccess.addEventListener('click',async()=>{
+        let selectedDocName = document.querySelector('.clicked-data').firstChild.firstChild.data
+        const response = await fetch('/api/delDocOfUser',{
+            method:"POST",
+            headers:{
+                'Content-Type':'application/json'
+            },
+            body:JSON.stringify({
+                "document":`${selectedDocName}`,
+                "userId":`${selected_userID}`,
+            })
+        })
+        let resp = response.text()
+        if(resp){
+            alert("Access Revoked Successfully");
+            location.reload()
+        }
+        else{
+            alert("Access Revoked Failed");
+            location.reload()
+        }
     })
     
 

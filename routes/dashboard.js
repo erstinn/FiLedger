@@ -2,7 +2,6 @@ const express = require('express')
 const router = express.Router()
 const fs = require("fs")
 const path = require('path')
-
 // databases
 const nano = require('nano')('http://administrator:qF3ChYhp@127.0.0.1:5984/');
 // const nano = require('nano')('http://root:root@127.0.0.1:5984/');
@@ -11,240 +10,35 @@ const docsOrg2DB = nano.db.use('org2-documents');
 const userOrg1DB = nano.db.use('org1-users');
 const userOrg2DB = nano.db.use('org2-users');
 const docViews = "/_design/all_users/_view/all";
-const departments = ["Sales","Marketing", "Human Resources", "Accounting"] //to remove when dynamic addition. of dept.s implemented
+const departments = ["Sales","Marketing", "Human Resources", "Accounting"] //todo remove last dept.
+
+
+//TODO this is the make lipat of rejected/accepted/pending
+// ALSO,
+const rejectedRouter = require("./rejected-docs");
+const acceptedRouter = require("./accepted-docs");
+const pendingRouter = require("./pending-docs");
+router.use('/rejected-docs', rejectedRouter);
+router.use('/pending-docs', pendingRouter);
+router.use('/accepted-docs', acceptedRouter);
+router.use('/user-rejected-docs', rejectedRouter);
+router.use('/user-pending-docs', pendingRouter);
+router.use('/user-accepted-docs', acceptedRouter);
+
+
 
 
 router.get('/', function (req, res){
-
     console.log(req.body.username)
     console.log(req.body.email)
     res.render("dashboard", {username : req.session.username}); //after session, username
-})
-
-//GANTO GINAWA KO PARA LUMITAW PERO HINDI KO ALAM ANO GAGAWIN FOR PAGINATION SHIT
-router.get("/accepted-docs",async(req,res)=>{
-    res.redirect('accepted-docs/1');
-})
-
-router.get('/rejected-docs',async(req,res)=>{
-    res.redirect('rejected-docs/1');
-})
-router.get('/pending-docs',async(req,res)=>{
-    res.redirect('pending-docs/1');
-})
-
-router.get("/rejected-docs/:page",async(req,res)=>{
-    let docz = await docsOrg1DB.find({selector:{
-        _id:{
-            "$gt":null
-        },
-        status:"Rejected"
-    }})
-    if(Number(req.params.page) <= (Math.ceil(docz.docs.length/10))){
-        if(req.query.sort === "title"){
-            docz.docs = docz.docs.sort((a,b)=>(a.name > b.name)? 1:-1)
-        }
-        else if(req.query.sort === 'type'){
-            docz.docs = docz.docs.sort((a,b)=>(a.type.slice(1).toUpperCase() > b.type.slice(1).toUpperCase())? 1:-1)
-        }
-        else if(req.query.sort === "size"){
-            docz.docs = docz.docs.sort((a,b)=>{
-                let unitA = a.size.split(" ")[1]
-                let unitB = b.size.split(" ")[1]
-                let valueA;
-                let valueB;
-                if(unitA === 'GB'){
-                    valueA = parseFloat(a.size.split(' ')[0]) * 125000
-                }
-                else if(unitA === 'MB'){
-                    valueA = parseFloat(a.size.split(' ')[0]) * 125
-                }
-                else if(unitA === 'KB'){
-                    valueA = parseFloat(a.size.split(' ')[0])
-                }
-
-                if(unitB === 'GB'){
-                    valueB = parseFloat(b.size.split(' ')[0]) * 125000
-                }
-                else if(unitB === 'MB'){
-                    valueB = parseFloat(b.size.split(' ')[0]) * 125
-                }
-                else if(unitB === 'KB'){
-                    valueB = parseFloat(b.size.split(' ')[0])
-                }
-                if(valueA > valueB){
-                    return 1
-                }
-                else{
-                    return -1
-                }
-            })
-        }else if(req.query.sort === "author"){
-            docz.docs = docz.docs.sort((a,b)=>(a.creator > b.creator)? 1:-1)
-        }else if(req.query.sort === 'date'){
-            docz.docs = docz.docs.sort((a,b)=>(a.state_history.slice(-1) > b.state_history.slice(-1))? 1:-1)
-        }
-        else{
-            docz.docs = docz.docs.sort((a,b)=>(a.name > b.name)? 1:-1)
-        }
-        res.render('rejected-docs',{username:req.session.username,doc2:docz,page:req.params.page})
-    }
-    else{
-        res.redirect("1")
-    }
-})
-
-router.get("/pending-docs/:page",async(req,res)=>{
-    //query for fetching all docs in documents DB
-    const docz = await docsOrg1DB.find({selector:{
-            _id:{
-                "$gt":null
-            },
-            status:"Pending"
-        }})
-    if(Number(req.params.page) <= (Math.ceil(docz.docs.length/10))){
-        const accepted = req.body.accept;
-        const user = req.session.user;
-        const admin = req.session.admin;
-        const approver = req.session.approver;
-    
-        //query for updating the status in each json doc
-        const state = await docsOrg1DB.find({selector:{
-            _id:{
-                "$gt":null
-            },
-            "status": req.params.status,
-            "name": req.params.name
-            // "department":
-        }})
-
-        if(req.query.sort === "title"){
-            docz.docs = docz.docs.sort((a,b)=>(a.name > b.name)? 1:-1)
-        }
-        else if(req.query.sort === 'type'){
-            docz.docs = docz.docs.sort((a,b)=>(a.type.slice(1).toUpperCase() > b.type.slice(1).toUpperCase())? 1:-1)
-        }
-        else if(req.query.sort === "size"){
-            docz.docs = docz.docs.sort((a,b)=>{
-                let unitA = a.size.split(" ")[1]
-                let unitB = b.size.split(" ")[1]
-                let valueA;
-                let valueB;
-                if(unitA === 'GB'){
-                    valueA = parseFloat(a.size.split(' ')[0]) * 125000
-                }
-                else if(unitA === 'MB'){
-                    valueA = parseFloat(a.size.split(' ')[0]) * 125
-                }
-                else if(unitA === 'KB'){
-                    valueA = parseFloat(a.size.split(' ')[0])
-                }
-
-                if(unitB === 'GB'){
-                    valueB = parseFloat(b.size.split(' ')[0]) * 125000
-                }
-                else if(unitB === 'MB'){
-                    valueB = parseFloat(b.size.split(' ')[0]) * 125
-                }
-                else if(unitB === 'KB'){
-                    valueB = parseFloat(b.size.split(' ')[0])
-                }
-                if(valueA > valueB){
-                    return 1
-                }
-                else{
-                    return -1
-                }
-            })
-        }else if(req.query.sort === "author"){
-            docz.docs = docz.docs.sort((a,b)=>(a.creator > b.creator)? 1:-1)
-        }else if(req.query.sort === 'date'){
-            docz.docs = docz.docs.sort((a,b)=>(a.state_history.slice(-1) > b.state_history.slice(-1))? 1:-1)
-        }
-        else{
-            docz.docs = docz.docs.sort((a,b)=>(a.name > b.name)? 1:-1)
-        }
-        res.render("pending-docs", {doc3: docz, username: req.session.username,page:req.params.page})
-    }else{
-        res.redirect('1')
-    }
-    const accepted = req.body.accept;
-    // const user = req.session.user;
-    const admin = req.session.admin;
-    const approver = req.session.approver;
-
-    //query for updating the status in each json doc
-    // const state = await docsOrg1DB.find({selector:{
-})
-
-router.get('/accepted-docs/:page',async(req,res)=>{
-    const docz = await docsOrg1DB.find({selector:{
-        _id:{
-            "$gt":null
-        },
-        status:"Accepted"
-    }})
-    if(Number(req.params.page) <= (Math.ceil(docz.docs.length/10))){
-        if(req.query.sort === "title"){
-            docz.docs = docz.docs.sort((a,b)=>(a.name > b.name)? 1:-1)
-        }
-        else if(req.query.sort === 'type'){
-            docz.docs = docz.docs.sort((a,b)=>(a.type.slice(1).toUpperCase() > b.type.slice(1).toUpperCase())? 1:-1)
-        }
-        else if(req.query.sort === "size"){
-            docz.docs = docz.docs.sort((a,b)=>{
-                let unitA = a.size.split(" ")[1]
-                let unitB = b.size.split(" ")[1]
-                let valueA;
-                let valueB;
-                if(unitA === 'GB'){
-                    valueA = parseFloat(a.size.split(' ')[0]) * 125000
-                }
-                else if(unitA ==='MB'){
-                    valueA = parseFloat(a.size.split(' ')[0]) * 125
-                }
-                else if(unitA === 'KB'){
-                    valueA = parseFloat(a.size.split(' ')[0])
-                }
-
-                if(unitB === 'GB'){
-                    valueB = parseFloat(b.size.split(' ')[0]) * 125000
-                }
-                else if(unitB === 'MB'){
-                    valueB = parseFloat(b.size.split(' ')[0]) * 125
-                }
-                else if(unitB === 'KB'){
-                    valueB = parseFloat(b.size.split(' ')[0])
-                }
-                if(valueA > valueB){
-                    return 1
-                }
-                else{
-                    return -1
-                }
-            })
-        }else if(req.query.sort === "author"){
-            docz.docs = docz.docs.sort((a,b)=>(a.creator > b.creator)? 1:-1)
-        }else if(req.query.sort === 'date'){
-            docz.docs = docz.docs.sort((a,b)=>(a.state_history.slice(-1) > b.state_history.slice(-1))? 1:-1)
-        }
-        else{
-            docz.docs = docz.docs.sort((a,b)=>(a.name > b.name)? 1:-1)
-        }
-        res.render('accepted-docs',{username:req.session.username,doc1:docz,page:req.params.page})
-    }
-    else{
-        res.redirect("1")
-    }
 })
 
 //======================================== UPLOAD FILE-RELATED CODES ================================================================
 const multer  = require('multer')
 const invoke = require("../network/chaincode/javascript/invoke");
 const {originalMaxAge} = require("express-session/session/cookie");
-// const e = require('express'); //?
-//todo maybe prevent zip file upload?
-//Specs: 1 file per upload, 1gb, any filetype
+const regRouter = require("./registration");
 var storage = multer.diskStorage({
     destination:'uploads/',
     filename: (req,file,cb)=>{
@@ -259,20 +53,9 @@ const upload = multer({
     storage:memStorage
 })
 
-//todo: change path?; plus redirection to current page; plus popup (#?)
-// popup to confirm certain info e.g. the
-//I FIX THIS WHEN OUR UI MASTER IS FINALLY HERE
+//TODO =============================== UPLOADING ONLY ===============================
 router.post('/upload',  upload.single('uploadDoc'),
     async function (req, res, next) {
-        //todo necessary user info here esp.: privilege (if !fileCreator/admin) ; they should have no upload button
-        // - category, size, type, name,
-        // - tags(array), state (always DRAFT state here), path (not sure),
-        // - state_change_timestamp (always set right after first upload)
-        // - auto-append ver control? if the file already exists
-        // WHEN DONE: REMOVE "for testing purposes"
-        // ADD 'req.file, req.session, req.body,'ORGDB'' AS PARAMS FOR insertDoc
-
-        //init all necessary fields :
         if (req.file.originalname === null) {
             res.render('dashboard');
         }
@@ -309,9 +92,7 @@ router.post('/upload',  upload.single('uploadDoc'),
         }
     })
 
-
-
-//======================================== MIDDLEWARES ================================================================
+//todo ======================================== FUNCTIONS ================================================================
 async function docQuery(fileName, creator){
     const indexDef = { //copied cod lol
         index: { fields: ["name", "creator"]},
@@ -331,29 +112,7 @@ async function docQuery(fileName, creator){
 }
 
 //TODO: change these into returns so that we can assign it to var nalang
-async function checkFileChanges(filebuff, filetag, file, fileVer, fileTimestamp, fileTags){
-    var ver = parseInt(fileVer);
 
-    if (!file.equals(filebuff)) { //checking if same file
-        if (fileTags.split("|")[1] == "") {
-            return{
-                version: ver++,
-                tags: `${file.originalname}|${filetag[filetag.length - 1].split("|")[1]}|@ ${fileTimestamp} V${parseFloat(fileVer).toFixed(2)}`
-            };
-        } else if (fileTags.split("|")[1] == filetag[filetag.length - 1].split("|")[1]) {
-            return{
-                version: ver++,
-                tags: `${file.originalname}|${filetag[filetag.length - 1].split("|")[1]}|@ ${fileTimestamp} V${parseFloat(fileVer).toFixed(2)}`
-            }
-        } else if (fileTags.split("|")[1] != filetag[filetag.length - 1].split("|")[1]) {
-            return {
-                version: ver += 0.1,
-                tags: `${file.originalname}|${filetag.substring(0, filetag.length - 1)}|@ ${fileTimestamp} V${parseFloat(fileVer).toFixed(2)}`
-
-            }
-        }
-    }
-}
 
 async function insertDoc(file, session, body, orgDB, res){
     const currentTime = new Date(Date.now());
@@ -371,14 +130,9 @@ async function insertDoc(file, session, body, orgDB, res){
         user = 'enroll'
         console.log('ADMIN DITO !!! GRRR')
     }
-    //TODO! check if filename exists already; add version where `state` = RESUBMITTED; else if new version and state: DRAFT
-    //for now assumes DRAFT state
-    let fileVersion = 1.0; //TODO when findDuplicate() for doc is implemented (auto increment INTEGER if duplicate)
-    const fileMinApprovers = 1; //TODO when UI for this is implemented
+    let fileVersion = 1.0;
     const state = "Draft"; //TODO when UI is implemented
     const stateTimestamp = state + " @ " + fileTimestamp; // @ to separate values later
-    // const qName = await userDB.find({selector:{"username":req.session.username}})
-    // const fileCreator = `${await qName.docs[0].firstname} ${await qName.docs[0].lastname}`; //TODO implement once sessions
     const fileCreator = `${session.firstname} ${session.lastname}`;
     let fileTagsList = []
     let stateTimestampList = []
@@ -417,7 +171,6 @@ async function insertDoc(file, session, body, orgDB, res){
             version_num: fileVersion,
             state_history: stateTimestampList,
             creator: fileCreator,
-            min_approvers: fileMinApprovers,
             last_activity: "Upload",
             status: "Pending",
         }, id, function (err, response) {
@@ -431,7 +184,6 @@ async function insertDoc(file, session, body, orgDB, res){
                     version_num: fileVersion,
                     state_history: stateTimestampList,
                     creator: fileCreator,
-                    min_approvers: fileMinApprovers,
                     last_activity: "Upload",
                     status: "Pending",
                 }
@@ -447,7 +199,6 @@ async function insertDoc(file, session, body, orgDB, res){
                 console.log("failed: ", err)
                 res.redirect("/dashboard/?fail=true")
             }
-
         })
 
         const frev = await docQuery(fileName, fileCreator);
@@ -475,7 +226,6 @@ async function updateDoc(file, session, body, orgDB, res){
     const currentTime = new Date(Date.now());
     const fileName = file.originalname;
     const fileCreator = `${session.firstname} ${session.lastname}`;
-    const fileMinApprovers = 1; //not sure if when this will be changed, placeholder for now
     const findRev = await docQuery(fileName, fileCreator);
     const revi = findRev[0]._rev;
     const doc = findRev[0]._id;
@@ -513,7 +263,6 @@ async function updateDoc(file, session, body, orgDB, res){
             version_num: parseFloat(fileVer).toFixed(2), //finally updates
             state_history: stateTimestamps,
             creator: fileCreator,
-            min_approvers: fileMinApprovers,
             _rev: revi,
             last_activity: "Upload",
             status: "Pending",
@@ -529,7 +278,6 @@ async function updateDoc(file, session, body, orgDB, res){
                     version_num: parseFloat(fileVer).toFixed(2), //finally updates
                     state_history: stateTimestamps,
                     creator: fileCreator,
-                    min_approvers: fileMinApprovers,
                     _rev: revi,
                     last_activity: "Upload",
                     status: "Pending",
@@ -579,7 +327,29 @@ async function formatBytes(bytes, decimals = 2) { //dno if need to async
 
     return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
 }
+async function checkFileChanges(filebuff, filetag, file, fileVer, fileTimestamp, fileTags){
+    var ver = parseInt(fileVer);
 
+    if (!file.equals(filebuff)) { //checking if same file
+        if (fileTags.split("|")[1] == "") {
+            return{
+                version: ver++,
+                tags: `${file.originalname}|${filetag[filetag.length - 1].split("|")[1]}|@ ${fileTimestamp} V${parseFloat(fileVer).toFixed(2)}`
+            };
+        } else if (fileTags.split("|")[1] == filetag[filetag.length - 1].split("|")[1]) {
+            return{
+                version: ver++,
+                tags: `${file.originalname}|${filetag[filetag.length - 1].split("|")[1]}|@ ${fileTimestamp} V${parseFloat(fileVer).toFixed(2)}`
+            }
+        } else if (fileTags.split("|")[1] != filetag[filetag.length - 1].split("|")[1]) {
+            return {
+                version: ver += 0.1,
+                tags: `${file.originalname}|${filetag.substring(0, filetag.length - 1)}|@ ${fileTimestamp} V${parseFloat(fileVer).toFixed(2)}`
+
+            }
+        }
+    }
+}
 //======================================== X CODES ================================================================
 
 module.exports = router;

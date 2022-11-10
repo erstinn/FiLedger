@@ -12,7 +12,7 @@ router.use(bodyParser.json())
 //TODO this is used in /admin/ url, invoked as soon as u enter http://127.0.0.1:3000/administration/admin
 router.post('/users',async function (req,res){
     if(req.headers.access === "admin" && req.session.org==='org1') { //todo may change to if req.session.admin
-        const users = await userorg1DB.find({selector:{"_id":{"$gt":null}}})
+        const users = await userOrg1DB.find({selector:{"_id":{"$gt":null}}})
         console.log(users.docs)
         res.send(users.docs);
     } else if (req.headers.access === "admin" && req.session.org==='org2'){
@@ -90,8 +90,7 @@ router.post('/acceptDocs',async(req,res)=>{
         docs.status = "Accepted"
         const date = new Date();
         const state = `Accepted @ ${date.getMonth()+1}/${date.getDate()}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`
-        docs.state_history.push(state)
-
+        docs.state_history.push(state);
         await docsOrg1DB.insert(docs,req.body.docId,err=>{
             if(err){
                 res.send(err)

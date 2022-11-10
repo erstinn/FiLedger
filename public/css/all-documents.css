@@ -20,10 +20,11 @@ a{
 .documents-container{
     height: 85vh;
     display: flex;
-    width: 100%;
+    width: 95vw;
     padding: .5vh;
     flex-direction: column;
     gap:.2vh;
+    margin:auto;
 }
 
 

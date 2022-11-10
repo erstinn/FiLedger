@@ -43,7 +43,7 @@ router.post('/docs', async (req,res)=>{
 //TODO used in /admin
 router.put('/insert-docs',async(req,res)=>{
     //todo tnginang reduce the fkin boilerplaate
-    if(req.headers.access === 'admin' && req.session.org==='org1') {
+    if(req.headers.access === 'admin' /*&& req.session.org==='org1'*/) {
         const user = await userOrg1DB.find({selector:{"_id":req.body.userId}})
         user.docs[0]['documents'].push({document:req.body.document,access:req.body.access}) //todo wtf is this supposed to do
         await userOrg1DB.insert(user.docs[0],req.body.userId,(err)=>{
@@ -63,7 +63,7 @@ router.put('/insert-docs',async(req,res)=>{
                 res.sendStatus(201)
             }
         });
-    }
+    }else{console.log("hi")}
 })
 
 //TODO used in pending-docs

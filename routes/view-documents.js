@@ -12,7 +12,7 @@ const nano = require('nano')('http://administrator:qF3ChYhp@127.0.0.1:5984/');
 const docsOrg1DB = nano.db.use('org1-documents');
 const docsOrg2DB = nano.db.use('org2-documents');
 // const docsDB = nano.db.use('org1-documents');
-let mimeType = require('./mimeType');
+let mimeType = require('mime-types');
 // maps file extension to MIME types
 // full list can be found here: https://www.freeformatter.com/mime-types-list.html
 

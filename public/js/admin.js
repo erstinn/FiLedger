@@ -38,10 +38,15 @@ async function getDocsOfUser(){
         })
     })
 
-    let data = await response.json()
-    data = JSON.stringify(data)
-    data = JSON.parse(data)
-    return data
+    try{
+        let data = await response.json()
+        data = JSON.stringify(data)
+        data = JSON.parse(data)
+        return data
+    }catch(err){
+        console.log(err)
+    }
+   
 }
 
 async function main(){
@@ -70,8 +75,8 @@ async function main(){
             })
             //TODO may remove:
             // removes all modal data when modal is exited
-            document.querySelectorAll('.data').forEach(e=>{
-                document.querySelector(".modalTable.tableUser").removeChild(e)
+            document.querySelectorAll('.tableUser .data').forEach(e=>{
+                document.querySelector(".modalTable.tableUser tbody").removeChild(e)
             })
         }
     })
@@ -132,19 +137,14 @@ async function main(){
                 let userDoc = document.createElement("tr");
                 userDoc.classList.add("data");
                 let userDocName = document.createElement("td")
-                userDocName.innerHTML = e['document']
+                userDocName.innerHTML = e['document'].substring(0,30)+"..."
                 let userDocAccess = document.createElement("td")
                 userDocAccess.innerHTML = e['access']
-                //todo may remove
-                let userDept = document.createElement("td")
-                userDept.innerHTML = item['department']
-                //end
 
                 userDoc.appendChild(userDocName)
                 userDoc.appendChild(userDocAccess)
-                userDoc.appendChild(userDept) //todo may remove
 
-                document.querySelector(".modalTable.tableUser").appendChild(userDoc)
+                document.querySelector(".modalTable.tableUser tbody").insertBefore(userDoc,document.querySelector(".modalTable.tableUser tbody").children[1])
             })
         })
 
@@ -242,8 +242,8 @@ async function main(){
         })
 
         //todo may remove
-        document.querySelectorAll('.data').forEach(e=>{
-            document.querySelector(".modalTable.tableUser").removeChild(e)
+        document.querySelectorAll('.tableUser .data').forEach(e=>{
+            document.querySelector(".modalTable.tableUser tbody").removeChild(e)
         })
 //end of may remove
     })
@@ -280,7 +280,8 @@ async function main(){
                 "userId":`${selected_userID}`
             }),
             headers:{
-                'Content-Type':'application/json'
+                'Content-Type':'application/json',
+                'access':'admin'
             }
         })
 
@@ -288,7 +289,46 @@ async function main(){
     })
     
 
+    const addRowDoc = document.querySelector(".addRowDoc")
+    const show = document.querySelectorAll('.addRowDoc svg')[0]
+    const hide = document.querySelectorAll('.addRowDoc svg')[1]
+    const searchRes = document.querySelector(".search-results")
 
+    addRowDoc.addEventListener('click',()=>{
+        if(show.classList.contains("inactive")){
+            show.classList.remove("inactive")
+            hide.classList.add("inactive")
+
+            doc4user.classList.add("inactive")
+            accessUser.classList.add("inactive")
+            searchRes.classList.add("inactive")
+           
+        }else{
+            show.classList.add("inactive")
+            hide.classList.remove("inactive")
+
+            doc4user.classList.remove("inactive")
+            accessUser.classList.remove("inactive")
+            searchRes.classList.remove("inactive")
+
+        }
+    
+    })
+
+    documents.forEach(e=>{
+        const docTitle = document.createElement("li");
+        docTitle.classList.add("searchDocs")
+        docTitle.innerHTML = e.name;
+        document.querySelector(".search-results ul").appendChild(docTitle)
+    })
+
+    document.querySelectorAll(".searchDocs").forEach(e=>{
+        e.addEventListener('click',()=>{
+            doc4user.value = e.innerHTML
+        })
+    })
+
+    
 }
 main()
 

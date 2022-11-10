@@ -311,11 +311,39 @@ async function main(){
             location.reload()
         }
     })
-    
 
+    let changeAccess = document.querySelector('.modal-changeButton');
+    changeAccess.addEventListener('click',()=>{
+        document.querySelector('.clicked-data').cells[1].innerHTML = `<select id='newAccess' onchange="onChangeAccess()"><option selected hidden disabled>New Access</option><option value='viewer'>Viewer</option><option value='editor'>Editor</option><option value='approver'>Approver</option></select>`
+    })
 
 }
 main()
+async function onChangeAccess(){
+    let selectedDocName = document.querySelector('.clicked-data').firstChild.firstChild.data
+    let newAccess = document.getElementById('newAccess').value
+    
+    const response = await fetch('/api/changeAccess',{
+        method:"POST",
+        headers:{
+            'Content-Type':'application/json'
+        },
+        body:JSON.stringify({
+            "document":`${selectedDocName}`,
+            "userId":`${selected_userID}`,
+            "newAccess":`${newAccess}`,
+        })
+    })
+    let resp = response.text()
+    if(resp){
+        alert("Access Changed Successfully");
+        location.reload()
+    }
+    else{
+        alert("Access Changed Failed");
+        location.reload()
+    }
+}
 
 // }
 // main()

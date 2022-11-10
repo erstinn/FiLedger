@@ -118,6 +118,23 @@ router.post('/delDocOfUser',async(req,res)=>{
     
 })
 
+router.post('/changeAccess',async(req,res)=>{
+    const userz = req.session.currentUsersDB;
+    const users = await userz.get(req.body.userId);
+    let temp = users['documents']
+    let index = temp.findIndex(x=>x.document === req.body.document)
+    temp[index].access = req.body.newAccess;
+    users.documents = temp;
+    await userz.insert(users,req.body.userId,(err)=>{
+        if(err){
+            res.send(false)
+        }else{
+            res.send(true)
+        }
+    });
+    
+})
+
 //todo ====================================================== middleware ======================================================
 
 module.exports = router

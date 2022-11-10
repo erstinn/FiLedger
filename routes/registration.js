@@ -19,7 +19,7 @@ const approverDB = nano.db.use('approvers');
 // const walletDB = nano.db.use('wallet');
 
 const userViews = "/_design/all_users/_view/all";
-const departments = ["Sales","Marketing", "Human Resources", "Accounting"] //to remove when dynamic addition. of dept.s implemented
+const departments = ["Sales","Marketing", "Human Resources"] //to remove when dynamic addition. of dept.s implemented
 
 router.get('/', function (req, res){
     res.render("registration", {dep: departments});

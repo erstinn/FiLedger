@@ -13,7 +13,7 @@
         <div class="table-title">
             Accepted Documents
             <div class="sortInput">
-                <label for="sortBy">Sort by:</label>
+                <label for="sortBy">Sort:</label>
                 <select name="sortBy" id="sortBy" class="sortBy" onchange="location = `<%=page%>?sort=${this.value}`;">
                     <option value="" selected hidden disabled>Choose one...</option>
                     <option value="title" class="opt">Title</option>
@@ -125,4 +125,3 @@ else if(query.get("sort")==="author"){
 }
 </script>
 </body>
-

@@ -2,18 +2,8 @@ const express = require('express')
 const router = express.Router()
 const fs = require("fs")
 const path = require('path')
-// databases
-const nano = require('nano')('http://administrator:qF3ChYhp@127.0.0.1:5984/');
-// const nano = require('nano')('http://root:root@127.0.0.1:5984/');
-const docsOrg1DB = nano.db.use('org1-documents');
-const docsOrg2DB = nano.db.use('org2-documents');
-const userOrg1DB = nano.db.use('org1-users');
-const userOrg2DB = nano.db.use('org2-users');
-const docViews = "/_design/all_users/_view/all";
-const departments = ["Sales","Marketing", "Human Resources", "Accounting"] //to remove when dynamic addition. of dept.s implemented
 
-
-router.use(setSessionDocsDB);
+router.use(setDocz);
 router.get('/', async(req,res)=>{
     console.log(req.session.admin);
     if (req.session.admin ||req.session.approver) {
@@ -24,14 +14,7 @@ router.get('/', async(req,res)=>{
 })
 
 router.get("/:page",async(req,res)=>{
-    docsDB = req.session.currentDocsDB;
-    let docz = await docsDB.find({selector:{
-            _id:{
-                "$gt":null
-            },
-            status:"Rejected"
-        }})
-    //checks if there are docs TODO may remove
+    const docz = req.session.docz;
     if(docz.docs.length <= 0){
         if (req.session.admin ||req.session.approver) {
             res.render('rejected-docs', {username: req.session.username, doc2: docz, page: req.params.page})
@@ -55,21 +38,15 @@ router.get("/:page",async(req,res)=>{
                 let valueB;
                 if(unitA === 'GB'){
                     valueA = parseFloat(a.size.split(' ')[0]) * 125000
-                }
-                else if(unitA === 'MB'){
+                }else if(unitA === 'MB'){
                     valueA = parseFloat(a.size.split(' ')[0]) * 125
-                }
-                else if(unitA === 'KB'){
+                } else if(unitA === 'KB'){
                     valueA = parseFloat(a.size.split(' ')[0])
-                }
-
-                if(unitB === 'GB'){
+                }if(unitB === 'GB'){
                     valueB = parseFloat(b.size.split(' ')[0]) * 125000
-                }
-                else if(unitB === 'MB'){
+                }else if(unitB === 'MB'){
                     valueB = parseFloat(b.size.split(' ')[0]) * 125
-                }
-                else if(unitB === 'KB'){
+                }else if(unitB === 'KB'){
                     valueB = parseFloat(b.size.split(' ')[0])
                 }
                 if(valueA > valueB){
@@ -102,13 +79,24 @@ router.get("/:page",async(req,res)=>{
     }
 })
 
-function setSessionDocsDB(req, res, next){ //bobo ko bat di ko ginawa una palang 🤡
-    if (req.session.org==='org1'){
-        req.session.currentDocsDB = docsOrg1DB;
-    }else{
-        req.session.currentDocsDB = docsOrg2DB;
-    }
+
+//todo ======================================= ACTUAL MIDDLEWARES =======================================
+//pls do ignore errors lolol
+async function setDocz(req, res, next) {
+    const docsDB = req.session.currentDocsDB; //this is nano.db.use :D
+    if (req.session.admin)
+        req.session.docz = await docsDB.find({selector: {_id: {"$gt": null}, status: "Rejected"}})
+    if (req.session.approver)
+        req.session.docz = await docsDB.find({selector: {_id: {"$gt": null}, status: "Rejected", department: req.session.department}})
+    if (req.session.user) //todo tngina, querying of the array na relevant documents
+        req.session.docz = await docsDB.find({selector: {_id: {"$gt": null}, status: "Rejected"}})
     next();
 }
+
+
+function approverAdminQuery(){
+
+}
+
 module.exports = router;
 

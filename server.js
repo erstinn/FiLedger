@@ -100,6 +100,23 @@ function isApprover (req, res, next){
     }
 }
 
+function setSessionDocsDB(req, res, next){ //bobo ko bat di ko ginawa una palang 🤡
+    if (req.session.org==='org1'){
+        req.session.currentDocsDB = nano.db.use('org1-documents');
+    }else{
+        req.session.currentDocsDB = nano.db.use('org2-documents');
+    }
+    next();
+}
+function setSessionUsersDB(req, res, next){ //bobo ko bat di ko ginawa una palang 🤡
+    if (req.session.org==='org1'){
+        req.session.currentUsersDB = nano.db.use('org1-users');
+    }else{
+        req.session.currentUsersDB = nano.db.use('org2-users');
+    }
+    next();
+}
+
 app.get('/create-docs', function (req, res){
     res.render("create-docs");
 })
@@ -137,15 +154,15 @@ const api = require('./routes/api')
 // const pendingDocs = require('./routes/pending-docs')
 
 //Mount all routers
-app.use('/login', isLoggedIn , loginRouter)
-app.use('/logout', logoutRouter)
-app.use('/api',api)
-app.use('/dashboard', isAuthenticated, dashboardRouter);
-app.use('/documents', isAuthenticated, isApprover, isUser, documentsRouter); //TODO CONSIDERING REMOVAL
-app.use('/all-documents', isAuthenticated, allDocumentsRouter);
-app.use('/administration', isAuthenticated, isAdmin, adminRouter);
-app.use('/view-documents', isAuthenticated, isAdmin,  viewDocumentsRouter) //TODO CONSIDERING REMOVAL
-app.use('/registration',isAuthenticated,isAdmin, regRouter);
+app.use('/login', isLoggedIn , loginRouter);
+app.use('/logout', logoutRouter);
+app.use('/api', setSessionDocsDB, setSessionUsersDB, api);
+app.use('/dashboard', isAuthenticated,setSessionDocsDB,setSessionUsersDB, dashboardRouter);
+app.use('/documents', isAuthenticated, isApprover, isUser,setSessionDocsDB,setSessionUsersDB, documentsRouter); //TODO CONSIDERING REMOVAL
+app.use('/all-documents', isAuthenticated,setSessionDocsDB,setSessionUsersDB, allDocumentsRouter);
+app.use('/administration', isAuthenticated, isAdmin,setSessionDocsDB,setSessionUsersDB, adminRouter);
+app.use('/view-documents', isAuthenticated, isAdmin,setSessionDocsDB, setSessionUsersDB, viewDocumentsRouter) //TODO CONSIDERING REMOVAL
+app.use('/registration',isAuthenticated,isAdmin,setSessionDocsDB,setSessionUsersDB, regRouter);
 // app.use('/pending-docs', isAuthenticated, pendingDocs)
 // app.use('/pending-docs', isAuthenticated, myFunc);
 

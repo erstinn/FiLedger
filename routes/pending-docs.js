@@ -2,19 +2,8 @@ const express = require('express')
 const router = express.Router()
 const fs = require("fs")
 const path = require('path')
-// databases
-const nano = require('nano')('http://administrator:qF3ChYhp@127.0.0.1:5984/');
-// const nano = require('nano')('http://root:root@127.0.0.1:5984/');
-const docsOrg1DB = nano.db.use('org1-documents');
-const docsOrg2DB = nano.db.use('org2-documents');
-const userOrg1DB = nano.db.use('org1-users');
-const userOrg2DB = nano.db.use('org2-users');
-const docViews = "/_design/all_users/_view/all";
-const departments = ["Sales","Marketing", "Human Resources", "Accounting"] //to remove when dynamic addition. of dept.s implemented
 
-
-router.use(setSessionDocsDB);
-
+router.use(setDocz);
 router.get('/', async(req,res)=>{
     if (req.session.admin ||req.session.approver) {
         res.redirect('pending-docs/1');
@@ -27,8 +16,7 @@ router.get('/', async(req,res)=>{
 
 router.get("/:page",async(req,res)=>{
     //todo soz ni-one liner ko nalang .find() :D
-    docsDB = req.session.currentDocsDB
-    const docz = await docsDB.find({selector:{_id:{"$gt":null},status:"Pending"}})
+    const docz = req.session.docz;
     if(Number(req.params.page) <= (Math.ceil(docz.docs.length/10))){
         //query for updating the status in each json doc
         if(req.query.sort === "title"){
@@ -84,12 +72,17 @@ router.get("/:page",async(req,res)=>{
     }
 })
 
-function setSessionDocsDB(req, res, next){ //bobo ko bat di ko ginawa una palang 🤡
-    if (req.session.org==='org1'){
-        req.session.currentDocsDB = docsOrg1DB;
-    }else{
-        req.session.currentDocsDB = docsOrg2DB;
-    }
+//todo ======================================= ACTUAL MIDDLEWARES =======================================
+//todo this is not tested yet for a diff pov
+//pls do ignore errors lolol
+async function setDocz(req, res, next) {
+    const docsDB = req.session.currentDocsDB; //this is nano.db.use :D
+    if (req.session.admin)
+        req.session.docz = await docsDB.find({selector: {_id: {"$gt": null}, status: "Pending"}})
+    if (req.session.approver)
+        req.session.docz = await docsDB.find({selector: {_id: {"$gt": null}, status: "Pending", department: req.session.department}})
+    if (req.session.user) //todo tngina, querying of the array na relevant documents
+        req.session.docz = await docsDB.find({selector: {_id: {"$gt": null}, status: "Pending"}})
     next();
 }
 

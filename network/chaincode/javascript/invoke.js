@@ -15,7 +15,7 @@ exports.log = async function(req, res) {
 }
 
 async function invokeTransaction (user, isAdmin, isApprov, Org, id, fileName, fileType, fileSize, fileTagsList,
-                                  fileVersion, stateTimestampList, fileCreator) {
+                                  fileVersion, stateTimestampList, fileCreator, category, status) {
 
     var dbName = dbGen(isAdmin, isApprov, Org);
 
@@ -62,7 +62,7 @@ async function invokeTransaction (user, isAdmin, isApprov, Org, id, fileName, fi
         await contract.submitTransaction(
             "createDoc",
             id, fileName, fileType, fileSize, fileTagsList,
-            fileVersion, stateTimestampList, fileCreator,
+            fileVersion, stateTimestampList, fileCreator, category, status
         );
         console.log("Transaction has been submitted");
 
@@ -79,7 +79,7 @@ async function invokeTransaction (user, isAdmin, isApprov, Org, id, fileName, fi
 }
 
 async function updateTransaction(user, isAdmin, isApprov, Org, id, fileName, fileType, fileSize, fileTagsList,
-                                 fileVersion, fileCreator, stateTimestamps) {
+                                 fileVersion, fileCreator, stateTimestamps, category, status) {
 
     var dbName = dbGen(isAdmin, isApprov, Org);
     var wallet = await Wallets.newCouchDBWallet('http://administrator:qF3ChYhp@127.0.0.1:5984/', dbName);
@@ -123,7 +123,7 @@ async function updateTransaction(user, isAdmin, isApprov, Org, id, fileName, fil
         await contract.submitTransaction(
             "updateDocs",
             id, fileName, fileType, fileSize, fileTagsList,
-            fileVersion, fileCreator, stateTimestamps
+            fileVersion, fileCreator, stateTimestamps, category, status
         );
         console.log("Document has been updated in the ledger");
 

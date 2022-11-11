@@ -13,7 +13,7 @@ class MyFiLedgerContract extends Contract {
     //uploadDoc
     //metadata from couchdb
     async createDoc(ctx, id, fileName, fileType, fileSize, fileTagsList,
-                     fileVersion, stateTimestampList, fileCreator) {
+                     fileVersion, stateTimestampList, fileCreator, category, status) {
 
         //checks if assetID exists
         const exists = await this.myDocExists(ctx, id);
@@ -28,13 +28,13 @@ class MyFiLedgerContract extends Contract {
             name: fileName,
             type: fileType,
             size: fileSize,
-            category: "standard",
+            category: category,
             tag_history: fileTagsList,
             version_num: fileVersion,
             state_history: stateTimestampList,
             creator: fileCreator,
             last_activity: "Upload",
-            status: "Pending",
+            status: status,
         };
         //if it doesn't exists, create new assetID
         const buffer = Buffer.from(JSON.stringify(document));
@@ -53,7 +53,7 @@ class MyFiLedgerContract extends Contract {
     }
     // //updateVer
     async updateDocs(ctx, id, fileName, fileType, fileSize, fileTagsList,
-                     fileVersion, fileCreator, stateTimestamps) {
+                     fileVersion, fileCreator, stateTimestamps, category, status) {
         // const exists = await this.myDocExists(ctx, id);
         // if (!exists) {
         //     throw new Error(`The my document ${MyDocId} does not exist`);
@@ -64,15 +64,13 @@ class MyFiLedgerContract extends Contract {
             name: fileName,
             type: fileType,
             size: fileSize,
-            category: "standard",
+            category: category,
             tags_history: fileTagsList,
             version_num: parseFloat(fileVersion).toFixed(2), //finally updates
             state_history: stateTimestamps,
             creator: fileCreator,
-            // min_approvers: fileMinApprovers,
-            // revision: revi, hindi sya pede iinsert sa db
             last_activity:"Upload",
-            status:"Pending",
+            status: status,
         };
         const buffer = Buffer.from(JSON.stringify(document));
         const worked = await ctx.stub.putState(id, buffer);

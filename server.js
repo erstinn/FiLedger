@@ -116,6 +116,24 @@ function setSessionUsersDB(req, res, next){ //bobo ko bat di ko ginawa una palan
     }
     next();
 }
+// sets db for deleted docs
+function setSessionDelDocsDB(req, res, next){ //bobo ko bat di ko ginawa una palang 🤡
+    if (req.session.org==='org1'){
+        req.session.currentDelDocsDB = nano.db.use('org1-deleted-docs');
+    }else{
+        req.session.currentDelDocsDB = nano.db.use('org2-deleted-docs');
+    }
+    next();
+}
+//sets db for deleter users
+function setSessionDelUsersDB(req, res, next){ //bobo ko bat di ko ginawa una palang 🤡
+    if (req.session.org==='org1'){
+        req.session.currentDelUsersDB = nano.db.use('org1-deleted-user');
+    }else{
+        req.session.currentDelUsersDB = nano.db.use('org2-deleted-user');
+    }
+    next();
+}
 
 app.get('/create-docs', function (req, res){
     res.render("create-docs");
@@ -156,7 +174,7 @@ const api = require('./routes/api')
 //Mount all routers
 app.use('/login', isLoggedIn , loginRouter);
 app.use('/logout', logoutRouter);
-app.use('/api', setSessionDocsDB, setSessionUsersDB, api);
+app.use('/api', setSessionDocsDB, setSessionUsersDB,setSessionDelDocsDB, setSessionDelUsersDB,api);
 app.use('/dashboard', isAuthenticated,setSessionDocsDB,setSessionUsersDB, dashboardRouter);
 app.use('/documents', isAuthenticated, isApprover, isUser,setSessionDocsDB,setSessionUsersDB, documentsRouter); //TODO CONSIDERING REMOVAL
 app.use('/all-documents', isAuthenticated,setSessionDocsDB,setSessionUsersDB, allDocumentsRouter);

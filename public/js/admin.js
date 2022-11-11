@@ -10,6 +10,7 @@ const nameUser = document.querySelector(".name-user");
 const departmentUser = document.querySelector(".department-user");
 const tableTitle = document.querySelector(".userList-header");
 var selected_userID;
+var selected_docID;
 
 async function getUsers(){
     const response = await fetch('/api/users',{method:"POST",headers:{'access':'admin'}})
@@ -34,6 +35,24 @@ async function getDocsOfUser(){
         },
         body:JSON.stringify({
             "userId":`${selected_userID}`
+        })
+    })
+
+    let data = await response.json()
+    data = JSON.stringify(data)
+    data = JSON.parse(data)
+    return data
+}
+//gets users associated with a doc
+async function getUsersOfDoc(){
+    const response = await fetch("/api/getUsersOfDoc",{
+        method:"POST",
+        headers:{
+            'Content-Type':'application/json',
+            'access':"admin"
+        },
+        body:JSON.stringify({
+            "documentId":`${selected_docID}`
         })
     })
 
@@ -72,6 +91,9 @@ async function main(){
             document.querySelectorAll('.tableUserData').forEach(f=>{
                 document.querySelector(".modalTable.tableUser").removeChild(f)
             })
+            document.querySelectorAll('.tableDocData').forEach(f=>{
+                document.querySelector(".modalTable.tableDoc").removeChild(f)
+            })//clears table when modal is exited
         }
     })
 
@@ -86,6 +108,10 @@ async function main(){
 
         currentActive = 0;
         searchBar.placeholder = "Search Username...";
+        document.querySelector(".modal-deleteButton").innerHTML= 'Delete Account'
+        document.querySelectorAll(".accessButtons .modalButton").forEach(e=>{
+            e.style.visibility = "visible";
+        })//hides buttons that are not needed
     })
     viewModes[1].addEventListener("click",()=>{
         usersList.classList.add("inactive")
@@ -97,6 +123,10 @@ async function main(){
         tableTitle.textContent = "List of Documents";
         currentActive = 1;
         searchBar.placeholder = "Search Document";
+        document.querySelector(".modal-deleteButton").innerHTML= 'Delete Document'
+        document.querySelectorAll(".accessButtons .modalButton").forEach(e=>{
+            e.style.visibility = "hidden";
+        })
     })
 
 
@@ -188,12 +218,28 @@ async function main(){
         documentList.appendChild(newData);
 
 
-        newData.addEventListener("click",()=>{
+        newData.addEventListener("click",async()=>{
             modal.classList.remove("inactive")
             document.querySelector("body").style.overflowY = "hidden"
             scrollTo(0,0)
             nameUser.textContent = item.name
             departmentUser.textContent = `User associated with ${item.name}`
+            selected_docID = item._id //displays users associate to docs in DOM
+            const usersOfDoc = await getUsersOfDoc()
+            usersOfDoc.forEach(e=>{
+                const docUser = document.createElement("tr");
+                docUser.classList.add("tableDocData")
+                const userOfDoc = document.createElement("td")
+                userOfDoc.innerHTML = e.username;
+                const accessOfUser = document.createElement("td")
+                accessOfUser.innerHTML = e.access;
+
+                docUser.appendChild(userOfDoc)
+                docUser.appendChild(accessOfUser)
+                document.querySelector(".modalTable.tableDoc").appendChild(docUser)
+
+
+            })
 
         })
     }
@@ -271,14 +317,16 @@ async function main(){
     let addDoc = document.getElementsByClassName("addDoc")[0];
 
     addDoc.addEventListener("click",async ()=>{
-        console.log(doc4user.value)
-        console.log(accessUser.value)
+        //added docId to documents in users to make sure selected data is unique
+        let doc4userName = doc4user.value.split("++")[0];
+        let doc4userId = doc4user.value.split("++")[1];
         await fetch('/api/insert-docs',{
             method:"PUT",
             body:JSON.stringify({
-                "document":`${doc4user.value}`,
+                "document":`${doc4userName}`,
                 "access":`${accessUser.value}`,
-                "userId":`${selected_userID}`
+                "userId":`${selected_userID}`,
+                "documentId":`${doc4userId}`
             }),
             headers:{
                 'Content-Type':'application/json'
@@ -315,6 +363,51 @@ async function main(){
     let changeAccess = document.querySelector('.modal-changeButton');
     changeAccess.addEventListener('click',()=>{
         document.querySelector('.clicked-data').cells[1].innerHTML = `<select id='newAccess' onchange="onChangeAccess()"><option selected hidden disabled>New Access</option><option value='viewer'>Viewer</option><option value='editor'>Editor</option><option value='approver'>Approver</option></select>`
+    })
+
+    //deletes users and documents
+    let deleteButton = document.querySelector(".modal-deleteButton");
+    deleteButton.addEventListener("click",async()=>{
+        if(currentActive==1){
+            const response = await fetch('/api/deleteDoc',{
+                method:"POST",
+                headers:{
+                    'Content-Type':'application/json'
+                },
+                body:JSON.stringify({
+                    "document":`${selected_docID}`
+                })
+            })
+            let resp = response.text()
+            if(resp){
+                alert("Deleted Successfully");
+                location.reload()
+            }
+            else{
+                alert("Deletion Failed");
+                location.reload()
+            }
+        }
+        else if(currentActive==0){
+            const response = await fetch('/api/deleteUser',{
+                method:"POST",
+                headers:{
+                    'Content-Type':'application/json'
+                },
+                body:JSON.stringify({
+                    "userId":`${selected_userID}`
+                })
+            })
+            let resp = response.text()
+            if(resp){
+                alert("Deleted Successfully");
+                location.reload()
+            }
+            else{
+                alert("Deletion Failed");
+                location.reload()
+            }
+        }
     })
 
 }

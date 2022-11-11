@@ -127,6 +127,7 @@ async function insertDoc(file, session, body, orgDB, res){
     const fileCreator = `${session.firstname} ${session.lastname}`;
     let fileTagsList = []
     let stateTimestampList = []
+    let category = body.docType;
     let fileTags = `${fileName}|${body.tags.substring(0, body.tags.length - 1)}|@ ${fileTimestamp} V${parseFloat(fileVersion).toFixed(2)}`
     fileTagsList.push(fileTags)
     stateTimestampList.push(stateTimestamp)
@@ -157,7 +158,7 @@ async function insertDoc(file, session, body, orgDB, res){
             name: fileName,
             type: fileType,
             size: fileSize,
-            category: "standard",
+            category: category,
             tags_history: fileTagsList,
             version_num: fileVersion,
             state_history: stateTimestampList,
@@ -170,7 +171,7 @@ async function insertDoc(file, session, body, orgDB, res){
                     name: fileName,
                     type: fileType,
                     size: fileSize,
-                    category: "standard",
+                    category: category,
                     tags_history: fileTagsList,
                     version_num: fileVersion,
                     state_history: stateTimestampList,
@@ -181,8 +182,7 @@ async function insertDoc(file, session, body, orgDB, res){
 
                 invoke.invokeTransaction(user, session.admin, session.approver, session.org, id, docdeets.name,
                     docdeets.type, docdeets.size, docdeets.tags_history, docdeets.version_num,
-                    docdeets.state_history, docdeets.creator);
-
+                    docdeets.state_history, docdeets.creator, docdeets.category, docdeets.status);
 
                 console.log("it worked")
                 console.log('File Deets:', fileName, file.mimetype)
@@ -224,6 +224,7 @@ async function updateDoc(file, session, body, orgDB, res){
     let fileVer = findRev[0].version_num;
     let tags = findRev[0].tags_history;
     let stateTimestamps = findRev[0].state_history;
+    let category = findRev[0].category;
     let user = session.username
     if (session.admin === true) {
         user = 'enroll'
@@ -248,7 +249,7 @@ async function updateDoc(file, session, body, orgDB, res){
             name: fileName,
             type: fileType,
             size: fileSize,
-            category: "standard",
+            category: category,
             tags_history: tags,
             version_num: parseFloat(fileVer).toFixed(2), //finally updates
             state_history: stateTimestamps,
@@ -263,7 +264,7 @@ async function updateDoc(file, session, body, orgDB, res){
                     name: fileName,
                     type: fileType,
                     size: fileSize,
-                    category: "standard",
+                    category: category,
                     tags_history: tags,
                     version_num: parseFloat(fileVer).toFixed(2), //finally updates
                     state_history: stateTimestamps,
@@ -274,8 +275,10 @@ async function updateDoc(file, session, body, orgDB, res){
                 }
                 console.log('File Deets:', fileName, file.mimetype, tempPath)
                 console.log("it worked")
-                invoke.updateTransaction(user, session.admin, session.approver, session.org, doc, docdeets.name, docdeets.type, docdeets.size,
-                    docdeets.tags_history, docdeets.version_num, docdeets.creator, docdeets.state_history);
+                invoke.updateTransaction(user, session.admin, session.approver, session.org, doc, docdeets.name,
+                    docdeets.type, docdeets.size, docdeets.tags_history, docdeets.version_num,
+                    docdeets.creator, docdeets.state_history, docdeets.category, docdeets.status);
+
 
                 res.redirect("/dashboard?fail=false")
             } else {

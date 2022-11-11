@@ -100,6 +100,7 @@ function isApprover (req, res, next){
     }
 }
 
+//todo DOCUMENTS db
 function setSessionDocsDB(req, res, next){ //bobo ko bat di ko ginawa una palang 🤡
     if (req.session.org==='org1'){
         req.session.currentDocsDB = nano.db.use('org1-documents');
@@ -108,14 +109,32 @@ function setSessionDocsDB(req, res, next){ //bobo ko bat di ko ginawa una palang
     }
     next();
 }
+
+//todo ALL USERS db
 function setSessionUsersDB(req, res, next){ //bobo ko bat di ko ginawa una palang 🤡
     if (req.session.org==='org1'){
         req.session.currentUsersDB = nano.db.use('org1-users');
+        req.session.currentUsersWalletDB = nano.db.use('org1-wallet_users');
+
+        req.session.currentAdminsDB = nano.db.use('org1-admins');
+        req.session.currentAdminsWalletDB = nano.db.use('org1-wallet_admins');
+
+        req.session.currentApproversDB = nano.db.use('org1-approvers');
+        req.session.currentApproversWalletDB = nano.db.use('org1-wallet_approvers');
     }else{
         req.session.currentUsersDB = nano.db.use('org2-users');
+        req.session.currentUsersWalletDB = nano.db.use('org1-wallet_users');
+
+        req.session.currentAdminsDB = nano.db.use('org2-admins');
+        req.session.currentAdminsWalletDB = nano.db.use('org2-wallet_admins');
+
+        req.session.currentApproversDB = nano.db.use('org2-approvers');
+        req.session.currentApproversWalletDB = nano.db.use('org2-wallet_approvers');
     }
     next();
 }
+
+
 
 app.get('/create-docs', function (req, res){
     res.render("create-docs");

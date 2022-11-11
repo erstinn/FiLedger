@@ -69,7 +69,8 @@
                                 <%}%>
                             </td>
                             <td><%=doc2.docs[i].creator%></td>
-                            <td>Abacan</td>
+<!--                            ito ung rehjected by Abacan: -->
+                            <td><%doc2.docs[i].approver%></td>
                             <td><%=doc2.docs[i].tags_history.slice(-1).toString().split('|')[1]%></td>
                             <td>
                             <form id="uploadDoc" enctype="multipart/form-data" action="/dashboard/upload" method="POST">

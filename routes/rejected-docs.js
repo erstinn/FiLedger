@@ -4,6 +4,9 @@ const fs = require("fs")
 const path = require('path')
 
 router.use(setDocz);
+//idkl if ill need this yet:
+router.use(getApproverInTheDept); // in line setDocz, it's rly hard to query the document in question or i am just dumb; so i just get current approver/s? in related per dept
+
 router.get('/', async(req,res)=>{
     console.log(req.session.admin);
     if (req.session.admin ||req.session.approver) {
@@ -15,6 +18,7 @@ router.get('/', async(req,res)=>{
 
 router.get("/:page",async(req,res)=>{
     const docz = req.session.docz;
+    console.log(docz, 'courage trhe coriler dog');
     if(docz.docs.length <= 0){
         if (req.session.admin ||req.session.approver) {
             res.render('rejected-docs', {username: req.session.username, doc2: docz, page: req.params.page})
@@ -102,14 +106,49 @@ async function setDocz(req, res, next) {
         })
     }
     if (req.session.user) {
+        //hahaha :-0
+        const FULLNAME = req.session.firstname + " " + req.session.lastname;
+        console.log(FULLNAME, "pano pako nakakatayo", req.session.department);
         req.session.docz = await docsDB.find({
             selector: {
                 _id: {"$gt": null},
-                "$or": [{status: "Rejected"}, {status: "Resubmit"}],
+                "status": "Resubmit",
+                "$or":[
+                    {"creator": FULLNAME},
+                    {
+                        roles: { //torsdo remove this if it doesnt query in editors/viewers
+                            viewers: {
+                                "$elemMatch":{
+                                    "$eq" : FULLNAME
+                                }
+                            },
+                        } //end of roles ARRAY
+                    },
+                    {
+                        roles: { //torsdo remove this if it doesnt query in editors/viewers
+                            editors: {
+                                "$elemMatch":{
+                                    "$eq" : FULLNAME
+                                }
+                            },
+                        } //end of roles ARRAY
+                    }
+                ],
                 department: req.session.department
             }
         })
     }
+    next();
+}
+
+async function getApproverInTheDept(req, res, next) { //TODO PASS THIS TO EJS, or not tbh idk what it does yet
+    const approverDB = req.session.currentApproversDB;
+    req.session.deptApprover = await approverDB.find({
+        selector: {
+            _id: {"$gt": null},
+            department: req.session.department
+        }
+    })
     next();
 }
 

@@ -226,7 +226,7 @@ router.post("/status", async function (req, res){
                 type: 'X.509',
             };
             if(approver==='on'){
-                await insertToApproverDB(id, firstName, lastName, email, username, password, dept, approver)
+                await insertToApproverDB(id, firstName, lastName, email, username, password, dept, approver, req.body.org)
                 await wallet_approvers.put(username, x509Identity);
                 console.log(`Successfully registered and enrolled admin user ${username} and imported it into the wallet`);
             }else {
@@ -368,7 +368,7 @@ async function insertToUserDB(id, firstName, lastName, email, username, password
     return;
 }
 
-async function insertToApproverDB(id, firstName, lastName, email, username, password, dept, approver){
+async function insertToApproverDB(id, firstName, lastName, email, username, password, dept, approver,org){
     const approverOrg1DB = nano.db.use('org1-approvers');
     const approverOrg2DB = nano.db.use('org2-approvers');
     if (org === 'org1'){

@@ -84,12 +84,32 @@ router.get("/:page",async(req,res)=>{
 //pls do ignore errors lolol
 async function setDocz(req, res, next) {
     const docsDB = req.session.currentDocsDB; //this is nano.db.use :D
-    if (req.session.admin)
-        req.session.docz = await docsDB.find({selector: {_id: {"$gt": null}, status: "Rejected"|| "Resubmit"}})
-    if (req.session.approver)
-        req.session.docz = await docsDB.find({selector: {_id: {"$gt": null}, status: "Rejected" || "Resubmit", department: req.session.department}})
-    if (req.session.user) //todo tngina, querying of the array na relevant documents
-        req.session.docz = await docsDB.find({selector: {_id: {"$gt": null}, status: "Rejected" || "Resubmit"}})
+    if (req.session.admin) {
+        req.session.docz = await docsDB.find({
+            selector: {
+                _id: {"$gt": null},
+                "$or": [{status: "Rejected"}, {status: "Resubmit"}]
+            }
+        })
+    }
+    if (req.session.approver) {
+        req.session.docz = await docsDB.find({
+            selector: {
+                _id: {"$gt": null},
+                "$or": [{status: "Rejected"}, {status: "Resubmit"}],
+                department: req.session.department
+            }
+        })
+    }
+    if (req.session.user) {
+        req.session.docz = await docsDB.find({
+            selector: {
+                _id: {"$gt": null},
+                "$or": [{status: "Rejected"}, {status: "Resubmit"}],
+                department: req.session.department
+            }
+        })
+    }
     next();
 }
 

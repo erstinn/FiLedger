@@ -5,6 +5,7 @@ const viewModes = document.querySelectorAll(".viewsMode");
 const searchBar = document.getElementById("searchUserList");
 const exitModal = document.querySelector(".exitModal");
 const modal = document.querySelector(".detailsModal-wrapper")
+const modalData = document.querySelectorAll(".modalTable .data")
 const accessButtons = document.querySelectorAll(".accessButtons .modalButton")
 const nameUser = document.querySelector(".name-user");
 const departmentUser = document.querySelector(".department-user");
@@ -37,10 +38,15 @@ async function getDocsOfUser(){
         })
     })
 
-    let data = await response.json()
-    data = JSON.stringify(data)
-    data = JSON.parse(data)
-    return data
+    try{
+        let data = await response.json()
+        data = JSON.stringify(data)
+        data = JSON.parse(data)
+        return data
+    }catch(err){
+        console.log(err)
+    }
+
 }
 
 async function main(){
@@ -70,7 +76,7 @@ async function main(){
             //TODO may remove:
             // removes all modal data when modal is exited
             document.querySelectorAll('.tableUserData').forEach(f=>{
-                document.querySelector(".modalTable.tableUser").removeChild(f)
+                document.querySelector(".modalTable.tableUser tbody").removeChild(e)
             })
         }
     })
@@ -135,13 +141,13 @@ async function main(){
                 let userDocAccess = document.createElement("td")
                 userDocAccess.innerHTML = e['access']
                 //todo may remove
-                let userDept = document.createElement("td")
-                userDept.innerHTML = item['department']
+                // let userDept = document.createElement("td")
+                // userDept.innerHTML = item['department']
                 //end
 
                 userDoc.appendChild(userDocName)
                 userDoc.appendChild(userDocAccess)
-                userDoc.appendChild(userDept) //todo may remove
+                // userDoc.appendChild(userDept) //todo may remove
 
                 document.querySelector(".modalTable.tableUser").appendChild(userDoc)
 
@@ -172,12 +178,17 @@ async function main(){
         let newDocType = document.createElement("td");
         newDocType.classList.add("docType");
         newDocType.innerHTML = item.category;
+        //todo this was fioreojreo reason removed :D
         let newNumApp = document.createElement("td");
         newNumApp.classList.add("numApp");
         newNumApp.innerHTML = Math.floor(Math.random()*10);
+        //end k
         let newNumUsers = document.createElement("td");
         newNumUsers.classList.add("numUser");
-        newNumUsers.innerHTML = Math.floor(Math.random()*10);
+        //todo test this codoekodkeo 2 below
+        // newNumUsers.innerHTML = Math.floor(Math.random()*10)
+        newNumUsers.innerHTML = 100;
+
 
 
         newData.appendChild(newTitle);
@@ -266,6 +277,23 @@ async function main(){
 //end of may remove
     })
 
+    modalData.forEach((item,index)=>{
+        item.addEventListener("click",()=>{
+            const activeData = document.querySelector(".clicked-data")
+            if(activeData!=undefined){
+                activeData.classList.remove("clicked-data")
+            }
+            item.classList.add("clicked-data")
+
+
+            accessButtons.forEach(button=>{
+                button.disabled = false;
+            })
+
+        })
+    })
+
+
     let doc4user = document.querySelector("#doc4user");
     let accessUser = document.querySelector("#accessUser");
     let addDoc = document.getElementsByClassName("addDoc")[0];
@@ -287,6 +315,7 @@ async function main(){
 
         window.location.reload()
     })
+
 
     let revAccess = document.querySelector(".modal-revokeButton");
     revAccess.addEventListener('click',async()=>{
@@ -312,11 +341,26 @@ async function main(){
         }
     })
 
+    documents.forEach(e=>{
+        const docTitle = document.createElement("li");
+        docTitle.classList.add("searchDocs")
+        docTitle.innerHTML = e.name;
+        document.querySelector(".search-results ul").appendChild(docTitle)
+    })
 
+
+    //from this:
+    // document.querySelectorAll(".searchDocs").forEach(e=>{
+    //     e.addEventListener('click',()=>{
+    //         doc4user.value = e.innerHTML
+    //     })
+    // })
+//to this:
     let changeAccess = document.querySelector('.modal-changeButton');
     changeAccess.addEventListener('click',()=>{
         document.querySelector('.clicked-data').cells[1].innerHTML = `<select id='newAccess' onchange="onChangeAccess()"><option selected hidden disabled>New Access</option><option value='viewer'>Viewer</option><option value='editor'>Editor</option><option value='approver'>Approver</option></select>`
     })
+
 
 }
 main()

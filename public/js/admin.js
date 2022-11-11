@@ -38,10 +38,15 @@ async function getDocsOfUser(){
         })
     })
 
-    let data = await response.json()
-    data = JSON.stringify(data)
-    data = JSON.parse(data)
-    return data
+    try{
+        let data = await response.json()
+        data = JSON.stringify(data)
+        data = JSON.parse(data)
+        return data
+    }catch(err){
+        console.log(err)
+    }
+
 }
 
 async function main(){
@@ -70,8 +75,8 @@ async function main(){
             })
             //TODO may remove:
             // removes all modal data when modal is exited
-            document.querySelectorAll('.data').forEach(e=>{
-                document.querySelector(".modalTable.tableUser").removeChild(e)
+            document.querySelectorAll('.tableUserData').forEach(f=>{
+                document.querySelector(".modalTable.tableUser tbody").removeChild(e)
             })
         }
     })
@@ -130,21 +135,36 @@ async function main(){
             const docsOfUser = await getDocsOfUser()
             docsOfUser.forEach(e=>{
                 let userDoc = document.createElement("tr");
-                userDoc.classList.add("data");
+                userDoc.classList.add("tableUserData");
                 let userDocName = document.createElement("td")
                 userDocName.innerHTML = e['document']
                 let userDocAccess = document.createElement("td")
                 userDocAccess.innerHTML = e['access']
                 //todo may remove
-                let userDept = document.createElement("td")
-                userDept.innerHTML = item['department']
+                // let userDept = document.createElement("td")
+                // userDept.innerHTML = item['department']
                 //end
 
                 userDoc.appendChild(userDocName)
                 userDoc.appendChild(userDocAccess)
-                userDoc.appendChild(userDept) //todo may remove
+                // userDoc.appendChild(userDept) //todo may remove
 
                 document.querySelector(".modalTable.tableUser").appendChild(userDoc)
+
+                userDoc.addEventListener("click",()=>{
+                    const activeData = document.querySelector(".clicked-data")
+                    if(activeData!=undefined){
+                        activeData.classList.remove("clicked-data")
+                    }
+                    userDoc.classList.add("clicked-data")
+
+
+                    accessButtons.forEach(button=>{
+                        button.disabled = false;
+                    })
+
+                })
+
             })
         })
 
@@ -158,12 +178,17 @@ async function main(){
         let newDocType = document.createElement("td");
         newDocType.classList.add("docType");
         newDocType.innerHTML = item.category;
+        //todo this was fioreojreo reason removed :D
         let newNumApp = document.createElement("td");
         newNumApp.classList.add("numApp");
         newNumApp.innerHTML = Math.floor(Math.random()*10);
+        //end k
         let newNumUsers = document.createElement("td");
         newNumUsers.classList.add("numUser");
-        newNumUsers.innerHTML = Math.floor(Math.random()*10);
+        //todo test this codoekodkeo 2 below
+        // newNumUsers.innerHTML = Math.floor(Math.random()*10)
+        newNumUsers.innerHTML = 100;
+
 
 
         newData.appendChild(newTitle);
@@ -290,11 +315,80 @@ async function main(){
 
         window.location.reload()
     })
-    
+
+
+    let revAccess = document.querySelector(".modal-revokeButton");
+    revAccess.addEventListener('click',async()=>{
+        let selectedDocName = document.querySelector('.clicked-data').firstChild.firstChild.data
+        const response = await fetch('/api/delDocOfUser',{
+            method:"POST",
+            headers:{
+                'Content-Type':'application/json'
+            },
+            body:JSON.stringify({
+                "document":`${selectedDocName}`,
+                "userId":`${selected_userID}`,
+            })
+        })
+        let resp = response.text()
+        if(resp){
+            alert("Access Revoked Successfully");
+            location.reload()
+        }
+        else{
+            alert("Access Revoked Failed");
+            location.reload()
+        }
+    })
+
+    documents.forEach(e=>{
+        const docTitle = document.createElement("li");
+        docTitle.classList.add("searchDocs")
+        docTitle.innerHTML = e.name;
+        document.querySelector(".search-results ul").appendChild(docTitle)
+    })
+
+
+    //from this:
+    // document.querySelectorAll(".searchDocs").forEach(e=>{
+    //     e.addEventListener('click',()=>{
+    //         doc4user.value = e.innerHTML
+    //     })
+    // })
+//to this:
+    let changeAccess = document.querySelector('.modal-changeButton');
+    changeAccess.addEventListener('click',()=>{
+        document.querySelector('.clicked-data').cells[1].innerHTML = `<select id='newAccess' onchange="onChangeAccess()"><option selected hidden disabled>New Access</option><option value='viewer'>Viewer</option><option value='editor'>Editor</option><option value='approver'>Approver</option></select>`
+    })
 
 
 }
 main()
+async function onChangeAccess(){
+    let selectedDocName = document.querySelector('.clicked-data').firstChild.firstChild.data
+    let newAccess = document.getElementById('newAccess').value
+
+    const response = await fetch('/api/changeAccess',{
+        method:"POST",
+        headers:{
+            'Content-Type':'application/json'
+        },
+        body:JSON.stringify({
+            "document":`${selectedDocName}`,
+            "userId":`${selected_userID}`,
+            "newAccess":`${newAccess}`,
+        })
+    })
+    let resp = response.text()
+    if(resp){
+        alert("Access Changed Successfully");
+        location.reload()
+    }
+    else{
+        alert("Access Changed Failed");
+        location.reload()
+    }
+}
 
 // }
 // main()

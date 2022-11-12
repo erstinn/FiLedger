@@ -13,29 +13,26 @@ const userOrg1DB = nano.db.use('org1-users');
 const userOrg2DB = nano.db.use('org2-users');
 
 router.get('/:page',async(req,res)=>{
-    console.log(req.session.approver);
-    console.log(req.session.admin);
-    console.log(req.session.user);
-    const documents = await docsOrg1DB.find({
+    const docs = req.session.currentDocsDB;
+    const documents = await docs.find({
         selector: {
             _id: {
                 "$gt": null
             }
         },
     })
-
     if (req.session.admin===true) {
 
         if(Number(req.params.page) <= Math.ceil(documents.docs.length/10)){
-            let docs;
+            let doc;
         if(req.query.sort === "title"){
-            docs = documents.docs.sort((a,b)=>(a.name > b.name)? 1:-1)
+            doc = documents.docs.sort((a,b)=>(a.name > b.name)? 1:-1)
         }
         else if(req.query.sort === 'type'){
-            docs = documents.docs.sort((a,b)=>(a.type.slice(1).toUpperCase() > b.type.slice(1).toUpperCase())? 1:-1)
+            doc = documents.docs.sort((a,b)=>(a.type.slice(1).toUpperCase() > b.type.slice(1).toUpperCase())? 1:-1)
         }
         else if(req.query.sort === "size"){
-            docs = documents.docs.sort((a,b)=>{
+            doc = documents.docs.sort((a,b)=>{
                 let unitA = a.size.split(" ")[1]
                 let unitB = b.size.split(" ")[1]
                 let valueA;
@@ -67,24 +64,21 @@ router.get('/:page',async(req,res)=>{
                 }
             })
         }else if(req.query.sort === "author"){
-            docs = documents.docs.sort((a,b)=>(a.creator > b.creator)? 1:-1)
+            doc = documents.docs.sort((a,b)=>(a.creator > b.creator)? 1:-1)
         }else if(req.query.sort === 'date'){
-            docs = documents.docs.sort((a,b)=>(a.state_history.slice(-1) > b.state_history.slice(-1))? 1:-1)
+            doc = documents.docs.sort((a,b)=>(a.state_history.slice(-1) > b.state_history.slice(-1))? 1:-1)
         }
         else{
-            docs = documents.docs.sort((a,b)=>(a.name > b.name)? 1:-1)
+            doc = documents.docs.sort((a,b)=>(a.name > b.name)? 1:-1)
         }
-        res.render("all-documents",{docs:docs,username : req.session.username,page:req.params.page,sort:req.query.sort})
-        console.log("docs:",docs);
+        res.render("all-documents",{docs:doc,username : req.session.username,page:req.params.page,sort:req.query.sort})
+        console.log("docs:",doc);
         }else{
             res.redirect("1")
         }
     }else if (req.session.approver===true){
         //simply to make sure it's an approver, probably not needed
-        console.log(req.session.department)
-        console.log("appotasetihjrit");
-
-        const documents = await docsOrg1DB.find({
+        const documents = await docs.find({
             selector: {
                 "department": req.session.department
             }
@@ -93,8 +87,7 @@ router.get('/:page',async(req,res)=>{
         console.log(documents);
     }else{
         //TODO uncomment pseudocode soon
-
-        const user = await userOrg1DB.find({
+        const user = await docs.find({
             selector:{
                 "department": req.session.department
             }
@@ -106,13 +99,13 @@ router.get('/:page',async(req,res)=>{
         //     }
         // })
         //selectors end
-        const responseUserDB = await userOrg1DB.find(user);
+        const responseUserDB = await docs.find(user);
         //fetch if align w dept of the creator? TODO MAYBE NOT
         //todo
         //  fetch all documents such that it matches username inside roles array (editor/viewer)
         // fetch by username == creator
 
-        const responseDocsDB = await docsOrg1DB.find(user);
+        const responseDocsDB = await docs.find(user);
         res.render("all-documents",{docs:documents,username : req.session.username,page:req.params.page})
         //todo ent of soducod
         console.log('paprover')

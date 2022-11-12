@@ -4,6 +4,7 @@ const path = require('path');
 const fs = require('fs');
 const http = require('https');
 const axios = require('axios')
+const FileSaver = require('file-saver');
 const query = require('../network/chaincode/javascript/queryDoc')
 //databases
 const nano = require('nano')('http://administrator:qF3ChYhp@127.0.0.1:5984/');
@@ -66,20 +67,28 @@ router.post('/downloads/:name',async(req,res)=>{
     });
     // const file = `uploads/${req.params.name}`;
     console.log(req.body.name);
-    if(req.session.admin && req.session.org === 'org1') {
-        // const filename = docsOrg1DB.attachment.get(req.params._id,req.params.name);
+
+    var user = '';
+    var ver = '';
+    // var timestamp = [];
+    let timestamp;
+    let data = '';
+    if(req.session.admin){
+        user = 'enroll';
+    }
+    else{
+        user = req.session.username;
+    }
+    if (req.session.org==='org1'){
+        data = await docsOrg1DB.find({selector:{"_id":req.params.id}})
+        ver = await query.queryDoc(user, req.session.admin, req.session.approver, req.session.org, data.docs[0]._id);
+        timestamp = ver.state_history.split(',');
+        //download
         const filePath =`downloads/${req.params.name}`;
         const stream = fs.createReadStream(filePath);
 
-        // res.setHeader('Content-Disposition', `image/jpeg; media-type=${req.params.name}` )
-        //text file palang gumagana idk how sa image and docx
         res.setHeader('Content-type',`application/${req.params.type}`)
-        // res.setHeader('Content-type','')
-        // res.setHeader('Content-Type', 'image/jpeg');
-        // res.setHeader('Content-Type', 'text/html');
-        // res.set('Content-Type', 'image/jpeg');
-        // res.setHeader('Content-Type', 'image/png');
-        // res.setHeader('Content-Type', 'application/octet-stream');
+        // res.setHeader('Content-type','image/jpeg');
         res.setHeader('Content-Disposition', `inline; filename="${req.params.name}"`);
         stream.pipe(res);
 
@@ -88,24 +97,43 @@ router.post('/downloads/:name',async(req,res)=>{
             console.log(err);
         })
 
-       stream.on("finish",function (){
+        stream.on("finish",function () {
             stream.close();
             console.log("Download done!")
         })
 
+        res.render("view-documents",{data:data,username : req.session.username, ver:ver, timestamp:timestamp});
+    } else if (req.session.org==='org2'){
+        data = await docsOrg2DB.find({selector:{"_id":req.params.id}})
+        ver = await query.queryDoc(user, req.session.admin, req.session.approver, req.session.org, data.docs[0]._id);
+        timestamp = ver.state_history.split(',');
+        //download
+        const filePath =`./Downloads/${req.params.name}`;
+        const stream = fs.createReadStream(filePath);
+        res.setHeader('Content-type',`application/${res.type}`)
+        res.setHeader('Content-Disposition', `inline; filename="${res.type}"`);
+        stream.pipe(res);
 
+        stream.on("error", function (err){
+            console.log("Error in writing to the stream");
+            console.log(err);
+        })
+
+        stream.on("finish",function (){
+            stream.close();
+            console.log("Download done!")
+        })
+
+        res.render("view-documents",{data:data,username : req.session.username, ver:ver, timestamp:timestamp});
     }
-    res.render('view-documents',{data:doc, username:req.session.username})
-    // res.download(file,req.params.name)
+
 })
 
 //todo ======================================= FUNCTIONS =======================================
-function downloadAttachment (db, org){
-    if (org==='org1'){
-        const body = b.attachment.get('')
-    }
-}
-
-
+// function downloadAttachment (db, org){
+//     if (org==='org1'){
+//         const body = b.attachment.get('')
+//     }
+// }
 
 module.exports = router

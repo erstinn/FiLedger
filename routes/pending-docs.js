@@ -15,7 +15,6 @@ router.get('/', async(req,res)=>{
 
 
 router.get("/:page",async(req,res)=>{
-    //todo soz ni-one liner ko nalang .find() :D
     const docz = req.session.docz;
     if(Number(req.params.page) <= (Math.ceil(docz.docs.length/10))){
         //query for updating the status in each json doc
@@ -81,8 +80,39 @@ async function setDocz(req, res, next) {
         req.session.docz = await docsDB.find({selector: {_id: {"$gt": null}, status: "Pending"}})
     if (req.session.approver)
         req.session.docz = await docsDB.find({selector: {_id: {"$gt": null}, status: "Pending", department: req.session.department}})
-    if (req.session.user) //todo tngina, querying of the array na relevant documents
-        req.session.docz = await docsDB.find({selector: {_id: {"$gt": null}, status: "Pending"}})
+    if (req.session.user) { //USER POV=================================================================================
+        //hahaha :-0
+        const FULLNAME = req.session.firstname + " " + req.session.lastname;
+        console.log(FULLNAME, "pano pako nakakatayo", req.session.department);
+        req.session.docz = await docsDB.find({
+            selector: {
+                _id: {"$gt": null},
+                "status": "Pending",
+                "$or":[
+                    {"creator": FULLNAME},
+                    {
+                        roles: { //matches one of array :----------------D
+                            viewers: {
+                                "$elemMatch":{
+                                    "$eq" : FULLNAME
+                                }
+                            },
+                        } //end of roles ARRAY
+                    },
+                    {
+                        roles: {
+                            editors: {
+                                "$elemMatch":{
+                                    "$eq" : FULLNAME
+                                }
+                            },
+                        } //end of roles ARRAY
+                    }
+                ],
+                department: req.session.department
+            }
+        })
+    }
     next();
 }
 

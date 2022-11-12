@@ -4,8 +4,6 @@ const fs = require("fs")
 const path = require('path')
 
 router.use(setDocz);
-//idkl if ill need this yet:
-router.use(getApproverInTheDept); // in line setDocz, it's rly hard to query the document in question or i am just dumb; so i just get current approver/s? in related per dept
 
 router.get('/', async(req,res)=>{
     console.log(req.session.admin);
@@ -105,18 +103,20 @@ async function setDocz(req, res, next) {
             }
         })
     }
-    if (req.session.user) {
+    if (req.session.user) {//USER POV=================================================================================
         //hahaha :-0
         const FULLNAME = req.session.firstname + " " + req.session.lastname;
         console.log(FULLNAME, "pano pako nakakatayo", req.session.department);
         req.session.docz = await docsDB.find({
             selector: {
                 _id: {"$gt": null},
-                "status": "Resubmit",
+                "status": {
+                    "$in" : ["Resubmit", "Rejected"]
+                },
                 "$or":[
                     {"creator": FULLNAME},
                     {
-                        roles: { //torsdo remove this if it doesnt query in editors/viewers
+                        roles: { //matches one of array :----------------D
                             viewers: {
                                 "$elemMatch":{
                                     "$eq" : FULLNAME
@@ -125,7 +125,7 @@ async function setDocz(req, res, next) {
                         } //end of roles ARRAY
                     },
                     {
-                        roles: { //torsdo remove this if it doesnt query in editors/viewers
+                        roles: {
                             editors: {
                                 "$elemMatch":{
                                     "$eq" : FULLNAME
@@ -140,22 +140,5 @@ async function setDocz(req, res, next) {
     }
     next();
 }
-
-async function getApproverInTheDept(req, res, next) { //TODO PASS THIS TO EJS, or not tbh idk what it does yet
-    const approverDB = req.session.currentApproversDB;
-    req.session.deptApprover = await approverDB.find({
-        selector: {
-            _id: {"$gt": null},
-            department: req.session.department
-        }
-    })
-    next();
-}
-
-
-function approverAdminQuery(){
-
-}
-
 module.exports = router;
 

@@ -1,6 +1,8 @@
 const express = require('express')
 const router = express.Router()
 const bodyParser = require('body-parser')
+const fs = require("fs");
+const path = require("path");
 router.use(bodyParser.json())
 
 //todo ====================================================== admin ======================================================
@@ -67,16 +69,22 @@ router.post('/tagResubmit',async(req,res)=>{
 })
 
 //todo ====================================================== rejected-docs ======================================================
-//tag for resubmit button
-// router.post('/tagResubmit',async(req,res)=>{
+// resubmit button, only visible for USER POV
+//TODO reduce boilerplate
+// router.post('/userReupload',async(req,res)=>{
 //     const docz = req.session.currentDocsDB;
-//     if(req.session.admin || req.session.approver) {
+//     const tempPath = path.resolve(__dirname, `./../uploads/${req.file.originalname}`);
+//     fs.writeFileSync(path.resolve(__dirname, `./../uploads/${req.file.originalname}`), file.buffer)
+//     if(req.session.user) {
 //         const docs = await docz.get(req.body.docId);
-//         docs.status = "Accepted"
+//         if (req.file.originalname !== docs.name)
+//             return;
+//         console.log(req.file.originalname, 'req.file.originalname')
+//         console.log(docs.name, 'docs.name')
+//         docs.status = "Pending"
 //         const date = new Date();
-//         const state = `Accepted @ ${date.getMonth()+1}/${date.getDate()}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`
+//         const state = `Pending @ ${date.getMonth()+1}/${date.getDate()}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`
 //         docs.state_history.push(state)
-//
 //         await docz.insert(docs,req.body.docId,err=>{
 //             if(err){
 //                 res.send(err)
@@ -85,6 +93,21 @@ router.post('/tagResubmit',async(req,res)=>{
 //                 res.send(true)
 //             }
 //         })
+//         const FULLNAME = req.session.firstname + " " + req.session.lastname;
+//         const q = {
+//             selector: {
+//                 "name": req.file.originalname,
+//                 "creator":  FULLNAME//todo there is still a what if for deleted accs.. :)
+//             }
+//         };
+//         const frev = await docz.find(q);
+//         const revi = frev[0]._rev;
+//         console.log(revi ,'revi');
+//         fs.readFile(tempPath, async (err, data) => { //dno if async
+//             await docz.attachment.insert(req.body.docId, req.file.originalname, data, file.mimetype, {}) //todo this should be attachment
+//                 if (err)
+//                     console.log('resubmit failURE: ', err)
+//         });
 //     }else{
 //         res.status(401).send("Unauthorized Access");
 //     }

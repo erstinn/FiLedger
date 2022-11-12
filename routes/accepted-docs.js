@@ -73,8 +73,39 @@ async function setDocz(req, res, next) {
         req.session.docz = await docsDB.find({selector: {_id: {"$gt": null}, status: "Accepted"}})
     if (req.session.approver)
         req.session.docz = await docsDB.find({selector: {_id: {"$gt": null}, status: "Accepted", department: req.session.department}})
-    if (req.session.user) //todo tngina, querying of the array na relevant documents
-        req.session.docz = await docsDB.find({selector: {_id: {"$gt": null}, status: "Accepted"}})
+    if (req.session.user) {//USER POV=================================================================================
+        //hahaha :-0
+        const FULLNAME = req.session.firstname + " " + req.session.lastname;
+        console.log(FULLNAME, "pano pako nakakatayo", req.session.department);
+        req.session.docz = await docsDB.find({
+            selector: {
+                _id: {"$gt": null},
+                "status": "Accepted",
+                "$or":[
+                    {"creator": FULLNAME},
+                    {
+                        roles: { //matches one of array :----------------D
+                            viewers: {
+                                "$elemMatch":{
+                                    "$eq" : FULLNAME
+                                }
+                            },
+                        } //end of roles ARRAY
+                    },
+                    {
+                        roles: {
+                            editors: {
+                                "$elemMatch":{
+                                    "$eq" : FULLNAME
+                                }
+                            },
+                        } //end of roles ARRAY
+                    }
+                ],
+                department: req.session.department
+            }
+        })
+    }
     next();
 }
 

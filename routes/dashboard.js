@@ -65,18 +65,16 @@ router.post('/upload',  upload.single('uploadDoc'), async function (req, res, ne
         const q = {
             selector: {
                 "name": fileName,
-                "creator": fileCreator
+                "creator": fileCreator //todo there is still a what if for deleted accs.. :)
             }
         };
         const rev = await docz.find(q);
 
         if (rev.docs == '') {
-            // TODO: add insertDoc function here
             //  - add if else for checking orgs for DB
             await insertDoc(req.file, req.session, req.body, docz, res);
             //END OF FUNCTION
         } else { //TODO ======================================= UPDATING =================================================
-            //TODO: turn into function
             // -Add (req.file, req.session, req.body, 'OrgDB') AS PARAMS FOR updateDoc
             await updateDoc(req.file, req.session, req.body, docz, res);
             //end of func

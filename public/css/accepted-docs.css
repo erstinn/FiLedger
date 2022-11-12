@@ -26,12 +26,11 @@ tr {
 }
 .table-title {
     background-color: #61c6c6;
-    padding: 0.5vw;
+    padding: 0.2vw;
     text-align: center;
     color: white;
-    /*font-weight: 600;*/
-    /*font-size: 2vw;*/
-    border-radius: 5px 5px 0px 0px;
+    display:flex;
+    padding:.5vw
 }
 .data:nth-child(odd){
     background-color:#61c6c654

@@ -16,6 +16,14 @@ router.get('/', async(req,res)=>{
 
 router.get("/:page",async(req,res)=>{
     const docz = req.session.docz;
+    if(docz.docs.length <= 0){
+        if (req.session.admin ||req.session.approver) {
+            res.render('pending-docs', {username: req.session.username, doc3: docz, page: req.params.page,sort: req.query.sort})
+        }else{
+            res.render('user-pending-docs', {username: req.session.username, doc3: docz, page: req.params.page,sort: req.query.sort})
+        }
+        return
+    }
     if(Number(req.params.page) <= (Math.ceil(docz.docs.length/10))){
         //query for updating the status in each json doc
         if(req.query.sort === "title"){

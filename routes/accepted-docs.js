@@ -14,6 +14,14 @@ router.get("/", async(req,res)=>{
 router.get('/:page',async(req,res)=>{
     //todo soz ni-one liner ko nalang .find() :D
     const docz = req.session.docz;
+    if(docz.docs.length <= 0){
+        if (req.session.admin ||req.session.approver) {
+            res.render('accepted-docs', {username: req.session.username, doc1: docz, page: req.params.page,sort: req.query.sort})
+        }else{
+            res.render('user-accepted-docs', {username: req.session.username, doc1: docz, page: req.params.page,sort: req.query.sort})
+        }
+        return
+    }
     if(Number(req.params.page) <= (Math.ceil(docz.docs.length/10))){
         if(req.query.sort === "title"){
             docz.docs = docz.docs.sort((a,b)=>(a.name > b.name)? 1:-1)
@@ -51,16 +59,16 @@ router.get('/:page',async(req,res)=>{
             docz.docs = docz.docs.sort((a,b)=>(a.name > b.name)? 1:-1)
         }
         if (req.session.admin ||req.session.approver) {
-            res.render('accepted-docs', {username: req.session.username, doc1: docz, page: req.params.page})
+            res.render('accepted-docs', {username: req.session.username, doc1: docz, page: req.params.page, sort: req.query.sort})
         }else {
-            res.render('user-accepted-docs', {username: req.session.username, doc1: docz, page: req.params.page})
+            res.render('user-accepted-docs', {username: req.session.username, doc1: docz, page: req.params.page, sort: req.query.sort})
         }
     }
     else{
         if (req.session.admin ||req.session.approver) {
-            res.redirect("accepted-docs/1")
+            res.redirect("accepted-docs/1") //working
         }else{
-            res.redirect("user-accepted-docs/1")
+            res.redirect("user-accepted-docs/1") //lol still not working
         }
     }
 })

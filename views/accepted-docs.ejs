@@ -44,7 +44,7 @@
             <%}%>
             <%var start = (page-1) * perPage %>
             <%var end = start + (perPage-1) %>
-            <%if(page === Math.ceil(doc1.docs.length/perPage) && page !== 1){%>
+            <%if(page == Math.ceil(doc1.docs.length/perPage) && page !== 1){%>
             <%end = doc1.docs.length-1%>
             <%}%>
             <%for(let i=start;i<=end;i++){%>
@@ -74,7 +74,7 @@
     </div>
     <div class="pages">
         <%for(let i=1;i <= Math.ceil(doc1.docs.length/perPage);i++){%>
-            <a href="<%=i%>"><button class="pagesButton"><%=i%></button></a>
+            <a href="<%=i%>?sort=<%=sort%>"><button class="pagesButton"><%=i%></button></a>
         <%}%>
     </div>
 </body>

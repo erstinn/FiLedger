@@ -116,8 +116,8 @@ async function getApproverIdentity(req,res,next){
     const approverOrg2DB = nano.db.use('org2-approvers');
     const responseOrg1ApproverDB = await approverOrg1DB.find(q)
     const responseOrg2ApproverDB = await approverOrg2DB.find(q)
-    const org1Wallet_approver = await Wallets.newCouchDBWallet('http://administrator:qF3ChYhp@127.0.0.1:5984/', "org1-wallet_approver");
-    const org2Wallet_approver = await Wallets.newCouchDBWallet('http://administrator:qF3ChYhp@127.0.0.1:5984/', "org2-wallet_approver");
+    const org1Wallet_approver = await Wallets.newCouchDBWallet('http://administrator:qF3ChYhp@127.0.0.1:5984/', "org1-wallet_approvers");
+    const org2Wallet_approver = await Wallets.newCouchDBWallet('http://administrator:qF3ChYhp@127.0.0.1:5984/', "org2-wallet_approvers");
     console.log(responseOrg1ApproverDB.bookmark, "org1approver")
     console.log(responseOrg2ApproverDB.bookmark, "org2approver")
     console.log(SHA1(req.body.password).toString(enc.Hex), "current pw")

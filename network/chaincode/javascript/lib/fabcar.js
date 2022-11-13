@@ -13,7 +13,7 @@ class MyFiLedgerContract extends Contract {
     //uploadDoc
     //metadata from couchdb
     async createDoc(ctx, id, fileName, fileType, fileSize, fileTagsList,
-                     fileVersion, stateTimestampList, fileCreator, category, status) {
+                     fileVersion, stateTimestampList, fileCreator, category, status, org) {
 
         //checks if assetID exists
         const exists = await this.myDocExists(ctx, id);
@@ -33,6 +33,7 @@ class MyFiLedgerContract extends Contract {
             version_num: fileVersion,
             state_history: stateTimestampList,
             creator: fileCreator,
+            organization: org,
             last_activity: "Upload",
             status: status,
         };
@@ -53,7 +54,7 @@ class MyFiLedgerContract extends Contract {
     }
     // //updateVer
     async updateDocs(ctx, id, fileName, fileType, fileSize, fileTagsList,
-                     fileVersion, fileCreator, stateTimestamps, category, status) {
+                     fileVersion, fileCreator, stateTimestamps, category, status, org) {
         // const exists = await this.myDocExists(ctx, id);
         // if (!exists) {
         //     throw new Error(`The my document ${MyDocId} does not exist`);
@@ -69,6 +70,7 @@ class MyFiLedgerContract extends Contract {
             version_num: parseFloat(fileVersion).toFixed(2), //finally updates
             state_history: stateTimestamps,
             creator: fileCreator,
+            organization: org,
             last_activity:"Upload",
             status: status,
         };

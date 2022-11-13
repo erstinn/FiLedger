@@ -161,6 +161,7 @@ async function insertDoc(file, session, body, orgDB, res){
             version_num: fileVersion,
             state_history: stateTimestampList,
             creator: fileCreator,
+            organization: session.org,
             last_activity: "Upload",
             status: "Pending",
         }, id, function (err, response) {
@@ -174,13 +175,14 @@ async function insertDoc(file, session, body, orgDB, res){
                     version_num: fileVersion,
                     state_history: stateTimestampList,
                     creator: fileCreator,
+                    organization: session.org,
                     last_activity: "Upload",
                     status: "Pending",
                 }
 
                 invoke.invokeTransaction(user, session.admin, session.approver, session.org, id, docdeets.name,
                     docdeets.type, docdeets.size, docdeets.tags_history, docdeets.version_num,
-                    docdeets.state_history, docdeets.creator, docdeets.category, docdeets.status);
+                    docdeets.state_history, docdeets.creator, docdeets.category, docdeets.status, docdeets.organization);
 
                 console.log("it worked")
                 console.log('File Deets:', fileName, file.mimetype)
@@ -252,6 +254,7 @@ async function updateDoc(file, session, body, orgDB, res){
             version_num: parseFloat(fileVer).toFixed(2), //finally updates
             state_history: stateTimestamps,
             creator: fileCreator,
+            organization: session.org,
             _rev: revi,
             last_activity: "Upload",
             status: "Pending",
@@ -267,6 +270,7 @@ async function updateDoc(file, session, body, orgDB, res){
                     version_num: parseFloat(fileVer).toFixed(2), //finally updates
                     state_history: stateTimestamps,
                     creator: fileCreator,
+                    organization: session.org,
                     _rev: revi,
                     last_activity: "Upload",
                     status: "Pending",
@@ -275,8 +279,7 @@ async function updateDoc(file, session, body, orgDB, res){
                 console.log("it worked")
                 invoke.updateTransaction(user, session.admin, session.approver, session.org, doc, docdeets.name,
                     docdeets.type, docdeets.size, docdeets.tags_history, docdeets.version_num,
-                    docdeets.creator, docdeets.state_history, docdeets.category, docdeets.status);
-
+                    docdeets.creator, docdeets.state_history, docdeets.category, docdeets.status, docdeets.organization);
 
                 res.redirect("/dashboard?fail=false")
             } else {

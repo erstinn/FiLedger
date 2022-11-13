@@ -76,6 +76,12 @@ router.post('/upload',  upload.single('uploadDoc'), async function (req, res, ne
             //END OF FUNCTION
         } else { //TODO ======================================= UPDATING =================================================
             // -Add (req.file, req.session, req.body, 'OrgDB') AS PARAMS FOR updateDoc
+            if(req.body.tags === undefined){
+                var tempTag = await docQuery(fileName, fileCreator, docz)
+                req.body.tags = `${tempTag[0].tags_history.slice(-1).toString().split('|')[1]},`
+            }
+
+            console.log('TAGS TO: ', req.body.tags)
             await updateDoc(req.file, req.session, req.body, docz, res);
             //end of func
         }
@@ -238,6 +244,13 @@ async function updateDoc(file, session, body, orgDB, res){
     const fileSize = await formatBytes(file.size);
     const stateTimestamp = state + " @ " + fileTimestamp; // @ to separate values later
     let fileTags = `${fileName}|${body.tags.substring(0, body.tags.length - 1)}|@ ${fileTimestamp} V${parseFloat(fileVer).toFixed(2)}`
+    //TODO: delete to if gumana without this
+    // try{
+    //     //its giving baindaid solution HAHAHA
+    //     fileTags = `${fileName}|${body.tags.substring(0, body.tags.length - 1)}|@ ${fileTimestamp} V${parseFloat(fileVer).toFixed(2)}`
+    // }catch (err){
+    //     fileTags = `${fileName}||@ ${fileTimestamp} V${parseFloat(fileVer).toFixed(2)}`
+    // }
     var fileInp = fs.readFileSync(path.resolve(__dirname, `./../uploads/${fileName}`));
     var tempPath = path.resolve(__dirname, `./../uploads/${fileName}`);
     console.log(fileInp) //todo remove

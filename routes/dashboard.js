@@ -161,7 +161,7 @@ async function insertDoc(file, session, body, orgDB, res){
             version_num: fileVersion,
             state_history: stateTimestampList,
             creator: fileCreator,
-            organization: session.org,
+            department: session.department,
             last_activity: "Upload",
             status: "Pending",
         }, id, function (err, response) {
@@ -175,14 +175,14 @@ async function insertDoc(file, session, body, orgDB, res){
                     version_num: fileVersion,
                     state_history: stateTimestampList,
                     creator: fileCreator,
-                    organization: session.org,
+                    department: session.department,
                     last_activity: "Upload",
                     status: "Pending",
                 }
 
                 invoke.invokeTransaction(user, session.admin, session.approver, session.org, id, docdeets.name,
                     docdeets.type, docdeets.size, docdeets.tags_history, docdeets.version_num,
-                    docdeets.state_history, docdeets.creator, docdeets.category, docdeets.status, docdeets.organization);
+                    docdeets.state_history, docdeets.creator, docdeets.category, docdeets.status, docdeets.department);
 
                 console.log("it worked")
                 console.log('File Deets:', fileName, file.mimetype)
@@ -242,6 +242,9 @@ async function updateDoc(file, session, body, orgDB, res){
     var tempPath = path.resolve(__dirname, `./../uploads/${fileName}`);
     console.log(fileInp) //todo remove
     let newMetadata = checkFileChanges(file.buffer, body.tags, fileInp, fileVer, fileTimestamp, fileTags);
+    //TODO: AYUSIN UNG FILEVER GGRRRrRr
+    // fileVer = (await newMetadata).version
+    // fileTags = (await newMetadata).tags
     fs.writeFileSync(path.resolve(__dirname, `./../uploads/${fileName}`), file.buffer);
     tags.push(fileTags);
     stateTimestamps.push(stateTimestamp);
@@ -254,7 +257,7 @@ async function updateDoc(file, session, body, orgDB, res){
             version_num: parseFloat(fileVer).toFixed(2), //finally updates
             state_history: stateTimestamps,
             creator: fileCreator,
-            organization: session.org,
+            department: session.org,
             _rev: revi,
             last_activity: "Upload",
             status: "Pending",
@@ -270,7 +273,7 @@ async function updateDoc(file, session, body, orgDB, res){
                     version_num: parseFloat(fileVer).toFixed(2), //finally updates
                     state_history: stateTimestamps,
                     creator: fileCreator,
-                    organization: session.org,
+                    department: session.department,
                     _rev: revi,
                     last_activity: "Upload",
                     status: "Pending",
@@ -279,7 +282,7 @@ async function updateDoc(file, session, body, orgDB, res){
                 console.log("it worked")
                 invoke.updateTransaction(user, session.admin, session.approver, session.org, doc, docdeets.name,
                     docdeets.type, docdeets.size, docdeets.tags_history, docdeets.version_num,
-                    docdeets.creator, docdeets.state_history, docdeets.category, docdeets.status, docdeets.organization);
+                    docdeets.creator, docdeets.state_history, docdeets.category, docdeets.status, docdeets.department);
 
                 res.redirect("/dashboard?fail=false")
             } else {

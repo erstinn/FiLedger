@@ -140,6 +140,7 @@ router.post("/status", async function (req, res){
             const identity2 = await wallet_admin2.get(adminid);
             if (identity2) {
                 console.log(`An identiry for the admin user org2 '${admin_username}' already exists in the wallet`)
+                return;
             }
 
             //Enroll the admin user for org2, and import the new identity into the wallet.

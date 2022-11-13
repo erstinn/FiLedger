@@ -59,7 +59,7 @@
                                 <%}%>
                             </td>
                             <td><%=doc3.docs[i].creator%></td>
-                            <td>tags</td> <!--tags-->
+                            <td><%=doc3.docs[i].tags_history.slice(-1).toString().split('|')[1]%></td>
                             <td><%=doc3.docs[i].size%></td>
                             <td>department</td> <!--  departments (to be added in DB structure)-->
                         </tr>

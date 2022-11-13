@@ -44,14 +44,14 @@ router.put('/insert-docs',async(req,res)=>{
             });
     
             const docs = await docz.get(req.body.documentId)
-            if(!docs.roles){
+            if(!docs.roles){//check if there are roles object in db if not create
                 docs.roles = {
                     approvers:[],
                     editors:[],
                     viewers:[]
                 }
-                docs.roles[`${req.body.access}s`].push(`${user.docs[0].firstname} ${user.docs[0].lastname}`);
-            }else{
+                docs.roles[`${req.body.access}s`].push(`${user.docs[0].firstname} ${user.docs[0].lastname}`); // yung [`${req.body.access}s`] may 's' kase sa dropdown ang value walang 's' pero need meron sa db
+            }else{//if meron push na lang
                 docs.roles[`${req.body.access}s`].push(`${user.docs[0].firstname} ${user.docs[0].lastname}`);
             }
             await docz.insert(docs,req.body.documentId)
@@ -200,15 +200,14 @@ router.post('/changeAccess',async(req,res)=>{
     temp[index].access = req.body.newAccess;
     users.documents = temp;
 
-    let Dtemp = docs.roles[`${req.body.oldAccess}s`]
-    console.log(Dtemp)
-    index = Dtemp.findIndex(x=>`${x.firstname} ${x.lastname}` === `${users.firstname} ${users.lastname}`)
-    Dtemp.splice(index,1);
-    docs.roles[`${req.body.oldAccess}s`] = Dtemp
+    let Dtemp = docs.roles[`${req.body.oldAccess}s`] // gets old access array
+    index = Dtemp.findIndex(x=>`${x.firstname} ${x.lastname}` === `${users.firstname} ${users.lastname}`)//gets index of element to be deleted
+    Dtemp.splice(index,1); // deletes the old access in roles object
+    docs.roles[`${req.body.oldAccess}s`] = Dtemp // reassign value
 
-    Dtemp = docs.roles[`${req.body.newAccess}s`]
-    Dtemp.push(`${users.firstname} ${users.lastname}`)
-    docs.roles[`${req.body.newAccess}s`] = Dtemp
+    Dtemp = docs.roles[`${req.body.newAccess}s`] // gets new access array
+    Dtemp.push(`${users.firstname} ${users.lastname}`) //push 
+    docs.roles[`${req.body.newAccess}s`] = Dtemp //reassign
 
     await docz.insert(docs,req.session.documentId)
     await userz.insert(users,req.body.userId);
@@ -229,12 +228,12 @@ router.post('/delDocOfUser',async(req,res)=>{
         Utemp.splice(index,1)
         users.documents = Utemp;
 
-        let Dtemp = docs.roles[`${req.body.access}s`]
+        let Dtemp = docs.roles[`${req.body.access}s`] //gets access from to know which array in roles
         console.log(Dtemp)
-        index = Dtemp.findIndex(x=>`${x.firstname} ${x.lastname}` === `${users.firstname} ${users.lastname}`)
+        index = Dtemp.findIndex(x=>`${x.firstname} ${x.lastname}` === `${users.firstname} ${users.lastname}`)//removes element in the array
         Dtemp.splice(index,1);
 
-        docs.roles[`${req.body.access}s`] = Dtemp
+        docs.roles[`${req.body.access}s`] = Dtemp // change value of the array
     
         await userz.insert(users,req.body.userId);
         await docz.insert(docs,req.body.documentId)

@@ -54,7 +54,7 @@
                     <%}%>
                     <%var start = (page-1) * perPage %>
                     <%var end = start + (perPage-1) %>
-                    <%if(page == Math.ceil(doc.docs.length/perPage) && page != 1){%>
+                    <%if(page == Math.ceil(doc.docs.length/perPage) && page !== 1){%>
                     <%end = doc.docs.length-1%>
                     <%}%>
                     <%for(var i=start;i<=end;i++){%>

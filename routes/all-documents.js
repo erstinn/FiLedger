@@ -83,16 +83,16 @@ router.get('/:page',async(req,res)=>{
                 "department": req.session.department
             }
         })
-        if(Number(req.params.page) <= Math.ceil(docApprover.docs.length/10)){
+        if(Number(req.params.page) <= Math.ceil(documents.docs.length/10)){
             let doc;
             if(req.query.sort === "title"){
-                doc = docApprover.docs.sort((a,b)=>(a.name > b.name)? 1:-1)
+                doc = documents.docs.sort((a,b)=>(a.name > b.name)? 1:-1)
             }
             else if(req.query.sort === 'type'){
-                doc = docApprover.docs.sort((a,b)=>(a.type.slice(1).toUpperCase() > b.type.slice(1).toUpperCase())? 1:-1)
+                doc = documents.docs.sort((a,b)=>(a.type.slice(1).toUpperCase() > b.type.slice(1).toUpperCase())? 1:-1)
             }
             else if(req.query.sort === "size"){
-                doc = docApprover.docs.sort((a,b)=>{
+                doc = documents.docs.sort((a,b)=>{
                     let unitA = a.size.split(" ")[1]
                     let unitB = b.size.split(" ")[1]
                     let valueA;
@@ -124,11 +124,11 @@ router.get('/:page',async(req,res)=>{
                     }
                 })
             }else if(req.query.sort === "author"){
-                doc = docApprover.docs.sort((a,b)=>(a.creator > b.creator)? 1:-1)
+                doc = documents.docs.sort((a,b)=>(a.creator > b.creator)? 1:-1)
             }else if(req.query.sort === 'date'){
-                doc = docApprover.docs.sort((a,b)=>(a.state_history.slice(-1) > b.state_history.slice(-1))? 1:-1)
+                doc = documents.docs.sort((a,b)=>(a.state_history.slice(-1) > b.state_history.slice(-1))? 1:-1)
             } else{
-                doc = docApprover.docs.sort((a,b)=>(a.name > b.name)? 1:-1)
+                doc = documents.docs.sort((a,b)=>(a.name > b.name)? 1:-1)
             }
             res.render("all-documents",{doc:documents,username : req.session.username,page:req.params.page,sort:req.query.sort})
             console.log("docs:",doc);

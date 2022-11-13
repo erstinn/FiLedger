@@ -58,9 +58,9 @@ router.get("/:page",async(req,res)=>{
             docz.docs = docz.docs.sort((a,b)=>(a.name > b.name)? 1:-1)
         }
         if (req.session.admin ||req.session.approver) {
-            res.render("pending-docs", {doc3: docz, username: req.session.username, page: req.params.page})
+            res.render("pending-docs", {doc3: docz, username: req.session.username, page: req.params.page, sort: req.query.sort})
         }else{
-            res.render("user-pending-docs", {doc3: docz, username: req.session.username, page: req.params.page})
+            res.render("user-pending-docs", {doc3: docz, username: req.session.username, page: req.params.page, sort: req.query.sort})
         }
     }else{
         if (req.session.admin ||req.session.approver) {

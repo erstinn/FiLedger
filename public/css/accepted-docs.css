@@ -7,7 +7,7 @@
     width: 95vw;
     height: 80vh;
     margin: 5vh auto 0 auto;
-    border: 1px solid black;
+    border: 0px solid black;
     border-radius: 5px 5px 0px 0px;
 }
 .acceptedDocs-table {
@@ -48,7 +48,7 @@ tr {
 
 .accept {
     background-color: rgb(122, 215, 88);
-    padding: 0.5vw;
+    padding: 0.1vw;
     border: none;
     color: white;
     cursor: pointer;

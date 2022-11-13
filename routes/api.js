@@ -20,7 +20,7 @@ router.post('/users',async function (req,res){
 
 // used on /admin
 router.post('/docs', async (req,res)=>{
-    const docz = req.session.currentUsersDB;
+    const docz = req.session.currentDocsDB;
     if(req.session.admin){
         const docs = await docz.find({selector:{_id:{"$gt":null}}})
         res.send(docs.docs);
@@ -31,17 +31,36 @@ router.post('/docs', async (req,res)=>{
 
 // used on /admin
 router.put('/insert-docs',async(req,res)=>{
-    const docz = req.session.currentUsersDB;
+    const userz = req.session.currentUsersDB;
+    const docz = req.session.currentDocsDB;
     if(req.session.admin) {
-        const user = await docz.find({selector:{"_id":req.body.userId}})
-        user.docs[0]['documents'].push({document:req.body.document,access:req.body.access}) //todo wtf is this supposed to do
-        await docz.insert(user.docs[0],req.body.userId,(err)=>{
+        try{
+            const user = await userz.find({selector:{"_id":req.body.userId}})
+            user.docs[0]['documents'].push({document:req.body.document,access:req.body.access,documentId:req.body.documentId}) //todo wtf is this supposed to do
+            await userz.insert(user.docs[0],req.body.userId,(err)=>{
+                if(err){
+                    res.send(err)
+                }
+            });
+    
+            const docs = await docz.get(req.body.documentId)
+            if(!docs.roles){
+                docs.roles = {
+                    approvers:[],
+                    editors:[],
+                    viewers:[]
+                }
+                docs.roles[`${req.body.access}s`].push(`${user.docs[0].firstname} ${user.docs[0].lastname}`);
+            }else{
+                docs.roles[`${req.body.access}s`].push(`${user.docs[0].firstname} ${user.docs[0].lastname}`);
+            }
+            await docz.insert(docs,req.body.documentId)
+        }catch(err){
             if(err){
                 res.send(err)
-            }else{
-                res.sendStatus(201)
             }
-        });
+        }
+        res.sendStatus(201)
     }
 })
 
@@ -161,7 +180,7 @@ router.post('/rejectDocs',async(req,res)=>{
 
 //used on /admin/
 router.post('/getDocsOfUser',async(req,res)=>{
-    const docz = req.session.currentDocsDB;
+    const docz = req.session.currentUsersDB;
     if(req.session.admin){
         const docs = await docz.get(req.body.userId);
         res.send(docs.documents);
@@ -172,37 +191,56 @@ router.post('/getDocsOfUser',async(req,res)=>{
 
 //todo ======================================== ADMINISTRATIOPN ========================================
 router.post('/changeAccess',async(req,res)=>{
+    const docz = req.session.currentDocsDB;
+    const docs = await docz.get(req.body.documentId);
     const userz = req.session.currentUsersDB;
     const users = await userz.get(req.body.userId);
     let temp = users['documents']
     let index = temp.findIndex(x=>x.document === req.body.document)
     temp[index].access = req.body.newAccess;
     users.documents = temp;
-    await userz.insert(users,req.body.userId,(err)=>{
-        if(err){
-            res.send(false)
-        }else{
-            res.send(true)
-        }
-    });
+
+    let Dtemp = docs.roles[`${req.body.oldAccess}s`]
+    console.log(Dtemp)
+    index = Dtemp.findIndex(x=>`${x.firstname} ${x.lastname}` === `${users.firstname} ${users.lastname}`)
+    Dtemp.splice(index,1);
+    docs.roles[`${req.body.oldAccess}s`] = Dtemp
+
+    Dtemp = docs.roles[`${req.body.newAccess}s`]
+    Dtemp.push(`${users.firstname} ${users.lastname}`)
+    docs.roles[`${req.body.newAccess}s`] = Dtemp
+
+    await docz.insert(docs,req.session.documentId)
+    await userz.insert(users,req.body.userId);
+
+
+
+    res.send(true)
 
 })
 
 router.post('/delDocOfUser',async(req,res)=>{
-    const userz = req.session.currentUsersDB;
-    const users = await userz.get(req.body.userId);
-    let temp = users['documents']
-    let index = temp.findIndex(x=>x.document === req.body.document)
-    temp.splice(index,1)
-    users.documents = temp;
+        const docz = req.session.currentDocsDB;
+        const docs = await docz.get(req.body.documentId)
+        const userz = req.session.currentUsersDB;
+        const users = await userz.get(req.body.userId);
+        let Utemp = users['documents']
+        let index = Utemp.findIndex(x=>x.document === req.body.document)
+        Utemp.splice(index,1)
+        users.documents = Utemp;
 
-    await userz.insert(users,req.body.userId,(err)=>{
-        if(err){
-            res.send(false)
-        }else{
-            res.send(true)
-        }
-    });
+        let Dtemp = docs.roles[`${req.body.access}s`]
+        console.log(Dtemp)
+        index = Dtemp.findIndex(x=>`${x.firstname} ${x.lastname}` === `${users.firstname} ${users.lastname}`)
+        Dtemp.splice(index,1);
+
+        docs.roles[`${req.body.access}s`] = Dtemp
+    
+        await userz.insert(users,req.body.userId);
+        await docz.insert(docs,req.body.documentId)
+    
+   
+        res.send(true)
 
 })
 
@@ -220,6 +258,7 @@ router.post('/getUsersOfDoc',async(req,res)=>{
             }
         })
     })
+    console.log(matchedUsers)
     res.send(matchedUsers)//returns array of object of usernames and access
 })
 //deletes a certain docs and put on deleted db

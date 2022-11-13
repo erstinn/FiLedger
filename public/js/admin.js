@@ -83,9 +83,6 @@ async function main(){
                 activeData.classList.remove("clicked-data")
             }
 
-            accessButtons.forEach(button=>{
-                button.disabled = true;
-            })
             //TODO may remove:
             // removes all modal data when modal is exited
             document.querySelectorAll('.tableUserData').forEach(f=>{
@@ -161,6 +158,7 @@ async function main(){
                 let userDoc = document.createElement("tr");
                 userDoc.classList.add("tableUserData");
                 let userDocName = document.createElement("td")
+                userDocName.classList.add(e['documentId'])
                 userDocName.innerHTML = e['document']
                 let userDocAccess = document.createElement("td")
                 userDocAccess.innerHTML = e['access']
@@ -226,6 +224,7 @@ async function main(){
             departmentUser.textContent = `User associated with ${item.name}`
             selected_docID = item._id //displays users associate to docs in DOM
             const usersOfDoc = await getUsersOfDoc()
+            console.log(usersOfDoc)
             usersOfDoc.forEach(e=>{
                 const docUser = document.createElement("tr");
                 docUser.classList.add("tableDocData")
@@ -339,6 +338,9 @@ async function main(){
     let revAccess = document.querySelector(".modal-revokeButton");
     revAccess.addEventListener('click',async()=>{
         let selectedDocName = document.querySelector('.clicked-data').firstChild.firstChild.data
+        let oldAccess = document.querySelector(".clicked-data").cells[1].firstChild.data;
+        let documentId = document.querySelector(".clicked-data").cells[0].classList[0];
+        console.log(documentId)
         const response = await fetch('/api/delDocOfUser',{
             method:"POST",
             headers:{
@@ -347,6 +349,8 @@ async function main(){
             body:JSON.stringify({
                 "document":`${selectedDocName}`,
                 "userId":`${selected_userID}`,
+                "documentId":`${documentId}`,
+                "access":`${oldAccess}`
             })
         })
         let resp = response.text()
@@ -362,7 +366,9 @@ async function main(){
 
     let changeAccess = document.querySelector('.modal-changeButton');
     changeAccess.addEventListener('click',()=>{
-        document.querySelector('.clicked-data').cells[1].innerHTML = `<select id='newAccess' onchange="onChangeAccess()"><option selected hidden disabled>New Access</option><option value='viewer'>Viewer</option><option value='editor'>Editor</option><option value='approver'>Approver</option></select>`
+        let documentId = document.querySelector(".clicked-data").cells[0].classList[0];
+        let oldAccess = document.querySelector(".clicked-data").cells[1].firstChild.data;
+        document.querySelector('.clicked-data').cells[1].innerHTML = `<select id='newAccess' onchange="onChangeAccess('${documentId}','${oldAccess}')"><option selected hidden disabled>New Access</option><option value='viewer'>Viewer</option><option value='editor'>Editor</option><option value='approver'>Approver</option></select>`
     })
 
     //deletes users and documents
@@ -412,7 +418,7 @@ async function main(){
 
 }
 main()
-async function onChangeAccess(){
+async function onChangeAccess(documentId,oldAccess){
     let selectedDocName = document.querySelector('.clicked-data').firstChild.firstChild.data
     let newAccess = document.getElementById('newAccess').value
 
@@ -425,6 +431,8 @@ async function onChangeAccess(){
             "document":`${selectedDocName}`,
             "userId":`${selected_userID}`,
             "newAccess":`${newAccess}`,
+            "documentId":`${documentId}`,
+            "oldAccess":`${oldAccess}`
         })
     })
     let resp = response.text()

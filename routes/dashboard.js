@@ -46,46 +46,40 @@ const upload = multer({
 
 //TODO =============================== UPLOADING ONLY ===============================
 router.post('/upload',  upload.single('uploadDoc'), async function (req, res, next) {
-        const docz = req.session.currentDocsDB; //todo this is now the current DOCS database
-        if (req.file.originalname === null) {
-            res.render('dashboard');
+    const docz = req.session.currentDocsDB; //todo this is now the current DOCS database
+    if (req.file.originalname === null) {
+        res.render('dashboard');
+    }
+    //created another index for querying if there is an existing file
+    const indexDef = { //copied cod lol
+        index: {fields: ["name", "creator"]},
+        type: "json",
+        name: "doc-rev-index"
+    }
+    const index = await docz.createIndex(indexDef);
+
+    const fileCreator = `${req.session.firstname} ${req.session.lastname}`;
+    const fileName = req.file.originalname;
+
+
+    const q = {
+        selector: {
+            "name": fileName,
+            "creator": fileCreator //todo there is still a what if for deleted accs.. :)
         }
-        //created another index for querying if there is an existing file
-        const indexDef = { //copied cod lol
-            index: {fields: ["name", "creator"]},
-            type: "json",
-            name: "doc-rev-index"
-        }
-        const index = await docz.createIndex(indexDef);
+    };
+    const rev = await docz.find(q);
 
-        const fileCreator = `${req.session.firstname} ${req.session.lastname}`;
-        const fileName = req.file.originalname;
-
-
-        const q = {
-            selector: {
-                "name": fileName,
-                "creator": fileCreator //todo there is still a what if for deleted accs.. :)
-            }
-        };
-        const rev = await docz.find(q);
-
-        if (rev.docs == '') {
-            //  - add if else for checking orgs for DB
-            await insertDoc(req.file, req.session, req.body, docz, res);
-            //END OF FUNCTION
-        } else { //TODO ======================================= UPDATING =================================================
-            // -Add (req.file, req.session, req.body, 'OrgDB') AS PARAMS FOR updateDoc
-            if(req.body.tags === undefined){
-                var tempTag = await docQuery(fileName, fileCreator, docz)
-                req.body.tags = `${tempTag[0].tags_history.slice(-1).toString().split('|')[1]},`
-            }
-
-            console.log('TAGS TO: ', req.body.tags)
-            await updateDoc(req.file, req.session, req.body, docz, res);
-            //end of func
-        }
-    })
+    if (rev.docs == '') {
+        //  - add if else for checking orgs for DB
+        await insertDoc(req.file, req.session, req.body, docz, res);
+        //END OF FUNCTION
+    } else { //TODO ======================================= UPDATING =================================================
+        // -Add (req.file, req.session, req.body, 'OrgDB') AS PARAMS FOR updateDoc
+        await updateDoc(req.file, req.session, req.body, docz, res);
+        //end of func
+    }
+})
 
 //todo ======================================== FUNCTIONS ================================================================
 async function docQuery(fileName, creator, docz){
@@ -152,70 +146,70 @@ async function insertDoc(file, session, body, orgDB, res){
     };
     const rev = await orgDB.find(q);
 
-        // TODO: add insertNewFile function here
-        console.log('inserting')
-        let uuid = await nano.uuids(1);
-        let id = uuid.uuids[0];
-        var tempPath = path.resolve(__dirname, `./../uploads/${fileName}`);
-        fs.writeFileSync(path.resolve(__dirname, `./../uploads/${fileName}`), file.buffer)
-        await orgDB.insert({
-            name: fileName,
-            type: fileType,
-            size: fileSize,
-            category: category,
-            tags_history: fileTagsList,
-            version_num: fileVersion,
-            state_history: stateTimestampList,
-            creator: fileCreator,
-            department: session.department,
-            last_activity: "Upload",
-            status: "Pending",
-        }, id, function (err, response) {
-            if (!err) {
-                var docdeets = {
-                    name: fileName,
-                    type: fileType,
-                    size: fileSize,
-                    category: category,
-                    tags_history: fileTagsList,
-                    version_num: fileVersion,
-                    state_history: stateTimestampList,
-                    creator: fileCreator,
-                    department: session.department,
-                    last_activity: "Upload",
-                    status: "Pending",
-                }
-
-                invoke.invokeTransaction(user, session.admin, session.approver, session.org, id, docdeets.name,
-                    docdeets.type, docdeets.size, docdeets.tags_history, docdeets.version_num,
-                    docdeets.state_history, docdeets.creator, docdeets.category, docdeets.status, docdeets.department);
-
-                console.log("it worked")
-                console.log('File Deets:', fileName, file.mimetype)
-                res.redirect("/dashboard?fail=false")
-            } else {
-                console.log("failed: ", err)
-                res.redirect("/dashboard/?fail=true")
+    // TODO: add insertNewFile function here
+    console.log('inserting')
+    let uuid = await nano.uuids(1);
+    let id = uuid.uuids[0];
+    var tempPath = path.resolve(__dirname, `./../uploads/${fileName}`);
+    fs.writeFileSync(path.resolve(__dirname, `./../uploads/${fileName}`), file.buffer)
+    await orgDB.insert({
+        name: fileName,
+        type: fileType,
+        size: fileSize,
+        category: category,
+        tags_history: fileTagsList,
+        version_num: fileVersion,
+        state_history: stateTimestampList,
+        creator: fileCreator,
+        department: session.department,
+        last_activity: "Upload",
+        status: "Pending",
+    }, id, function (err, response) {
+        if (!err) {
+            var docdeets = {
+                name: fileName,
+                type: fileType,
+                size: fileSize,
+                category: category,
+                tags_history: fileTagsList,
+                version_num: fileVersion,
+                state_history: stateTimestampList,
+                creator: fileCreator,
+                department: session.department,
+                last_activity: "Upload",
+                status: "Pending",
             }
-        })
 
-        const frev = await docQuery(fileName, fileCreator,orgDB);
-        const revi = frev[0]._rev;
-        fs.readFile(tempPath, async (err, data) => { //dno if async
-            await orgDB.attachment.insert(
-                id,
-                fileName,
-                data,
-                file.mimetype,
-                {rev: revi}
-            )
-            {
-                if (err){
-                    console.log('Fail attach: ', err)
-                }
-                console.log('no err')
+            invoke.invokeTransaction(user, session.admin, session.approver, session.org, id, docdeets.name,
+                docdeets.type, docdeets.size, docdeets.tags_history, docdeets.version_num,
+                docdeets.state_history, docdeets.creator, docdeets.category, docdeets.status, docdeets.department);
+
+            console.log("it worked")
+            console.log('File Deets:', fileName, file.mimetype)
+            res.redirect("/dashboard?fail=false")
+        } else {
+            console.log("failed: ", err)
+            res.redirect("/dashboard/?fail=true")
+        }
+    })
+
+    const frev = await docQuery(fileName, fileCreator,orgDB);
+    const revi = frev[0]._rev;
+    fs.readFile(tempPath, async (err, data) => { //dno if async
+        await orgDB.attachment.insert(
+            id,
+            fileName,
+            data,
+            file.mimetype,
+            {rev: revi}
+        )
+        {
+            if (err){
+                console.log('Fail attach: ', err)
             }
-        }); //END OF FUNCTION
+            console.log('no err')
+        }
+    }); //END OF FUNCTION
 }
 
 // UPDATE FILE FUNCTION
@@ -244,13 +238,6 @@ async function updateDoc(file, session, body, orgDB, res){
     const fileSize = await formatBytes(file.size);
     const stateTimestamp = state + " @ " + fileTimestamp; // @ to separate values later
     let fileTags = `${fileName}|${body.tags.substring(0, body.tags.length - 1)}|@ ${fileTimestamp} V${parseFloat(fileVer).toFixed(2)}`
-    //TODO: delete to if gumana without this
-    // try{
-    //     //its giving baindaid solution HAHAHA
-    //     fileTags = `${fileName}|${body.tags.substring(0, body.tags.length - 1)}|@ ${fileTimestamp} V${parseFloat(fileVer).toFixed(2)}`
-    // }catch (err){
-    //     fileTags = `${fileName}||@ ${fileTimestamp} V${parseFloat(fileVer).toFixed(2)}`
-    // }
     var fileInp = fs.readFileSync(path.resolve(__dirname, `./../uploads/${fileName}`));
     var tempPath = path.resolve(__dirname, `./../uploads/${fileName}`);
     console.log(fileInp) //todo remove
@@ -362,4 +349,3 @@ async function checkFileChanges(filebuff, filetag, file, fileVer, fileTimestamp,
 //todo ======================================== X CODES ================================================================
 
 module.exports = router;
-

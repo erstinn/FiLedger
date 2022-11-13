@@ -20,7 +20,7 @@ router.post('/users',async function (req,res){
 
 // used on /admin
 router.post('/docs', async (req,res)=>{
-    const docz = req.session.currentUsersDB;
+    const docz = req.session.currentDocsDB;
     if(req.session.admin){
         const docs = await docz.find({selector:{_id:{"$gt":null}}})
         res.send(docs.docs);

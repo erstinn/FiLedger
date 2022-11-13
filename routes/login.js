@@ -9,7 +9,7 @@ const FabricCAServices = require("fabric-ca-client");
 const yaml = require("js-yaml");
 const fs = require("fs");
 // databases
-const nano = require('nano')('http://administrator:qF3ChYhp@127.0.0.1:5984/');
+const nano = require('nano')('http://root:root@127.0.0.1:5984/');
 // const nano = require('nano')('http://root:root@127.0.0.1:5984/');
 const userDB = nano.db.use('users');
 const adminDB = nano.db.use('admins');
@@ -70,8 +70,8 @@ async function getAdminIdentity(req, res, next) {
     const adminOrg2DB = nano.db.use('org2-admins');
     const responseOrg1AdminDB = await adminOrg1DB.find(q)
     const responseOrg2AdminDB = await adminOrg2DB.find(q)
-    const org1Wallet_admin = await Wallets.newCouchDBWallet('http://administrator:qF3ChYhp@127.0.0.1:5984/', "org1-wallet_admins");
-    const org2Wallet_admin = await Wallets.newCouchDBWallet('http://administrator:qF3ChYhp@127.0.0.1:5984/', "org2-wallet_admins");
+    const org1Wallet_admin = await Wallets.newCouchDBWallet('http://root:root@127.0.0.1:5984/', "org1-wallet_admins");
+    const org2Wallet_admin = await Wallets.newCouchDBWallet('http://root:root@127.0.0.1:5984/', "org2-wallet_admins");
     const adminIdentityOrg1 = await org1Wallet_admin.get("enroll");
     const adminIdentityOrg2 = await org2Wallet_admin.get("enroll");
 
@@ -116,8 +116,8 @@ async function getApproverIdentity(req,res,next){
     const approverOrg2DB = nano.db.use('org2-approvers');
     const responseOrg1ApproverDB = await approverOrg1DB.find(q)
     const responseOrg2ApproverDB = await approverOrg2DB.find(q)
-    const org1Wallet_approver = await Wallets.newCouchDBWallet('http://administrator:qF3ChYhp@127.0.0.1:5984/', "org1-wallet_approver");
-    const org2Wallet_approver = await Wallets.newCouchDBWallet('http://administrator:qF3ChYhp@127.0.0.1:5984/', "org2-wallet_approver");
+    const org1Wallet_approver = await Wallets.newCouchDBWallet('http://root:root@127.0.0.1:5984/', "org1-wallet_approver");
+    const org2Wallet_approver = await Wallets.newCouchDBWallet('http://root:root@127.0.0.1:5984/', "org2-wallet_approver");
     console.log(responseOrg1ApproverDB.bookmark, "org1approver")
     console.log(responseOrg2ApproverDB.bookmark, "org2approver")
     console.log(SHA1(req.body.password).toString(enc.Hex), "current pw")
@@ -162,8 +162,8 @@ async function getUserIdentity(req,res,next) {
     const userOrg2DB = nano.db.use('org2-users');
     const responseOrg1UserDB = await userOrg1DB.find(q);
     const responseOrg2UserDB = await userOrg2DB.find(q);
-    const org1Wallet_user = await Wallets.newCouchDBWallet('http://administrator:qF3ChYhp@127.0.0.1:5984/', "org1-wallet_users");
-    const org2Wallet_user = await Wallets.newCouchDBWallet('http://administrator:qF3ChYhp@127.0.0.1:5984/', "org2-wallet_users");
+    const org1Wallet_user = await Wallets.newCouchDBWallet('http://root:root@127.0.0.1:5984/', "org1-wallet_users");
+    const org2Wallet_user = await Wallets.newCouchDBWallet('http://root:root@127.0.0.1:5984/', "org2-wallet_users");
 
     console.log(responseOrg1UserDB.bookmark, "org1user")
     console.log(responseOrg2UserDB.bookmark, "org2user",)

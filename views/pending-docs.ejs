@@ -66,11 +66,13 @@
                         </tr>
                         <%}%>
                     </table>
+                    <div class="pages">
+                        <%for(let i=1;i <= Math.ceil(doc3.docs.length/perPage);i++){%>
+                        <a href="<%=i%>?sort=<%=sort%>"><button class="pagesButton"><%=i%></button></a>
+                        <%}%>
+                    </div>
             </div>
-            <div class="pages">
-                <%for(let i=1;i <= Math.ceil(doc3.docs.length/perPage);i++){%>
-                    <a href="<%=i%>?sort=<%=sort%>"><button class="pagesButton"><%=i%></button></a>
-                <%}%>
+
             </div>
-            </div>
+
     </body>

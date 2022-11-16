@@ -61,12 +61,13 @@
                 </tr>
             <%}%>
         </table>
-    </div>
-    <div class="pages">
-        <%for(let i=1;i <= Math.ceil(doc1.docs.length/perPage);i++){%>
+        <div class="pages">
+            <%for(let i=1;i <= Math.ceil(doc1.docs.length/perPage);i++){%>
             <a href="<%=i%>"><button class="pagesButton"><%=i%></button></a>
-        <%}%>
+            <%}%>
+        </div>
     </div>
+
 </div>
 <script>
     var title;

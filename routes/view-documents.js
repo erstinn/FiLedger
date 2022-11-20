@@ -106,10 +106,12 @@ router.post('/downloads/:name',async(req,res)=>{
         ver = await query.queryDoc(user, req.session.admin, req.session.approver, req.session.org, data.docs[0]._id);
         timestamp = ver.state_history.split(',');
         //download
-        const filePath =`./Downloads/${req.params.name}`;
+        const filePath =`downloads/${req.params.name}`;
         const stream = fs.createReadStream(filePath);
-        res.setHeader('Content-type',`application/${res.type}`)
-        res.setHeader('Content-Disposition', `inline; filename="${res.type}"`);
+
+        res.setHeader('Content-type',`application/${req.params.type}`)
+        // res.setHeader('Content-type','image/jpeg');
+        res.setHeader('Content-Disposition', `inline; filename="${req.params.name}"`);
         stream.pipe(res);
 
         stream.on("error", function (err){
@@ -117,7 +119,7 @@ router.post('/downloads/:name',async(req,res)=>{
             console.log(err);
         })
 
-        stream.on("finish",function (){
+        stream.on("finish",function () {
             stream.close();
             console.log("Download done!")
         })

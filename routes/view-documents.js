@@ -39,18 +39,25 @@ router.get('/:id', async function (req,res){
         data = await docsOrg1DB.find({selector:{"_id":req.params.id}})
         ver = await query.queryDoc(user, req.session.admin, req.session.approver, req.session.org, data.docs[0]._id);
         var timestamp = ver.state_history.split(',');
-
+        var tagsHist = ver.tags_history;
         //for version number
-        v1 = ver.tags_history.split(',');
-        for (i in v1){
-            v2.push(v1[i].split('V'));
-        }
-        for(i in v2){
-            for (j in v2[i]){
-                if(j == 1){
-                    vnum.push(v2[i][j]);
+        if(tagsHist.includes(',')){
+            v1 = tagsHist.split(',');
+            for (i in v1){
+                v2.push(v1[i].split('V'));
+            }
+            for(i in v2){
+                for (j in v2[i]){
+                    if(j == 1){
+                        vnum.push(v2[i][j]);
+                    }
                 }
             }
+        }
+        else{
+            v1 = tagsHist
+            v2 = v1.split('V');
+            vnum = v2[1];
         }
 
         res.render("view-documents",{data:data,username : req.session.username, ver:ver, timestamp:timestamp, vnum:vnum});
@@ -60,14 +67,16 @@ router.get('/:id', async function (req,res){
         var timestamp = ver.state_history.split(',');
 
         //for version number
-        v1 = ver.tags_history.split(',');
-        for (i in v1){
-            v2.push(v1[i].split('V'));
-        }
-        for(i in v2){
-            for (j in v2[i]){
-                if(j == 1){
-                    vnum.push(v2[i][j]);
+        if(ver.tags_history.includes(',')){
+            v1 = ver.tags_history.split(',');
+            for (i in v1){
+                v2.push(v1[i].split('V'));
+            }
+            for(i in v2){
+                for (j in v2[i]){
+                    if(j == 1){
+                        vnum.push(v2[i][j]);
+                    }
                 }
             }
         }

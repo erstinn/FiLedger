@@ -8,6 +8,7 @@ const mspId = "Org1MSP";
 const CC_NAME="assetcc";
 const CHANNEL="mychannel";
 let ccp = null;
+const serverip = '127.0.0.1';
 
 exports.log = async function(req, res) {
     console.log("invoke log")
@@ -19,7 +20,7 @@ async function invokeTransaction (user, isAdmin, isApprov, Org, id, fileName, fi
 
     var dbName = dbGen(isAdmin, isApprov, Org);
 
-    var wallet = await Wallets.newCouchDBWallet('http://admin:admin@127.0.0.1:5984/', dbName);
+    var wallet = await Wallets.newCouchDBWallet(`http://admin:admin@${serverip}:5984/`, dbName);
 
 
 
@@ -82,7 +83,7 @@ async function updateTransaction(user, isAdmin, isApprov, Org, id, fileName, fil
                                  fileVersion, fileCreator, stateTimestamps, status, dept) {
 
     var dbName = dbGen(isAdmin, isApprov, Org);
-    var wallet = await Wallets.newCouchDBWallet('http://admin:admin@127.0.0.1:5984/', dbName);
+    var wallet = await Wallets.newCouchDBWallet(`http://admin:admin@${serverip}:5984/`, dbName);
 
     try {
         console.log("Invoking UPDATE chaincode using :", user);

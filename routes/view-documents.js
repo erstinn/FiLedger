@@ -7,8 +7,8 @@ const axios = require('axios')
 const FileSaver = require('file-saver');
 const query = require('../network/chaincode/javascript/queryDoc')
 //databases
+const serverip = '127.0.0.1'
 const nano = require('nano')(`http://admin:admin@${serverip}:5984/`);
-
 const docsOrg1DB = nano.db.use('org1-documents');
 const docsOrg2DB = nano.db.use('org2-documents');
 // const docsDB = nano.db.use('org1-documents');

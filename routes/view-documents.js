@@ -23,6 +23,10 @@ router.get('/:id', async function (req,res){
     var user = '';
     var ver = '';
     // var timestamp = [];
+    //variables for version number
+    let v1 = [];
+    let v2 = [];
+    let vnum = [];
     let data = '';
     if(req.session.admin){
         user = 'enroll';
@@ -35,12 +39,40 @@ router.get('/:id', async function (req,res){
         data = await docsOrg1DB.find({selector:{"_id":req.params.id}})
         ver = await query.queryDoc(user, req.session.admin, req.session.approver, req.session.org, data.docs[0]._id);
         var timestamp = ver.state_history.split(',');
-        res.render("view-documents",{data:data,username : req.session.username, ver:ver, timestamp:timestamp});
+
+        //for version number
+        v1 = ver.tags_history.split(',');
+        for (i in v1){
+            v2.push(v1[i].split('V'));
+        }
+        for(i in v2){
+            for (j in v2[i]){
+                if(j == 1){
+                    vnum.push(v2[i][j]);
+                }
+            }
+        }
+
+        res.render("view-documents",{data:data,username : req.session.username, ver:ver, timestamp:timestamp, vnum:vnum});
     } else if (req.session.org==='org2'){
         data = await docsOrg2DB.find({selector:{"_id":req.params.id}})
         ver = await query.queryDoc(user, req.session.admin, req.session.approver, req.session.org, data.docs[0]._id);
         var timestamp = ver.state_history.split(',');
-        res.render("view-documents",{data:data,username : req.session.username, ver:ver, timestamp:timestamp});
+
+        //for version number
+        v1 = ver.tags_history.split(',');
+        for (i in v1){
+            v2.push(v1[i].split('V'));
+        }
+        for(i in v2){
+            for (j in v2[i]){
+                if(j == 1){
+                    vnum.push(v2[i][j]);
+                }
+            }
+        }
+
+        res.render("view-documents",{data:data,username : req.session.username, ver:ver, timestamp:timestamp, vnum:vnum});
     }
 })
 
@@ -105,6 +137,7 @@ router.post('/downloads/:name',async(req,res)=>{
         data = await docsOrg2DB.find({selector:{"_id":req.params.id}})
         ver = await query.queryDoc(user, req.session.admin, req.session.approver, req.session.org, data.docs[0]._id);
         timestamp = ver.state_history.split(',');
+
         //download
         const filePath =`downloads/${req.params.name}`;
         const stream = fs.createReadStream(filePath);

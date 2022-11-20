@@ -43,7 +43,6 @@
                         <th>File Size</th>
                         <th>File Version</th>
                         <th>Author</th>
-                        <th>Classification</th>
                         <th>Modified By</th>
                         <th>Last Modified</th>
                         <th>Status</th>
@@ -66,8 +65,7 @@
                         <td><%=doc.docs[i].size%></td>
                         <td><%=doc.docs[i].version_num%></td>
                         <td><%=doc.docs[i].creator%></td>
-                        <td><%=doc.docs[i].category%></td>
-                        <td>Miciella Decano</td>
+                        <td><%=doc.docs[i].creator%></td>
                         <td><%=doc.docs[i].state_history.slice(-1).toString().split(" ").slice(2).toString().replace(","," ")%></td>
                         <td><%=doc.docs[i].status%></td>
                     </tr>

@@ -59,7 +59,7 @@
                         <%}%>
                     </td>
                     <td><%=doc1.docs[i].creator%></td>
-                    <td>Abacan</td>
+                    <td><%=doc1.docs[i].approver%></td>
                     <td><%=doc1.docs[i].size%></td>
                     <td><%=doc1.docs[i].version_num%></td>
                     <td><%=doc1.docs[i].tags_history.slice(-1).toString().split('|')[1]%></td>

@@ -6,6 +6,7 @@ const generator = require('generate-password');
 const app = express();
 const session = require('express-session')
 const invoke = require('./network/chaincode/javascript/invoke')
+const serverip = '127.0.0.1';
 const nano = require('nano')(`http://admin:admin@${serverip}:5984/`);
 // const nano = require('nano')('http://root:root@127.0.0.1:5984/');
 
@@ -180,7 +181,7 @@ app.use('/dashboard', isAuthenticated,setSessionDocsDB,setSessionUsersDB, dashbo
 app.use('/documents', isAuthenticated, isApprover, isUser,setSessionDocsDB,setSessionUsersDB, documentsRouter); //TODO CONSIDERING REMOVAL
 app.use('/all-documents', isAuthenticated,setSessionDocsDB,setSessionUsersDB, allDocumentsRouter);
 app.use('/administration', isAuthenticated, isAdmin,setSessionDocsDB,setSessionUsersDB, adminRouter);
-app.use('/view-documents', isAuthenticated, isAdmin,setSessionDocsDB, setSessionUsersDB, viewDocumentsRouter) //TODO CONSIDERING REMOVAL
+app.use('/view-documents', isAuthenticated,setSessionDocsDB, setSessionUsersDB, viewDocumentsRouter) //TODO CONSIDERING REMOVAL
 app.use('/registration',isAuthenticated,isAdmin,setSessionDocsDB,setSessionUsersDB, regRouter);
 // app.use('/pending-docs', isAuthenticated, pendingDocs)
 // app.use('/pending-docs', isAuthenticated, myFunc);

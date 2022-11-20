@@ -6,6 +6,7 @@ const generator = require('generate-password');
 const app = express();
 const session = require('express-session')
 const invoke = require('./network/chaincode/javascript/invoke')
+const serverip = '127.0.0.1'
 const nano = require('nano')(`http://admin:admin@${serverip}:5984/`);
 // const nano = require('nano')('http://root:root@127.0.0.1:5984/');
 

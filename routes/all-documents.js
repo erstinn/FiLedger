@@ -72,7 +72,7 @@ router.get('/:page',async(req,res)=>{
                 doc = documents.docs.sort((a,b)=>(a.name > b.name)? 1:-1)
             }
             res.render("all-documents",{doc:documents,username : req.session.username,page:req.params.page,sort:req.query.sort})
-            console.log("docs:",doc);
+            // console.log("docs:",doc);
         }else{
             res.redirect("1")
         }
@@ -132,7 +132,7 @@ router.get('/:page',async(req,res)=>{
                 doc = documents.docs.sort((a,b)=>(a.name > b.name)? 1:-1)
             }
             res.render("all-documents",{doc:documents,username : req.session.username,page:req.params.page,sort:req.query.sort})
-            console.log("docs:",doc);
+            // console.log("docs:",doc);
         }else{
             res.redirect("1")
         }
@@ -218,7 +218,7 @@ router.get('/:page',async(req,res)=>{
                 doc = documents.docs.sort((a,b)=>(a.name > b.name)? 1:-1)
             }
             res.render("all-documents",{doc:documents,username : req.session.username,page:req.params.page,sort:req.query.sort})
-            console.log("docs:",doc);
+            // console.log("docs:",doc);
         }else{
             res.redirect("1")
         }

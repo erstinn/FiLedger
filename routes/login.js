@@ -11,8 +11,6 @@ const fs = require("fs");
 // databases
 const serverip = '127.0.0.1'
 const nano = require('nano')(`http://admin:admin@${serverip}:5984/`);
-// const nano = require('nano')('http://administrator:qF3ChYhp@127.0.0.1:5984/');
-// const nano = require('nano')('http://root:root@127.0.0.1:5984/');
 const userDB = nano.db.use('users');
 const adminDB = nano.db.use('admins');
 const approverDB = nano.db.use('approvers');

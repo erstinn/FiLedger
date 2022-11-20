@@ -5,7 +5,6 @@ const path = require('path')
 // databases
 const serverip = '127.0.0.1'
 const nano = require('nano')(`http://admin:admin@${serverip}:5984/`);
-// const nano = require('nano')('http://administrator:qF3ChYhp@127.0.0.1:5984/');
 // const nano = require('nano')('http://root:root@127.0.0.1:5984/');
 
 //TODO this is the make lipat of rejected/accepted/pending

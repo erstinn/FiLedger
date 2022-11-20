@@ -303,7 +303,7 @@ router.post("/status", async function (req, res){
             };
 
             if(approver==='on'){
-                await insertToApproverDB(id, firstName, lastName, email, username, password, dept, approver)
+                await insertToApproverDB(id, firstName, lastName, email, username, password, dept, approver,req.body.org)
                 await wallet_approvers2.put(username, x509Identity2);
                 console.log(`Successfully registered and enrolled admin user ${username} and imported it into the wallet`);
             }else {

@@ -140,9 +140,7 @@ router.post('/acceptDocs',async(req,res)=>{
     if(req.session.admin || req.session.approver) {
         const docs = await docz.get(req.body.docId);
         docs.status = "Accepted"
-        if(req.session.approver){
-            docs.approver = `${req.session.firstname} ${req.session.lastname}`;
-        }
+        docs.approver = `${req.session.firstname} ${req.session.lastname}`;
         const date = new Date();
         const state = `Accepted @ ${date.getMonth()+1}/${date.getDate()}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`
         docs.state_history.push(state)
@@ -173,12 +171,10 @@ router.post('/acceptDocs',async(req,res)=>{
 //used on /pending-docs/ REJECT BUTTON
 router.post('/rejectDocs',async(req,res)=>{
     const docz = req.session.currentDocsDB;
-    if( req.session.admin || req.session.approver) {
+    if(req.session.admin || req.session.approver) {
         const docs = await docz.get(req.body.docId);
         docs.status = "Rejected";
-        if(req.session.approver){
-            docs.approver = `${req.session.firstname} ${req.session.lastname}`;
-        }
+        docs.approver = `${req.session.firstname} ${req.session.lastname}`;
         const date = new Date();
         const state = `Rejected @ ${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`
         docs.state_history.push(state)

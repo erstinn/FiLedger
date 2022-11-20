@@ -146,7 +146,7 @@ app.get('/header', function (req, res){
 })
 
 app.get('/', function (req, res, next){
-    if(!req.session.user || !req.session.admin){
+    if(!req.session.user || !req.session.admin || !req.session.approver){
         res.render("index");
     }
     else{
@@ -181,7 +181,7 @@ app.use('/dashboard', isAuthenticated,setSessionDocsDB,setSessionUsersDB, dashbo
 app.use('/documents', isAuthenticated, isApprover, isUser,setSessionDocsDB,setSessionUsersDB, documentsRouter); //TODO CONSIDERING REMOVAL
 app.use('/all-documents', isAuthenticated,setSessionDocsDB,setSessionUsersDB, allDocumentsRouter);
 app.use('/administration', isAuthenticated, isAdmin,setSessionDocsDB,setSessionUsersDB, adminRouter);
-app.use('/view-documents', isAuthenticated, isAdmin,setSessionDocsDB, setSessionUsersDB, viewDocumentsRouter) //TODO CONSIDERING REMOVAL
+app.use('/view-documents', isAuthenticated,setSessionDocsDB, setSessionUsersDB, viewDocumentsRouter) //TODO CONSIDERING REMOVAL
 app.use('/registration',isAuthenticated,isAdmin,setSessionDocsDB,setSessionUsersDB, regRouter);
 // app.use('/pending-docs', isAuthenticated, pendingDocs)
 // app.use('/pending-docs', isAuthenticated, myFunc);

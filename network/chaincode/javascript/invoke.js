@@ -15,13 +15,13 @@ exports.log = async function(req, res) {
 }
 
 async function invokeTransaction (user, isAdmin, isApprov, Org, id, fileName, fileType, fileSize, fileTagsList,
-                                  fileVersion, stateTimestampList, fileCreator, category, status, dept) {
+                                  fileVersion, stateTimestampList, fileCreator, status, dept) {
 
     var dbName = dbGen(isAdmin, isApprov, Org);
 
-    var wallet = await Wallets.newCouchDBWallet('http://administrator:qF3ChYhp@127.0.0.1:5984/', dbName);
+    var wallet = await Wallets.newCouchDBWallet('http://admin:admin@127.0.0.1:5984/', dbName);
 
-    //     }
+
 
     try {
         console.log("Invoking cREATE chaincode using :", user);
@@ -62,7 +62,7 @@ async function invokeTransaction (user, isAdmin, isApprov, Org, id, fileName, fi
         await contract.submitTransaction(
             "createDoc",
             id, fileName, fileType, fileSize, fileTagsList,
-            fileVersion, stateTimestampList, fileCreator, category, status, dept
+            fileVersion, stateTimestampList, fileCreator, status, dept
         );
         console.log("Transaction has been submitted");
 
@@ -79,10 +79,10 @@ async function invokeTransaction (user, isAdmin, isApprov, Org, id, fileName, fi
 }
 
 async function updateTransaction(user, isAdmin, isApprov, Org, id, fileName, fileType, fileSize, fileTagsList,
-                                 fileVersion, fileCreator, stateTimestamps, category, status, dept) {
+                                 fileVersion, fileCreator, stateTimestamps, status, dept) {
 
     var dbName = dbGen(isAdmin, isApprov, Org);
-    var wallet = await Wallets.newCouchDBWallet('http://administrator:qF3ChYhp@127.0.0.1:5984/', dbName);
+    var wallet = await Wallets.newCouchDBWallet('http://admin:admin@127.0.0.1:5984/', dbName);
 
     try {
         console.log("Invoking UPDATE chaincode using :", user);
@@ -123,7 +123,7 @@ async function updateTransaction(user, isAdmin, isApprov, Org, id, fileName, fil
         await contract.submitTransaction(
             "updateDocs",
             id, fileName, fileType, fileSize, fileTagsList,
-            fileVersion, fileCreator, stateTimestamps, category, status, dept
+            fileVersion, fileCreator, stateTimestamps, status, dept
         );
         console.log("Document has been updated in the ledger");
 

@@ -56,7 +56,7 @@
                             <td><%=doc3.docs[i].creator%></td>
                             <td><%=doc3.docs[i].tags_history.slice(-1).toString().split('|')[1]%></td>
                             <td><%=doc3.docs[i].size%></td>
-                            <td>department</td> <!--  departments (to be added in DB structure)-->
+                            <td><%=doc3.docs[i].department%></td> <!--  departments (to be added in DB structure)-->
                             <td><button class="accept <%=doc3.docs[i]._id%>" name="accept">Accept</button>
                                 <button class="reject <%=doc3.docs[i]._id%>" name="reject">Reject</button> </td>
                         </tr>

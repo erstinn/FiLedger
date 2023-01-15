@@ -7,10 +7,8 @@ const axios = require('axios')
 const FileSaver = require('file-saver');
 const query = require('../network/chaincode/javascript/queryDoc')
 //databases
-const nano = require('nano')('http://administrator:qF3ChYhp@127.0.0.1:5984/');
-//const nano = require('nano')('http://admin:mysecretpassword@127.0.0.1:5984/');
-// const nano = require('nano')('http://root:root@127.0.0.1:5984/');
-// const nano = require('nano')('http://admin:pw123@127.0.0.1:5984/');
+const serverip = '127.0.0.1'
+const nano = require('nano')(`http://admin:admin@${serverip}:5984/`);
 const docsOrg1DB = nano.db.use('org1-documents');
 const docsOrg2DB = nano.db.use('org2-documents');
 // const docsDB = nano.db.use('org1-documents');
@@ -25,6 +23,10 @@ router.get('/:id', async function (req,res){
     var user = '';
     var ver = '';
     // var timestamp = [];
+    //variables for version number
+    let v1 = [];
+    let v2 = [];
+    let vnum = [];
     let data = '';
     if(req.session.admin){
         user = 'enroll';
@@ -37,12 +39,56 @@ router.get('/:id', async function (req,res){
         data = await docsOrg1DB.find({selector:{"_id":req.params.id}})
         ver = await query.queryDoc(user, req.session.admin, req.session.approver, req.session.org, data.docs[0]._id);
         var timestamp = ver.state_history.split(',');
-        res.render("view-documents",{data:data,username : req.session.username, ver:ver, timestamp:timestamp});
+        var tagsHist = ver.tags_history;
+        //for version number
+        if(tagsHist.includes(',')){
+            v1 = tagsHist.split(',');
+            for (i in v1){
+                v2.push(v1[i].split('V'));
+            }
+            for(i in v2){
+                for (j in v2[i]){
+                    if(j == 1){
+                        vnum.push(v2[i][j]);
+                    }
+                }
+            }
+        }
+        else{
+            v1 = tagsHist
+            v2 = v1.split('V');
+            vnum = v2[1];
+        }
+
+        res.render("view-documents",{data:data,username : req.session.username, ver:ver, timestamp:timestamp, vnum:vnum});
     } else if (req.session.org==='org2'){
         data = await docsOrg2DB.find({selector:{"_id":req.params.id}})
         ver = await query.queryDoc(user, req.session.admin, req.session.approver, req.session.org, data.docs[0]._id);
         var timestamp = ver.state_history.split(',');
-        res.render("view-documents",{data:data,username : req.session.username, ver:ver, timestamp:timestamp});
+
+        //for version number
+        var tagsHist = ver.tags_history;
+        //for version number
+        if(tagsHist.includes(',')){
+            v1 = tagsHist.split(',');
+            for (i in v1){
+                v2.push(v1[i].split('V'));
+            }
+            for(i in v2){
+                for (j in v2[i]){
+                    if(j == 1){
+                        vnum.push(v2[i][j]);
+                    }
+                }
+            }
+        }
+        else{
+            v1 = tagsHist
+            v2 = v1.split('V');
+            vnum = v2[1];
+        }
+
+        res.render("view-documents",{data:data,username : req.session.username, ver:ver, timestamp:timestamp, vnum:vnum});
     }
 })
 
@@ -71,6 +117,9 @@ router.post('/downloads/:name',async(req,res)=>{
     var user = '';
     var ver = '';
     // var timestamp = [];
+    let v1 = [];
+    let v2 = [];
+    let vnum = [];
     let timestamp;
     let data = '';
     if(req.session.admin){
@@ -83,6 +132,28 @@ router.post('/downloads/:name',async(req,res)=>{
         data = await docsOrg1DB.find({selector:{"_id":req.params.id}})
         ver = await query.queryDoc(user, req.session.admin, req.session.approver, req.session.org, data.docs[0]._id);
         timestamp = ver.state_history.split(',');
+
+        var tagsHist = ver.tags_history;
+        //for version number
+        if(tagsHist.includes(',')){
+            v1 = tagsHist.split(',');
+            for (i in v1){
+                v2.push(v1[i].split('V'));
+            }
+            for(i in v2){
+                for (j in v2[i]){
+                    if(j == 1){
+                        vnum.push(v2[i][j]);
+                    }
+                }
+            }
+        }
+        else{
+            v1 = tagsHist
+            v2 = v1.split('V');
+            vnum = v2[1];
+        }
+
         //download
         const filePath =`downloads/${req.params.name}`;
         const stream = fs.createReadStream(filePath);
@@ -102,16 +173,40 @@ router.post('/downloads/:name',async(req,res)=>{
             console.log("Download done!")
         })
 
-        res.render("view-documents",{data:data,username : req.session.username, ver:ver, timestamp:timestamp});
+        res.render("view-documents",{data:data,username : req.session.username, ver:ver, timestamp:timestamp, vnum:vnum});
     } else if (req.session.org==='org2'){
         data = await docsOrg2DB.find({selector:{"_id":req.params.id}})
         ver = await query.queryDoc(user, req.session.admin, req.session.approver, req.session.org, data.docs[0]._id);
         timestamp = ver.state_history.split(',');
+
+        var tagsHist = ver.tags_history;
+        //for version number
+        if(tagsHist.includes(',')){
+            v1 = tagsHist.split(',');
+            for (i in v1){
+                v2.push(v1[i].split('V'));
+            }
+            for(i in v2){
+                for (j in v2[i]){
+                    if(j == 1){
+                        vnum.push(v2[i][j]);
+                    }
+                }
+            }
+        }
+        else{
+            v1 = tagsHist
+            v2 = v1.split('V');
+            vnum = v2[1];
+        }
+
         //download
-        const filePath =`./Downloads/${req.params.name}`;
+        const filePath =`downloads/${req.params.name}`;
         const stream = fs.createReadStream(filePath);
-        res.setHeader('Content-type',`application/${res.type}`)
-        res.setHeader('Content-Disposition', `inline; filename="${res.type}"`);
+
+        res.setHeader('Content-type',`application/${req.params.type}`)
+        // res.setHeader('Content-type','image/jpeg');
+        res.setHeader('Content-Disposition', `inline; filename="${req.params.name}"`);
         stream.pipe(res);
 
         stream.on("error", function (err){
@@ -119,12 +214,12 @@ router.post('/downloads/:name',async(req,res)=>{
             console.log(err);
         })
 
-        stream.on("finish",function (){
+        stream.on("finish",function () {
             stream.close();
             console.log("Download done!")
         })
 
-        res.render("view-documents",{data:data,username : req.session.username, ver:ver, timestamp:timestamp});
+        res.render("view-documents",{data:data,username : req.session.username, ver:ver, timestamp:timestamp, vnum:vnum});
     }
 
 })

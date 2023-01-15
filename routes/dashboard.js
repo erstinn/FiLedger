@@ -3,7 +3,8 @@ const router = express.Router()
 const fs = require("fs")
 const path = require('path')
 // databases
-const nano = require('nano')('http://administrator:qF3ChYhp@127.0.0.1:5984/');
+const serverip = '127.0.0.1'
+const nano = require('nano')(`http://admin:admin@${serverip}:5984/`);
 // const nano = require('nano')('http://root:root@127.0.0.1:5984/');
 
 //TODO this is the make lipat of rejected/accepted/pending
@@ -70,12 +71,28 @@ router.post('/upload',  upload.single('uploadDoc'), async function (req, res, ne
     };
     const rev = await docz.find(q);
 
+    // if(req.session.approver == undefined){
+    //     req.session.approver = false;
+    // }
+    // if(req.session.admin == undefined){
+    //     req.session.admin = false;
+    // }
+    // if(req.session.user == undefined){
+    //     req.session.user = false;
+    // }
+
     if (rev.docs == '') {
         //  - add if else for checking orgs for DB
         await insertDoc(req.file, req.session, req.body, docz, res);
         //END OF FUNCTION
     } else { //TODO ======================================= UPDATING =================================================
         // -Add (req.file, req.session, req.body, 'OrgDB') AS PARAMS FOR updateDoc
+        if(req.body.tags === undefined){
+            var tempTag = await docQuery(fileName, fileCreator, docz)
+            req.body.tags = `${tempTag[0].tags_history.slice(-1).toString().split('|')[1]},`
+        }
+
+        console.log('TAGS TO: ', req.body.tags)
         await updateDoc(req.file, req.session, req.body, docz, res);
         //end of func
     }
@@ -125,7 +142,6 @@ async function insertDoc(file, session, body, orgDB, res){
     const fileCreator = `${session.firstname} ${session.lastname}`;
     let fileTagsList = []
     let stateTimestampList = []
-    let category = body.docType;
     let fileTags = `${fileName}|${body.tags.substring(0, body.tags.length - 1)}|@ ${fileTimestamp} V${parseFloat(fileVersion).toFixed(2)}`
     fileTagsList.push(fileTags)
     stateTimestampList.push(stateTimestamp)
@@ -156,7 +172,6 @@ async function insertDoc(file, session, body, orgDB, res){
         name: fileName,
         type: fileType,
         size: fileSize,
-        category: category,
         tags_history: fileTagsList,
         version_num: fileVersion,
         state_history: stateTimestampList,
@@ -170,7 +185,6 @@ async function insertDoc(file, session, body, orgDB, res){
                 name: fileName,
                 type: fileType,
                 size: fileSize,
-                category: category,
                 tags_history: fileTagsList,
                 version_num: fileVersion,
                 state_history: stateTimestampList,
@@ -182,10 +196,11 @@ async function insertDoc(file, session, body, orgDB, res){
 
             invoke.invokeTransaction(user, session.admin, session.approver, session.org, id, docdeets.name,
                 docdeets.type, docdeets.size, docdeets.tags_history, docdeets.version_num,
-                docdeets.state_history, docdeets.creator, docdeets.category, docdeets.status, docdeets.department);
+                docdeets.state_history, docdeets.creator, docdeets.status, docdeets.department);
 
             console.log("it worked")
             console.log('File Deets:', fileName, file.mimetype)
+            attachFile(fileName, fileCreator, tempPath, orgDB, file, id);
             res.redirect("/dashboard?fail=false")
         } else {
             console.log("failed: ", err)
@@ -193,23 +208,23 @@ async function insertDoc(file, session, body, orgDB, res){
         }
     })
 
-    const frev = await docQuery(fileName, fileCreator,orgDB);
-    const revi = frev[0]._rev;
-    fs.readFile(tempPath, async (err, data) => { //dno if async
-        await orgDB.attachment.insert(
-            id,
-            fileName,
-            data,
-            file.mimetype,
-            {rev: revi}
-        )
-        {
-            if (err){
-                console.log('Fail attach: ', err)
-            }
-            console.log('no err')
-        }
-    }); //END OF FUNCTION
+    // const frev = await docQuery(fileName, fileCreator,orgDB);
+    // const revi = frev[0]._rev;
+    // fs.readFile(tempPath, async (err, data) => { //dno if async
+    //     await orgDB.attachment.insert(
+    //         id,
+    //         fileName,
+    //         data,
+    //         file.mimetype,
+    //         {rev: revi}
+    //     )
+    //     {
+    //         if (err){
+    //             console.log('Fail attach: ', err)
+    //         }
+    //         console.log('no err')
+    //     }
+    // }) //END OF FUNCTION
 }
 
 // UPDATE FILE FUNCTION
@@ -222,9 +237,9 @@ async function updateDoc(file, session, body, orgDB, res){
     const revi = findRev[0]._rev;
     const doc = findRev[0]._id;
     let fileVer = findRev[0].version_num;
+    fileVer = parseFloat(fileVer);
     let tags = findRev[0].tags_history;
     let stateTimestamps = findRev[0].state_history;
-    let category = findRev[0].category;
     let user = session.username
     if (session.admin === true) {
         user = 'enroll'
@@ -238,13 +253,30 @@ async function updateDoc(file, session, body, orgDB, res){
     const fileSize = await formatBytes(file.size);
     const stateTimestamp = state + " @ " + fileTimestamp; // @ to separate values later
     let fileTags = `${fileName}|${body.tags.substring(0, body.tags.length - 1)}|@ ${fileTimestamp} V${parseFloat(fileVer).toFixed(2)}`
+
     var fileInp = fs.readFileSync(path.resolve(__dirname, `./../uploads/${fileName}`));
     var tempPath = path.resolve(__dirname, `./../uploads/${fileName}`);
     console.log(fileInp) //todo remove
-    let newMetadata = checkFileChanges(file.buffer, body.tags, fileInp, fileVer, fileTimestamp, fileTags);
-    //TODO: AYUSIN UNG FILEVER GGRRRrRr
-    // fileVer = (await newMetadata).version
-    // fileTags = (await newMetadata).tags
+    // let newMetadata = await checkFileChanges(file.buffer, body.tags, fileInp, fileVer, fileTimestamp, fileTags);
+// filebuff, filetag, file, fileVer, fileTimestamp, fileTags
+    if (!fileInp.equals(file.buffer)) { //checking if same file
+        if (fileTags.split("|")[1] == "") {
+            fileVer++;
+            fileTags = `${file.originalname}|${body.tags[body.tags.length - 1].split("|")[1]}|@ ${fileTimestamp} V${parseFloat(fileVer).toFixed(2)}`
+        } else if (fileTags.split("|")[1] == body.tags[body.tags.length - 1].split("|")[1]) {
+            fileVer++;
+            fileTags = `${file.originalname}|${body.tags[body.tags.length - 1].split("|")[1]}|@ ${fileTimestamp} V${parseFloat(fileVer).toFixed(2)}`
+
+        } else if (fileTags.split("|")[1] != body.tags[body.tags.length - 1].split("|")[1]) {
+            fileVer += 0.1
+            fileTags = `${file.originalname}|${body.tags.substring(0, body.tags.length - 1)}|@ ${fileTimestamp} V${parseFloat(fileVer).toFixed(2)}`
+
+        }
+    }
+
+    //TODO: AYUSIN UNG FLEVER GGRRRrRr
+    // fileVer = newMetadata.version
+    // fileTags = newMetadata.tags
     fs.writeFileSync(path.resolve(__dirname, `./../uploads/${fileName}`), file.buffer);
     tags.push(fileTags);
     stateTimestamps.push(stateTimestamp);
@@ -252,12 +284,11 @@ async function updateDoc(file, session, body, orgDB, res){
             name: fileName,
             type: fileType,
             size: fileSize,
-            category: category,
             tags_history: tags,
             version_num: parseFloat(fileVer).toFixed(2), //finally updates
             state_history: stateTimestamps,
             creator: fileCreator,
-            department: session.org,
+            department: session.department,
             _rev: revi,
             last_activity: "Upload",
             status: "Pending",
@@ -268,7 +299,6 @@ async function updateDoc(file, session, body, orgDB, res){
                     name: fileName,
                     type: fileType,
                     size: fileSize,
-                    category: category,
                     tags_history: tags,
                     version_num: parseFloat(fileVer).toFixed(2), //finally updates
                     state_history: stateTimestamps,
@@ -282,8 +312,9 @@ async function updateDoc(file, session, body, orgDB, res){
                 console.log("it worked")
                 invoke.updateTransaction(user, session.admin, session.approver, session.org, doc, docdeets.name,
                     docdeets.type, docdeets.size, docdeets.tags_history, docdeets.version_num,
-                    docdeets.creator, docdeets.state_history, docdeets.category, docdeets.status, docdeets.department);
+                    docdeets.creator, docdeets.state_history, docdeets.status, docdeets.department);
 
+                attachFile(fileName, fileCreator, tempPath, orgDB, file, doc)
                 res.redirect("/dashboard?fail=false")
             } else {
                 console.log("failed dIT0: ", err)
@@ -291,6 +322,10 @@ async function updateDoc(file, session, body, orgDB, res){
             }
         }
     )
+
+}
+async function attachFile(fileName, fileCreator, tempPath, orgDB, file, doc){
+
     const frev = await docQuery(fileName, fileCreator, orgDB);
     const rev = frev[0]._rev;
     fs.readFile(tempPath, async (err, data) => { //dno if async
@@ -349,3 +384,4 @@ async function checkFileChanges(filebuff, filetag, file, fileVer, fileTimestamp,
 //todo ======================================== X CODES ================================================================
 
 module.exports = router;
+

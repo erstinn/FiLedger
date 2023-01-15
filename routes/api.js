@@ -3,6 +3,7 @@ const router = express.Router()
 const bodyParser = require('body-parser')
 const fs = require("fs");
 const path = require("path");
+const invoke = require('../network/chaincode/javascript/invoke')
 router.use(bodyParser.json())
 
 //todo ====================================================== admin ======================================================
@@ -71,7 +72,7 @@ router.post('/tagResubmit',async(req,res)=>{
         const docs = await docz.get(req.body.docId);
         docs.status = "Resubmit";
         const date = new Date();
-        const state = `Resubmit  @ ${date.getMonth()+1}/${date.getDate()}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
+        const state = `Resubmit @ ${date.getMonth()+1}/${date.getDate()}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
         docs.state_history.push(state);
 
         await docz.insert(docs,req.body.docId,err=>{
@@ -139,6 +140,7 @@ router.post('/acceptDocs',async(req,res)=>{
     if(req.session.admin || req.session.approver) {
         const docs = await docz.get(req.body.docId);
         docs.status = "Accepted"
+        docs.approver = `${req.session.firstname} ${req.session.lastname}`;
         const date = new Date();
         const state = `Accepted @ ${date.getMonth()+1}/${date.getDate()}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`
         docs.state_history.push(state)
@@ -148,6 +150,15 @@ router.post('/acceptDocs',async(req,res)=>{
                 res.send(err)
             }
             else{
+                // user, isAdmin, isApprov, Org, id, fileName, fileType, fileSize, fileTagsList,
+                //     fileVersion, fileCreator, stateTimestamps, status, dept
+                let user = req.session.username;
+                if(req.session.admin){
+                    user = 'enroll';
+                }
+                invoke.updateTransaction(user, req.session.admin, req.session.approver, req.session.org,
+                    docs._id, docs.name, docs.type, docs.size, docs.tags_history, docs.version_num, docs.creator,
+                    docs.state_history, docs.status, req.session.department);
                 res.send(true)
             }
         })
@@ -160,9 +171,10 @@ router.post('/acceptDocs',async(req,res)=>{
 //used on /pending-docs/ REJECT BUTTON
 router.post('/rejectDocs',async(req,res)=>{
     const docz = req.session.currentDocsDB;
-    if( req.session.admin || req.session.approver) {
+    if(req.session.admin || req.session.approver) {
         const docs = await docz.get(req.body.docId);
         docs.status = "Rejected";
+        docs.approver = `${req.session.firstname} ${req.session.lastname}`;
         const date = new Date();
         const state = `Rejected @ ${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`
         docs.state_history.push(state)

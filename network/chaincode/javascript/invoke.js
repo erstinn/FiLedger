@@ -8,7 +8,6 @@ const mspId = "Org1MSP";
 const CC_NAME="assetcc";
 const CHANNEL="mychannel";
 let ccp = null;
-const serverip = '127.0.0.1';
 
 exports.log = async function(req, res) {
     console.log("invoke log")
@@ -16,18 +15,18 @@ exports.log = async function(req, res) {
 }
 
 async function invokeTransaction (user, isAdmin, isApprov, Org, id, fileName, fileType, fileSize, fileTagsList,
-                                  fileVersion, stateTimestampList, fileCreator, status, dept) {
+                                  fileVersion, stateTimestampList, fileCreator, category, status, dept) {
 
     var dbName = dbGen(isAdmin, isApprov, Org);
 
-    var wallet = await Wallets.newCouchDBWallet(`http://admin:admin@${serverip}:5984/`, dbName);
+    var wallet = await Wallets.newCouchDBWallet('http://administrator:qF3ChYhp@127.0.0.1:5984/', dbName);
 
-
+    //     }
 
     try {
         console.log("Invoking cREATE chaincode using :", user);
         // load the network configuration
-        const ccpPath = path.resolve("./network/filedger-cluster", "connection-org.yaml");
+        const ccpPath = path.resolve("./network/cluster", "connection-org.yaml");
         if (ccpPath.includes(".yaml")) {
             ccp = yaml.load(fs.readFileSync(ccpPath, "utf8"));
         } else {
@@ -63,7 +62,7 @@ async function invokeTransaction (user, isAdmin, isApprov, Org, id, fileName, fi
         await contract.submitTransaction(
             "createDoc",
             id, fileName, fileType, fileSize, fileTagsList,
-            fileVersion, stateTimestampList, fileCreator, status, dept
+            fileVersion, stateTimestampList, fileCreator, category, status, dept
         );
         console.log("Transaction has been submitted");
 
@@ -80,15 +79,15 @@ async function invokeTransaction (user, isAdmin, isApprov, Org, id, fileName, fi
 }
 
 async function updateTransaction(user, isAdmin, isApprov, Org, id, fileName, fileType, fileSize, fileTagsList,
-                                 fileVersion, fileCreator, stateTimestamps, status, dept) {
+                                 fileVersion, fileCreator, stateTimestamps, category, status, dept) {
 
     var dbName = dbGen(isAdmin, isApprov, Org);
-    var wallet = await Wallets.newCouchDBWallet(`http://admin:admin@${serverip}:5984/`, dbName);
+    var wallet = await Wallets.newCouchDBWallet('http://administrator:qF3ChYhp@127.0.0.1:5984/', dbName);
 
     try {
         console.log("Invoking UPDATE chaincode using :", user);
         // load the network configuration
-        const ccpPath = path.resolve("./network/filedger-cluster", "connection-org.yaml");
+        const ccpPath = path.resolve("./network/cluster", "connection-org.yaml");
         if (ccpPath.includes(".yaml")) {
             ccp = yaml.load(fs.readFileSync(ccpPath, "utf8"));
         } else {
@@ -124,7 +123,7 @@ async function updateTransaction(user, isAdmin, isApprov, Org, id, fileName, fil
         await contract.submitTransaction(
             "updateDocs",
             id, fileName, fileType, fileSize, fileTagsList,
-            fileVersion, fileCreator, stateTimestamps, status, dept
+            fileVersion, fileCreator, stateTimestamps, category, status, dept
         );
         console.log("Document has been updated in the ledger");
 

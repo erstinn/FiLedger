@@ -4,7 +4,6 @@ const fs = require("fs")
 const path = require('path')
 
 router.use(setDocz);
-
 router.get("/", async(req,res)=>{
     if (req.session.admin || req.session.approver)
         res.redirect('accepted-docs/1');

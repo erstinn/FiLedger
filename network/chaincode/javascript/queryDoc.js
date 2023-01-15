@@ -12,7 +12,6 @@ const mspId = "Org1MSP";
 const CC_NAME="assetcc";
 const CHANNEL="mychannel";
 let ccp = null;
-const serverip = '127.0.0.1'
 
 let queryDoc = async function main(user, isAdmin, isApprov, Org, id) {
     var dbName = '';
@@ -40,12 +39,12 @@ let queryDoc = async function main(user, isAdmin, isApprov, Org, id) {
     console.log(dbName, "!!!!!");
 
 
-    var wallet = await Wallets.newCouchDBWallet(`http://admin:admin@${serverip}:5984/`, dbName);
+    var wallet = await Wallets.newCouchDBWallet('http://administrator:qF3ChYhp@127.0.0.1:5984/', dbName);
 
     try {
         console.log("Invoking chaincode using :", user);
         // load the network configuration
-        const ccpPath = path.resolve("./network/filedger-cluster", "connection-org.yaml");
+        const ccpPath = path.resolve("./network/cluster", "connection-org.yaml");
         if (ccpPath.includes(".yaml")) {
             ccp = yaml.load(fs.readFileSync(ccpPath, "utf8"));
         } else {
@@ -79,8 +78,7 @@ let queryDoc = async function main(user, isAdmin, isApprov, Org, id) {
         // queryCar transaction - requires 1 argument, ex: ('queryCar', 'CAR4')
         // queryAllCars transaction - requires no arguments, ex: ('queryAllCars')
         const result = await contract.evaluateTransaction('readDoc', id);
-        console.log(`Transaction has been evaluated succesfully`);
-        // console.log(`Transaction has been evaluated, result is: ${result.toString()}`);
+        console.log(`Transaction has been evaluated, result is: ${result.toString()}`);
 
         return JSON.parse(result);
     } catch (error) {

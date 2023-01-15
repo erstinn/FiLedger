@@ -1,8 +1,7 @@
 const express = require('express')
 const router = express.Router()
-const serverip = '127.0.0.1'
-const nano = require('nano')(`http://admin:admin@${serverip}:5984/`);
 // const nano = require('nano')('http://root:root@127.0.0.1:5984/');
+const nano = require('nano')('http://administrator:qF3ChYhp@127.0.0.1:5984/');
 // const docsDB = nano.db.use('documents');
 // const approverDB = nano.db.use('approvers');
 // const userDB = nano.db.use('users');
@@ -72,7 +71,7 @@ router.get('/:page',async(req,res)=>{
                 doc = documents.docs.sort((a,b)=>(a.name > b.name)? 1:-1)
             }
             res.render("all-documents",{doc:documents,username : req.session.username,page:req.params.page,sort:req.query.sort})
-            // console.log("docs:",doc);
+            console.log("docs:",doc);
         }else{
             res.redirect("1")
         }
@@ -132,7 +131,7 @@ router.get('/:page',async(req,res)=>{
                 doc = documents.docs.sort((a,b)=>(a.name > b.name)? 1:-1)
             }
             res.render("all-documents",{doc:documents,username : req.session.username,page:req.params.page,sort:req.query.sort})
-            // console.log("docs:",doc);
+            console.log("docs:",doc);
         }else{
             res.redirect("1")
         }
@@ -218,7 +217,7 @@ router.get('/:page',async(req,res)=>{
                 doc = documents.docs.sort((a,b)=>(a.name > b.name)? 1:-1)
             }
             res.render("all-documents",{doc:documents,username : req.session.username,page:req.params.page,sort:req.query.sort})
-            // console.log("docs:",doc);
+            console.log("docs:",doc);
         }else{
             res.redirect("1")
         }

@@ -27,7 +27,7 @@ async function invokeTransaction (user, isAdmin, isApprov, Org, id, fileName, fi
     try {
         console.log("Invoking cREATE chaincode using :", user);
         // load the network configuration
-        const ccpPath = path.resolve("./network/cluster", "connection-org.yaml");
+        const ccpPath = path.resolve("./network/filedger-cluster", "connection-org.yaml");
         if (ccpPath.includes(".yaml")) {
             ccp = yaml.load(fs.readFileSync(ccpPath, "utf8"));
         } else {
@@ -88,7 +88,7 @@ async function updateTransaction(user, isAdmin, isApprov, Org, id, fileName, fil
     try {
         console.log("Invoking UPDATE chaincode using :", user);
         // load the network configuration
-        const ccpPath = path.resolve("./network/cluster", "connection-org.yaml");
+        const ccpPath = path.resolve("./network/filedger-cluster", "connection-org.yaml");
         if (ccpPath.includes(".yaml")) {
             ccp = yaml.load(fs.readFileSync(ccpPath, "utf8"));
         } else {

@@ -68,7 +68,7 @@ router.post("/status", async function (req, res){
 
 
     const admin_username = usernameAdmin;
-    const ccpPath = path.resolve("./network/cluster/", "connection-org.yaml");
+    const ccpPath = path.resolve("./network/filedger-cluster", "connection-org.yaml");
     if (ccpPath.includes(".yaml")) {
         ccp = yaml.load(fs.readFileSync(ccpPath, 'utf-8'));
     } else {

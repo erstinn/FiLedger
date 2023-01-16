@@ -23,7 +23,6 @@
                     <div><span class="class-type"></span></div>
                     <div class="modalDepartment"><span class="department-user"></span></div>
                     <div class="table-wrapper">
-                        <div class="tableUser-wrapper">
                         <table class="modalTable tableUser">
                             <tr>
                                 <th>Document Titles</th>
@@ -34,7 +33,7 @@
                                 <td>
                                     <select name="doc4user" id="doc4user" class="doc4user">
                                         <%for(let i=0;i< docs.docs.length;i++){%>
-                                            <option value="<%=docs.docs[i].name%>"><%=docs.docs[i].name%></option>
+                                            <option value="<%=docs.docs[i].name%>++<%=docs.docs[i]._id%>"><%=docs.docs[i].name%></option>
                                         <%}%>
                                     </select>
                                 </td>
@@ -48,40 +47,10 @@
                                 <td>&nbsp;</td>
                             </tr>
                         </table>
-                           
-                        </div>
                         <table class="modalTable tableDoc inactive">
                             <tr>
                                 <th>Username</th>
                                 <th>Access Status</th>
-                            </tr>
-                            <tr class="data">
-                                <td>Mark</td>
-                                <td>Viewer</td>
-                            </tr>
-                            <tr class="data">
-                                <td>Mark</td>
-                                <td>Viewer</td>
-                            </tr>
-                            <tr class="data">
-                                <td>Mark</td>
-                                <td>Viewer</td>
-                            </tr>
-                            <tr class="data">
-                                <td>Mark</td>
-                                <td>Viewer</td>
-                            </tr>
-                            <tr class="data">
-                                <td>Mark</td>
-                                <td>Viewer</td>
-                            </tr>
-                            <tr class="data">
-                                <td>Mark</td>
-                                <td>Viewer</td>
-                            </tr>
-                            <tr class="data">
-                                <td>Mark</td>
-                                <td>Viewer</td>
                             </tr>
                         </table>
                     </div>
